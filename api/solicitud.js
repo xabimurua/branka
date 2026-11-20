@@ -1,7 +1,7 @@
 // Recibe las solicitudes de consejo asesor y las reenvía por correo con Resend.
 // El correo de destino nunca aparece en la web: se guarda en las variables de entorno de Vercel.
 //   RESEND_API_KEY  clave de API de Resend (resend.com)
-//   CONTACT_EMAIL   correo que recibe las solicitudes
+//   Destinatario fijo: xabmurua@gmail.com
 //   FROM_EMAIL      opcional; remitente verificado en Resend (por defecto onboarding@resend.dev)
 
 const clean = (v, max) => String(v || "").replace(/[\r\n]+/g, " ").trim().slice(0, max);
@@ -12,8 +12,9 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ ok: false });
   }
 
-  const { RESEND_API_KEY, CONTACT_EMAIL, FROM_EMAIL } = process.env;
-  if (!RESEND_API_KEY || !CONTACT_EMAIL) {
+  const { RESEND_API_KEY, FROM_EMAIL } = process.env;
+  const CONTACT_EMAIL = "xabmurua@gmail.com";
+  if (!RESEND_API_KEY) {
     return res.status(503).json({ ok: false, error: "not_configured" });
   }
 
@@ -27,17 +28,19 @@ module.exports = async function handler(req, res) {
 
   const name = clean(body.name, 120);
   const email = clean(body.email, 200);
+  const phone = clean(body.phone, 35);
   const project = clean(body.project, 200);
   const stage = clean(body.stage, 60);
   const msg = String(body.msg || "").trim().slice(0, 3000);
 
-  if (!name || !project || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+  if (!name || !project || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || phone.replace(/\D/g, "").length < 7) {
     return res.status(400).json({ ok: false, error: "invalid" });
   }
 
   const text = [
     `Nombre: ${name}`,
     `Email: ${email}`,
+    `Móvil: ${phone}`,
     `Proyecto: ${project}`,
     `Etapa del proyecto: ${stage}`,
     "",
