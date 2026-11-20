@@ -1,4 +1,4 @@
-// Recibe las solicitudes de mentoría y las reenvía por correo con Resend.
+// Recibe las solicitudes de consejo asesor y las reenvía por correo con Resend.
 // El correo de destino nunca aparece en la web: se guarda en las variables de entorno de Vercel.
 //   RESEND_API_KEY  clave de API de Resend (resend.com)
 //   CONTACT_EMAIL   correo que recibe las solicitudes
@@ -53,7 +53,7 @@ module.exports = async function handler(req, res) {
         from: FROM_EMAIL || "Branka <onboarding@resend.dev>",
         to: [CONTACT_EMAIL],
         reply_to: email,
-        subject: `Branka · Solicitud de mentoría · ${project}`,
+        subject: `Branka · Solicitud de consejo asesor · ${project}`,
         text,
       }),
     });

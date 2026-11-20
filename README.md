@@ -1,6 +1,6 @@
-# Branka · Mentorías de emprendedores a emprendedores
+# Branka · Monta tu consejo asesor
 
-Web estática (HTML, sin compilación). Lo central son las mentorías: emprendedores con experiencia que acompañan a quienes empiezan. Como apoyo incluye:
+Web estática (HTML, sin compilación). Lo central son los consejos asesores: emprendedores con experiencia que acompañan a quienes empiezan. Como apoyo incluye:
 
 - **Herramientas**: 17 herramientas explicadas en 1 minuto, con plantilla descargable en PDF (`plantillas/`).
 - **Aprende**: los episodios más vistos del podcast de Itnig, reproducibles en la página.
