@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EDEBE · Herramientas para emprender</title>
+<link rel="icon" href="edebe.png">
+<meta name="description" content="EDEBE: herramientas para emprender en píldoras de 1 minuto, plantillas descargables, noticias y los mejores podcasts para emprendedores.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* EDEBE: el degradado del icono (naranja → rojo) para cabecera, acciones y acentos; fondo claro cálido para leer cómodo.
+     Layout: cabecera roja con el icono, ruta de 5 fases como filtro, biblioteca en rejilla y ficha de detalle por herramienta. */
+  --brand: #a52b17;
+  --orange: #ec8f35;
+  --red: #da3a22;
+  --grad: linear-gradient(135deg, #ec8f35 0%, #e0602b 45%, #da3a22 100%);
+  --bg: #fdf7f3;
+  --surface: #ffffff;
+  --surface-2: #fbeee6;
+  --line: #f0d9cc;
+  --text: #2b110b;
+  --muted: #7a5548;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 17px; line-height: 1.55; }
+a { color: var(--red); }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.1; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+header.top { background: var(--brand); position: sticky; top: 0; z-index: 5; box-shadow: 0 1px 0 rgba(0,0,0,.08); }
+header.top .wrap { display: flex; align-items: center; gap: 24px; min-height: 66px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 24px; letter-spacing: .04em; }
+.brand img { width: 40px; height: 40px; border-radius: 10px; display: block; }
+.brand small { font-family: var(--font-body); font-weight: 500; font-size: 14px; letter-spacing: 0; opacity: .85; }
+nav.main { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+nav.main a { text-decoration: none; color: #ffd9c4; padding: 8px 16px; border-radius: 999px; font-weight: 600; }
+nav.main a[aria-current="page"] { background: rgba(255,255,255,.16); color: #fff; }
+
+.hero { margin: 0 calc(50% - 50vw); padding: 44px calc(50vw - 50%) 34px; background: var(--grad); color: #fff; position: relative; overflow: hidden; }
+.hero > * { position: relative; max-width: 1132px; }
+.hero::after { content: ""; position: absolute; right: -120px; bottom: -160px; width: 520px; height: 300px; border-radius: 50%; background: rgba(165,43,23,.35); transform: rotate(-38deg); }
+.hero-in { display: grid; gap: 14px; }
+.eyebrow { color: var(--red); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 13px; }
+.hero .eyebrow { color: #fff3e8; }
+.hero h1 { font-size: clamp(32px, 5vw, 54px); font-weight: 800; max-width: 19ch; }
+.hero p { color: #fff3ea; max-width: 62ch; margin: 0; font-size: 19px; }
+
+.route { display: grid; grid-template-columns: repeat(5, 1fr); margin: 26px 0 0; position: relative; }
+.route::before { content: ""; position: absolute; left: 10%; right: 10%; top: 23px; height: 4px; background: rgba(255,255,255,.35); border-radius: 2px; }
+.route button { background: none; border: 0; cursor: pointer; display: grid; justify-items: center; gap: 6px; padding: 6px 4px; position: relative; color: #ffe6d6; }
+.route .dot { width: 38px; height: 38px; border-radius: 50%; background: rgba(165,43,23,.55); border: 3px solid rgba(255,255,255,.55); display: grid; place-items: center; font-weight: 800; font-size: 15px; color: #fff; }
+.route .nm { font-weight: 700; font-size: 15px; text-align: center; color: #fff; }
+.route .ct { font-size: 13px; }
+.route button[aria-pressed="true"] .dot { background: #fff; color: var(--red); border-color: #fff; }
+
+.toolbar { display: flex; gap: 12px; align-items: center; margin: 26px 0 18px; flex-wrap: wrap; }
+.search { flex: 1 1 260px; display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; }
+.search input { background: none; border: 0; outline: none; padding: 12px 0; width: 100%; }
+.search:focus-within { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(236,143,53,.2); }
+.toolbar .count { color: var(--muted); font-size: 15px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; padding: 12px 18px; font-weight: 700; text-decoration: none; border: 0; background: var(--surface-2); color: var(--text); cursor: pointer; }
+.btn.primary { background: var(--grad); color: #fff; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; padding-bottom: 56px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px 18px 16px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 10px; text-decoration: none; color: var(--text); position: relative; overflow: hidden; transition: box-shadow .15s, transform .15s; }
+.card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: var(--grad); }
+.card:hover { box-shadow: 0 10px 28px rgba(165,43,23,.14); transform: translateY(-2px); }
+.card .num { font-family: var(--font-display); font-weight: 800; font-size: 15px; letter-spacing: .04em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; width: max-content; }
+.card h3 { font-size: 22px; font-weight: 800; }
+.card p { margin: 0; color: var(--muted); font-size: 15.5px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: 12.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+.chip.ok { background: var(--grad); color: #fff; }
+.chip.phase { color: var(--brand); background: #fde3d4; }
+
+.detail { padding: 28px 0 64px; display: grid; gap: 26px; }
+.crumbs { display: flex; gap: 10px; align-items: center; color: var(--muted); font-size: 15px; flex-wrap: wrap; }
+.crumbs a { color: var(--muted); }
+.dhead { display: grid; gap: 10px; }
+.dhead h1 { font-size: clamp(30px, 4.5vw, 48px); font-weight: 800; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 880px) { .layout { grid-template-columns: 1fr; } .route .nm { font-size: 12.5px; } .route .ct { display: none; } }
+.player { aspect-ratio: 16 / 9; width: 100%; background: #6f1c0e; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 12px 30px rgba(165,43,23,.18); }
+.player video { width: 100%; height: 100%; display: block; background: #000; }
+.poster { position: absolute; inset: 0; display: grid; align-content: center; gap: 10px; padding: 7%; background: linear-gradient(135deg, #962513, #761b0d); color: #fff; overflow: hidden; }
+.poster::after { content: ""; position: absolute; right: -8%; bottom: -30%; width: 55%; height: 70%; border-radius: 50%; background: var(--grad); opacity: .55; transform: rotate(-38deg); }
+.poster > * { position: relative; z-index: 1; }
+.poster .k { color: #ffcd96; font-weight: 800; letter-spacing: .08em; font-size: clamp(11px, 1.4vw, 15px); }
+.poster .t { font-family: var(--font-display); font-weight: 800; font-size: clamp(22px, 4vw, 44px); line-height: 1.08; max-width: 16ch; }
+.poster .s { color: #ffdcc8; font-size: clamp(12px, 1.5vw, 16px); max-width: 44ch; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 10px; }
+.panel h2 { font-size: 13px; font-family: var(--font-body); color: var(--red); letter-spacing: .08em; text-transform: uppercase; font-weight: 800; }
+.panel p { margin: 0; }
+.panel .big { font-size: 20px; font-weight: 600; }
+.blocks { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.blocks span { background: var(--surface-2); border-left: 4px solid var(--orange); border-radius: 8px; padding: 8px 10px; font-weight: 600; font-size: 14.5px; }
+.minroute { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.minroute span { height: 8px; border-radius: 4px; background: var(--line); }
+.minroute span.on { background: var(--grad); }
+.minroute + small { color: var(--muted); }
+.guion p { color: #4a2a20; max-width: 65ch; }
+.guion p + p { margin-top: 10px; }
+.side { display: grid; gap: 16px; }
+.tpl img { width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block; }
+.tpl .btn { width: 100%; }
+.dlmsg { color: var(--muted); font-size: 14px; }
+.dlmsg:empty { display: none; }
+.pager { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.pager a { flex: 1 1 240px; text-decoration: none; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; color: var(--text); display: grid; font-weight: 700; }
+.pager a small { color: var(--muted); font-weight: 500; }
+.pager a.next { text-align: right; }
+
+.news-head { margin: 0 calc(50% - 50vw); padding: 40px calc(50vw - 50%) 30px; background: var(--grad); color: #fff; display: grid; gap: 10px; }
+.news-head > * { max-width: 1132px; }
+.news-head .eyebrow { color: #fff3e8; }
+.news-head h1 { font-size: clamp(30px, 4.5vw, 48px); font-weight: 800; }
+.news-head p { color: #fff3ea; max-width: 64ch; margin: 0; }
+.news-top { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px; margin: 26px 0; align-items: center; }
+@media (max-width: 880px) { .news-top { grid-template-columns: 1fr; } }
+.news { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; padding-bottom: 64px; }
+.story { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 12px; align-content: start; }
+.story h3 { font-size: 22px; font-weight: 800; }
+.story p { margin: 0; color: #4a2a20; font-size: 16px; }
+.lesson { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 6px; border-left: 4px solid var(--orange); }
+.lesson b { color: var(--red); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; }
+.lesson a { font-weight: 700; font-size: 15px; }
+.srcs { font-size: 13.5px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+.srcs a { color: var(--muted); }
+
+.admin { border: 2px dashed var(--line); border-radius: 16px; padding: 18px 20px; margin: 22px 0 6px; display: grid; gap: 10px; background: var(--surface); }
+.admin[hidden] { display: none; }
+.admin h2 { font-size: 18px; }
+.admin p { margin: 0; color: var(--muted); font-size: 15px; }
+.drop { border: 2px dashed #e9b79c; border-radius: 12px; padding: 18px; text-align: center; color: var(--muted); cursor: pointer; }
+.drop.over { border-color: var(--red); color: var(--text); background: var(--surface-2); }
+.log { font-size: 14px; color: var(--muted); display: grid; gap: 2px; max-height: 180px; overflow: auto; }
+.log .good { color: #1f7a4a; }
+.log .bad { color: #b3261e; }
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; padding: 22px 0 32px; }
+
+.feat { display: grid; grid-template-columns: 300px 1fr; gap: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px; margin: 28px 0 8px; align-items: center; }
+@media (max-width: 760px) { .feat { grid-template-columns: 1fr; } }
+.feat-art { aspect-ratio: 1; border-radius: 16px; background: var(--grad); display: grid; place-content: center; text-align: center; color: #fff; position: relative; overflow: hidden; }
+.feat-art::after { content: ""; position: absolute; width: 70%; height: 40%; right: -15%; bottom: -10%; border-radius: 50%; background: rgba(165,43,23,.45); transform: rotate(-38deg); }
+.feat-art span { font-family: var(--font-display); font-weight: 800; font-size: 64px; letter-spacing: -.02em; position: relative; z-index: 1; }
+.feat-art small { font-weight: 800; letter-spacing: .3em; position: relative; z-index: 1; }
+.feat-body { display: grid; gap: 10px; }
+.feat-body h2 { font-size: clamp(26px, 3.4vw, 36px); font-weight: 800; }
+.feat-body .by { color: var(--red); font-weight: 600; margin: 0; }
+.feat-body p { margin: 0; max-width: 62ch; }
+.btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.btns .btn { padding: 9px 14px; font-size: 15px; }
+.note { color: var(--muted); font-size: 13.5px; }
+.sec-h { font-size: 26px; font-weight: 800; margin: 34px 0 14px; }
+.eps { display: grid; gap: 12px; }
+.ep { display: grid; grid-template-columns: 120px 1fr; gap: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; align-items: start; }
+@media (max-width: 600px) { .ep { grid-template-columns: 1fr; } .ep-art { display: none !important; } }
+.ep-art { aspect-ratio: 16/10; border-radius: 10px; background: linear-gradient(135deg, #962513, #761b0d); display: grid; place-items: center; }
+.ep-art { position: relative; }
+.ep-art b { position: absolute; left: 10px; top: 6px; font-family: var(--font-display); font-weight: 800; font-size: 28px; color: #ffcd96; }
+.sec-row { display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+.sec-row .sec-h { margin: 0; }
+.ep-art span { width: 42px; height: 42px; border-radius: 50%; background: var(--grad); color: #fff; display: grid; place-items: center; font-size: 16px; }
+.ep-body { display: grid; gap: 8px; }
+.ep-body h3 { font-size: 21px; font-weight: 800; }
+.ep-body p { margin: 0; color: #4a2a20; }
+.tl { font-weight: 700; font-size: 15px; }
+.news.last { padding-bottom: 64px; }
+
+.player video { position: relative; z-index: 1; }
+.player .poster { z-index: 0; }
+.player.novid video { display: none; }
+.ep { grid-template-columns: minmax(0, 360px) 1fr; }
+.yt, .ytf { width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; border: 0; display: block; }
+.yt { position: relative; padding: 0; cursor: pointer; overflow: hidden; background: #6f1c0e; }
+.yt img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.yt b { position: absolute; left: 10px; top: 8px; font-family: var(--font-display); font-weight: 800; font-size: 26px; color: #fff; background: var(--grad); border-radius: 10px; padding: 2px 12px; }
+.yt span { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; border-radius: 50%; background: var(--grad); color: #fff; display: grid; place-items: center; font-size: 22px; box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+.yt:hover span { transform: translate(-50%, -50%) scale(1.06); }
+@media (max-width: 760px) { .ep { grid-template-columns: 1fr; } }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#herramientas"><img src="edebe.png" alt="">EDEBE <small>Herramientas para emprender</small></a>
+    <nav class="main" aria-label="Secciones">
+      <a href="#herramientas" data-nav="herramientas">Herramientas</a>
+      <a href="#aprende" data-nav="aprende">Aprende</a>
+      <a href="#noticias" data-nav="noticias">Noticias</a>
+    </nav>
+  </div>
+</header>
+
+<main id="app" class="wrap"></main>
+
+<footer>
+  <div class="wrap">EDEBE · Píldoras narradas por Xabi Murua. Plantillas descargables en PDF. Las noticias enlazan siempre a su fuente.</div>
+</footer>
+
+<script id="tools-data" type="application/json">{"tools": [{"slug": "01_identificacion_necesidad", "n": 1, "name": "Identificación de la necesidad", "ph": 0, "para": "Detectar qué cambia en tu entorno y encontrar ahí una necesidad real.", "blocks": ["Tendencias demográficas", "Regulación", "Entorno económico", "Competidores", "Tendencias tecnológicas", "Necesidades de cliente", "Incertidumbre"], "cuando": "Al arrancar, antes de tener producto. Y revísala cada año.", "guion": ["Píldora de emprendimiento: identificación de la necesidad. Antes de pensar en tu producto, mira el mundo que lo rodea.", "Esta herramienta sirve para detectar qué está cambiando en tu entorno y encontrar ahí una necesidad real, en lugar de partir de una idea que solo te gusta a ti.", "Se usa como un mapa con siete zonas alrededor de tu empresa: tendencias demográficas, regulación, entorno económico, competidores, tendencias tecnológicas, necesidades de cliente e incertidumbres. En cada zona apunta cambios concretos, con datos y fuentes. Después busca dónde se cruzan varios cambios: ahí suele esconderse la oportunidad.", "¿Cuándo usarla? Al principio de todo, en la fase de exploración, antes de tener producto. Y vuelve a ella cada año para comprobar que tu negocio sigue respondiendo a una necesidad viva."]}, {"slug": "02_tendencias_consumo", "n": 2, "name": "Consumer Trend Canvas", "ph": 0, "para": "Convertir una tendencia de consumo en una idea de innovación para tu negocio.", "blocks": ["Necesidades básicas", "Drivers de cambio", "Inspiración", "Expectativas emergentes", "Tipo de innovación", "¿A quién?", "Tu innovación"], "cuando": "Explorando ideas, o cuando quieres renovar una oferta que ya existe.", "guion": ["Píldora de emprendimiento: el Consumer Trend Canvas, o lienzo de tendencias de consumo.", "Sirve para coger una tendencia que ves en la calle o en las noticias y convertirla en una idea de negocio concreta. No basta con decir que algo está de moda: hay que entender por qué y qué significa para ti.", "Tiene dos partes. Primero analizas: qué necesidad profunda cubre la tendencia, qué está cambiando para que surja ahora, cómo la aplican otras empresas y qué nuevas expectativas crea en los consumidores. Después aplicas: qué tipo de innovación harías, para qué nuevo grupo de clientes, y lo resumes en tu propia innovación.", "Úsalo en la fase de exploración, cuando buscas ideas, o más adelante, cuando quieras renovar una oferta que ya tienes en el mercado."]}, {"slug": "03_tecnologia_disruptiva", "n": 3, "name": "Tecnología disruptiva", "ph": 0, "para": "Comparar varias ideas y puntuar su potencial disruptivo del 1 al 10.", "blocks": ["Desirability", "Feasibility", "Viability", "Potencial disruptivo", "Idea 1 … Idea 6"], "cuando": "Cuando tienes varias ideas y debes elegir en cuál apostar.", "guion": ["Píldora de emprendimiento: la matriz de tecnología disruptiva.", "Sirve para comparar varias ideas o innovaciones y decidir cuál tiene más potencial de cambiar las reglas del juego, en vez de quedarte con la primera que se te ocurrió.", "Pones hasta seis ideas en filas y las valoras con tres criterios. Deseabilidad: ¿resuelve un problema importante y creciente del cliente? Factibilidad: ¿es mucho mejor que lo que existe? Y viabilidad: ¿es mucho más barata y permite nuevos modelos de negocio? Puntúa cada una del uno al diez y suma: el total es su potencial disruptivo.", "Úsala cuando tienes varias ideas sobre la mesa y debes elegir en cuál apostar tu tiempo. Es un filtro rápido antes de invertir en validar."]}, {"slug": "04_mapa_empatia", "n": 4, "name": "Mapa de empatía", "ph": 1, "para": "Ponerte en la piel de tu cliente: qué piensa, siente, ve, oye, dice y hace.", "blocks": ["¿Con quién empatizamos?", "Objetivo", "¿Qué ve?", "¿Qué escucha?", "¿Qué dice?", "¿Qué hace?", "¿Qué piensa y siente?", "Pains", "Gains"], "cuando": "Antes y después de entrevistar a clientes potenciales.", "guion": ["Píldora de emprendimiento: el mapa de empatía.", "Sirve para ponerte de verdad en la piel de tu cliente. No para describir lo que tú crees que necesita, sino para entender cómo vive su situación.", "Empieza definiendo con quién empatizas y qué necesita conseguir. Después rellena qué ve en su entorno, qué escucha de amigos y referentes, qué dice y qué hace realmente. En el centro, qué piensa y siente. Y para cerrar, sus pains, es decir, miedos y frustraciones, y sus gains, sus deseos y sueños. Separa lo que has observado de lo que imaginas.", "¿Cuándo? En cuanto tengas un segmento de cliente en mente. Úsalo para preparar entrevistas y vuelve a rellenarlo después, con lo que has aprendido."]}, {"slug": "05_personas", "n": 5, "name": "Personas · Público objetivo", "ph": 1, "para": "Dar cara y nombre a tu cliente ideal para tomar mejores decisiones.", "blocks": ["Foto y nombre", "Edad · Sexo · Ocupación", "Localización · Ingresos", "Educación", "Objetivos", "Motivaciones", "Frustraciones", "Aficiones", "Marcas que le gustan", "Dispositivos"], "cuando": "Tras las primeras entrevistas, antes de diseñar producto y marketing.", "guion": ["Píldora de emprendimiento: la ficha de Personas, o público objetivo.", "Sirve para dar cara y nombre a tu cliente ideal. Cuando el equipo comparte la misma persona en la cabeza, las decisiones de producto, precio y comunicación son mucho más fáciles.", "Rellena una ficha como si fuera alguien real: foto, edad, ocupación, dónde vive, ingresos y formación. Luego lo importante: sus objetivos, sus motivaciones y sus frustraciones. Y termina con aficiones, marcas que le gustan y qué dispositivos usa. Basa cada dato en entrevistas, no en suposiciones, y haz una ficha por cada tipo de cliente.", "Úsala después de tus primeras entrevistas y antes de diseñar el producto o la campaña de marketing. Tenla siempre a mano en las reuniones."]}, {"slug": "06_value_proposition_canvas", "n": 6, "name": "Value Proposition Canvas", "ph": 2, "para": "Formular en una frase qué valor das, a quién y en qué te diferencias.", "blocks": ["Nuestros productos y servicios", "ayudan a… (verbo)", "segmento de cliente", "que quieren… (jobs to be done)", "a diferencia de… (alternativa)"], "cuando": "Cuando ya conoces al cliente y necesitas explicar tu solución.", "guion": ["Píldora de emprendimiento: la propuesta de valor.", "Sirve para resumir en una sola frase qué ofreces, a quién y por qué eres diferente. Si no sabes decirlo en una frase, tu cliente tampoco lo va a entender.", "La plantilla es una frase con huecos. Nuestros productos y servicios, ayudan a, y aquí un verbo, a tal segmento de cliente, que quieren conseguir tal tarea o resultado, a diferencia de la alternativa que usan hoy. Prueba varias versiones, léelas en voz alta y quédate con la más clara y concreta. Después, contrástala con clientes reales.", "Úsala cuando ya has entendido al cliente con el mapa de empatía y la ficha de Personas, y antes de construir tu modelo de negocio o tu pitch."]}, {"slug": "07_matriz_competencia", "n": 7, "name": "Matriz de competencias", "ph": 2, "para": "Compararte con tu competencia en los puntos que te hacen diferente.", "blocks": ["Nuestra empresa", "Competidor 2", "Competidor 3", "Competidor 4 …", "Propuesta diferencial 1", "Propuesta diferencial 2", "Propuesta diferencial 3", "Propuesta diferencial 4"], "cuando": "Al definir tu propuesta y antes de presentar a inversores.", "guion": ["Píldora de emprendimiento: la matriz de competencias.", "Sirve para ver de un vistazo cómo te sitúas frente a tu competencia en aquello que te hace diferente. Decir que no tienes competencia nunca es una buena señal.", "En las filas pones tu empresa y hasta cinco competidores, directos o alternativos. En las columnas, tus cuatro propuestas diferenciales: precio, rapidez, sostenibilidad, experiencia, lo que te distinga. Marca o puntúa a cada uno. Si en ninguna columna destacas claramente, tu propuesta aún no es lo bastante diferente.", "Úsala cuando estás definiendo tu propuesta de valor y repítela antes de presentar el proyecto a inversores o socios. Es una diapositiva casi obligatoria."]}, {"slug": "08_calculo_mercado", "n": 8, "name": "Cálculo de mercado · TAM SAM SOM", "ph": 2, "para": "Estimar el tamaño real de tu oportunidad en clientes y en euros.", "blocks": ["TAM · mercado total", "SAM · mercado que encaja contigo", "SOM · mercado que puedes captar"], "cuando": "Antes de hacer tu plan financiero o buscar financiación.", "guion": ["Píldora de emprendimiento: el cálculo de mercado, o TAM, SAM y SOM.", "Sirve para estimar el tamaño de tu oportunidad, tanto en número de clientes como en facturación. Te ayuda a saber si el negocio merece la pena y a defenderlo ante inversores.", "Son tres círculos, uno dentro de otro. El TAM es el mercado total. El SAM es la parte de ese mercado que encaja con tu oferta y tu modelo de negocio. Y el SOM es la parte que de verdad puedes captar y atender en los próximos años. Calcula de abajo arriba: número de clientes por precio, y deja escritas tus fuentes y supuestos.", "Úsalo cuando ya tienes clara la propuesta y la competencia, y siempre antes de hacer tu plan financiero o de salir a buscar financiación."]}, {"slug": "09_business_model_canvas", "n": 9, "name": "Business Model Canvas", "ph": 3, "para": "Ver todo tu modelo de negocio en una sola página.", "blocks": ["Partners clave", "Actividades clave", "Recursos clave", "Propuesta de valor", "Relación con clientes", "Canales", "Segmentos de clientes", "Estructura de costes", "Fuentes de ingresos"], "cuando": "Cuando pasas de idea a modelo. Actualízalo tras cada aprendizaje.", "guion": ["Píldora de emprendimiento: el Business Model Canvas.", "Sirve para ver todo tu modelo de negocio en una sola página: cómo creas valor, cómo lo entregas y cómo ganas dinero. Es el mapa que conecta todas las demás herramientas.", "Tiene nueve bloques. A la derecha, el cliente: segmentos, propuesta de valor, canales y relación con clientes. A la izquierda, la operación: actividades, recursos y partners clave. Y abajo, los números: estructura de costes y fuentes de ingresos. Rellénalo con pósits, una idea por pósit, empezando por el cliente y la propuesta de valor.", "Úsalo cuando pasas de una idea a un modelo de negocio. No es un documento que se hace una vez: actualízalo después de cada experimento o conversación con clientes."]}, {"slug": "10_service_blueprint", "n": 10, "name": "Service Blueprint", "ph": 3, "para": "Diseñar lo que el cliente vive y lo que tiene que pasar por detrás.", "blocks": ["Atracción", "Compra", "Uso", "Valoración y recomendación", "Evidencias físicas", "Acciones del cliente", "Línea emocional", "Touchpoints", "Operativa", "Procesos de apoyo"], "cuando": "Antes de lanzar un piloto, para que la operación esté lista.", "guion": ["Píldora de emprendimiento: el Service Blueprint.", "Sirve para definir las acciones y procesos que tienen que pasar, a nivel operativo, para que tu producto o servicio funcione. Une lo que el cliente vive con lo que tu equipo hace por detrás.", "En horizontal, las fases del cliente: atracción, compra, uso, y valoración y recomendación. En vertical, las capas. Arriba, el frontstage: evidencias físicas, acciones del cliente, su línea emocional y los puntos de contacto. Abajo, el backstage: la operativa y los procesos de apoyo que el cliente no ve. Busca los momentos con emoción negativa: ahí tienes que mejorar.", "Úsalo antes de lanzar tu primer piloto, para que la operación esté preparada, y cada vez que algo falle en la experiencia del cliente."]}, {"slug": "11_product_market_fit", "n": 11, "name": "Product-Market Fit", "ph": 3, "para": "Alinear lo que pide el mercado con lo que ofrece tu producto.", "blocks": ["Problemas y necesidades ↔ Características", "Madurez del mercado ↔ Alternativas", "Experiencia de usuario ↔ Valor diferencial", "Canales ↔ Valor añadido del canal"], "cuando": "Al diseñar tu MVP y al revisar los resultados del piloto.", "guion": ["Píldora de emprendimiento: el Product-Market Fit.", "Sirve para comprobar que lo que ofrece tu producto encaja con lo que de verdad pide el mercado. Sin ese encaje, ningún presupuesto de marketing te va a salvar.", "La plantilla enfrenta dos columnas en cuatro parejas. Problemas y necesidades del cliente, frente a las características de tu producto. Madurez del mercado, frente a las alternativas que ya existen. La experiencia de usuario, frente a tu valor diferencial. Y los canales de compra, frente al valor que aporta tu canal. Cada pareja debe responderse con evidencias.", "Úsalo cuando diseñas tu producto mínimo viable y otra vez cuando analizas los resultados del piloto. Si las columnas no encajan, toca pivotar."]}, {"slug": "12_vision_futuro", "n": 12, "name": "Canvas de visión de futuro", "ph": 4, "para": "Definir hacia dónde va tu negocio y qué pasos te llevan allí.", "blocks": ["Visión", "Grandes hitos", "Apoyos", "Retos", "Temáticas"], "cuando": "Al formar el equipo y al empezar cada año.", "guion": ["Píldora de emprendimiento: el canvas de visión de futuro.", "Sirve para definir hacia dónde quieres llevar tu negocio y cómo vas a ayudar a tus clientes a largo plazo. Alinea al equipo y da sentido a las decisiones del día a día.", "En el centro escribe la visión: cómo será tu negocio dentro de unos años. Alrededor, los grandes hitos que te acercan a ella, agrupados por temáticas, como producto, equipo o mercado. Después identifica los apoyos que te van a ayudar a conseguirlo y los retos que te lo pueden dificultar. Que sea ambiciosa, pero creíble.", "Úsalo al formar el equipo fundador y al empezar cada año. Es el punto de partida para fijar tus OKRs."]}, {"slug": "13_okrs", "n": 13, "name": "OKRs", "ph": 4, "para": "Convertir la visión en objetivos medibles y acciones concretas.", "blocks": ["Objetivo anual", "Objetivo trimestral", "Resultados clave", "Acciones clave"], "cuando": "Cada trimestre, en cuanto tengas equipo y visión.", "guion": ["Píldora de emprendimiento: los OKRs, objetivos y resultados clave.", "Sirven para convertir tu visión en objetivos medibles y en acciones concretas. Así todo el equipo sabe qué es lo más importante ahora y cómo se mide el avance.", "Parte de un objetivo anual, inspirador y cualitativo. Divídelo en objetivos trimestrales. Para cada uno define resultados clave medibles, con un número y una fecha, por ejemplo cien clientes de pago en marzo. Y debajo, las acciones clave que vas a hacer para lograrlos. Pocos objetivos, como mucho tres resultados clave por cada uno.", "Úsalos en cuanto tengas equipo y visión. Revísalos cada semana y fíjalos de nuevo cada trimestre."]}, {"slug": "14_plan_negocio", "n": 14, "name": "Plan de negocio", "ph": 4, "para": "Proyectar ingresos y gastos para saber si el negocio se sostiene.", "blocks": ["Mes 1 … Mes 5", "Año 2 · Año 3", "Equipo", "Marketing", "Tecnología", "Oficina y transporte", "Ingresos por cliente o línea"], "cuando": "Antes de pedir financiación y para controlar tu caja.", "guion": ["Píldora de emprendimiento: el plan de negocio en números.", "Sirve para proyectar tus ingresos y tus gastos y saber si tu negocio se sostiene, cuánto dinero necesitas y cuándo llegarías al equilibrio.", "En columnas, el tiempo: los primeros meses uno a uno, y después el año dos y el año tres. En filas, primero la estructura de gastos: personas, marketing, tecnología, servicios, oficina, transporte. Después la estructura de ingresos, por cliente o por línea de negocio. Usa los datos de tu cálculo de mercado y sé conservador con los ingresos.", "Úsalo cuando ya tienes modelo de negocio y antes de pedir financiación. Y después, compáralo cada mes con la realidad para controlar tu caja."]}, {"slug": "15_escenarios", "n": 15, "name": "Escenarios", "ph": 4, "para": "Preparar tu negocio para que las cosas vayan mejor o peor de lo previsto.", "blocks": ["Indicadores · KPIs", "Escenario optimista", "Escenario moderado", "Escenario pesimista"], "cuando": "Junto al plan de negocio, y al revisar resultados.", "guion": ["Píldora de emprendimiento: la plantilla de escenarios.", "Sirve para prepararte ante distintos futuros. Las cosas casi nunca salen como en el plan, así que conviene saber de antemano qué harás si van mejor o peor.", "Primero define tus indicadores clave: clientes conseguidos, clientes fidelizados, ingresos, tamaño del equipo. Después describe tres escenarios, optimista, moderado y pesimista, con el valor de cada indicador en cada uno. Y lo más útil: decide qué decisiones tomarías en cada caso, por ejemplo contratar, recortar gastos o buscar financiación.", "Úsala junto al plan de negocio y cada vez que revises resultados. Así sabrás pronto en qué escenario estás y podrás reaccionar a tiempo."]}, {"slug": "16_riesgos", "n": 16, "name": "Riesgos del proyecto", "ph": 4, "para": "Anticipar lo que puede salir mal y cómo lo vas a mitigar.", "blocks": ["Producto o servicio", "Venta y comercialización", "Gestión de la operativa", "Riesgos económico-financieros", "Impacto generado"], "cuando": "Antes de lanzar un piloto y en cada revisión trimestral.", "guion": ["Píldora de emprendimiento: la plantilla de riesgos del proyecto.", "Sirve para identificar qué puede salir mal antes de que pase, y preparar cómo reducirlo. Los inversores valoran mucho a quien conoce sus riesgos.", "Repasa cinco áreas: el producto o servicio, la venta y comercialización, la gestión de la operativa interna, los riesgos económico-financieros y el impacto generado. En cada una explica los riesgos principales, valora su probabilidad y su impacto, y elige una métrica para vigilarlos. Añade una acción concreta para mitigar los más graves.", "Úsala antes de lanzar un piloto y revísala en cada cierre de trimestre, junto a tus OKRs y escenarios."]}, {"slug": "17_impacto_positivo", "n": 17, "name": "Impacto positivo", "ph": 4, "para": "Medir el impacto social, medioambiental y económico de tu proyecto.", "blocks": ["Impacto social", "Impacto medioambiental", "Impacto económico", "Positivo y negativo"], "cuando": "Desde el diseño del modelo, y al presentar a inversores de impacto.", "guion": ["Píldora de emprendimiento: la plantilla de impacto positivo.", "Sirve para analizar qué huella deja tu proyecto en el mundo, más allá de la facturación. Cada vez más clientes, talento e inversores lo miran antes de decidir.", "Tiene tres áreas. Impacto social: contribución local, diversidad, igualdad y apoyo a colectivos. Impacto medioambiental: residuos, huella hídrica, huella de carbono y reaprovechamiento. Impacto económico: empleo, sostenibilidad del negocio en el tiempo y riqueza para el entorno. En cada una anota el impacto positivo, pero también el negativo, con honestidad.", "Úsala desde que diseñas tu modelo de negocio, no al final. Y llévala contigo cuando presentes el proyecto a inversores o a convocatorias de impacto."]}], "phases": ["Explorar", "Entender al cliente", "Definir la propuesta", "Diseñar el modelo", "Planificar y crecer"]}</script>
+<script id="news-data" type="application/json">{"week": "Semana del 16 al 20 de noviembre de 2026", "videoKey": "noticias-2026-11-20", "videoFile": "IA_negocios_semana_20nov2026.mp4", "items": [{"tag": "Financiación", "title": "Anthropic sale a bolsa en el Nasdaq", "body": "La creadora de Claude fijó el precio de su salida a bolsa en 83 dólares por acción, por encima del rango previsto, con una demanda de unas seis veces la oferta. Eso la valora en torno a 1,5 billones de dólares y la sitúa entre las mayores salidas a bolsa de la historia. Empezó a cotizar el jueves 19 de noviembre.", "lesson": "El capital sigue apostando fuerte por la IA. Si tu proyecto la usa para resolver un problema concreto, hoy es más fácil explicar por qué el mercado es grande.", "tool": "08_calculo_mercado", "sources": [["The Next Web", "https://thenextweb.com/news/anthropic-ipo-prices-83-share-1-5-trillion-record-raise"], ["AI Weekly (CNBC)", "https://aiweekly.co/alerts/anthropic-prices-ipo-at-83-above-range-trades-thursday-as-ant"]]}, {"tag": "Liderazgo", "title": "Nvidia cambia de CEO y aun así bate récords", "body": "Jensen Huang dimitió el 12 de noviembre tras 33 años al frente, en medio de una investigación del consejo. La directora financiera, Colette Kress, es la consejera delegada interina. Cinco días después, Nvidia presentó unos ingresos trimestrales de 115.800 millones de dólares, un 103 % más que hace un año.", "lesson": "Depender de una sola persona es un riesgo, incluso en la empresa más valiosa del sector. Inclúyelo en tu análisis de riesgos.", "tool": "16_riesgos", "sources": [["TechCrunch", "https://techcrunch.com/?p=3187751"], ["Stock Analysis", "https://stockanalysis.com/news/nvda-q3-fy2027-earnings-beat/"]]}, {"tag": "Producto", "title": "OpenAI lanza GPT-6.2 Astra y Sol", "body": "Son dos modelos nuevos pensados para el trabajo profesional, con menos coste de computación para tareas complejas. Llegan dos semanas después de que GPT-6 Sol y Luna rebajaran precios a la mitad.", "lesson": "Lo que hace un año era caro de automatizar hoy cuesta mucho menos. Vuelve a puntuar la viabilidad de tus ideas.", "tool": "03_tecnologia_disruptiva", "sources": [["The Neuron", "https://www.theneuron.ai/digest/everything-that-happened-in-ai-today-wednesday-november-18-2026/"], ["Anicca", "https://anicca.co.uk/?p=63488"]]}, {"tag": "Producto", "title": "Google abre Gemini 4 Carbon a su API de pago", "body": "El modelo, antes limitado a un programa de ciberseguridad, ya está disponible en Google AI Studio y en Gemini para empresas, con un precio de lanzamiento de 2 dólares por millón de tokens de entrada y 10 de salida hasta el 30 de noviembre.", "lesson": "Los precios de lanzamiento son una ventana para prototipar barato. Aprovéchala para tu producto mínimo viable.", "tool": "11_product_market_fit", "sources": [["OpenTools", "https://opentools.ai/news/rezolve-ai-gears-up-to-revolutionize-retail-with-trumps-dollar500-billion-stargate-ai-initiative"]]}, {"tag": "Organización", "title": "Cognizant reorganiza a 68.000 personas por plataforma de IA", "body": "La consultora ha dividido a 68.000 empleados en unidades especializadas en Claude, OpenAI y Gemini, apostando por la especialización para ganar contratos de implantación de IA en empresas.", "lesson": "Especializarse en un nicho claro es una propuesta de valor. Defínela en una frase.", "tool": "06_value_proposition_canvas", "sources": [["OpenTools", "https://opentools.ai/news/building-the-future-why-robust-it-infrastructure-is-key-to-ai-success"]]}, {"tag": "Marketing", "title": "ChatGPT abre perfiles de empresa y agentes de marca", "body": "OpenAI ha lanzado en beta un espacio para que las empresas verifiquen su presencia en ChatGPT, consulten métricas de visibilidad y creen agentes que atienden a posibles clientes.", "lesson": "Tus clientes ya preguntan a la IA antes de comprar. Revisa tus canales: ¿apareces ahí?", "tool": "09_business_model_canvas", "sources": [["MarketingProfs", "https://www.marketingprofs.com/opinions/2026/56258/ai-update-november-13-2026-ai-news-and-views-from-the-past-week"]]}, {"tag": "Startups", "title": "LangChain alcanza una valoración de 3.000 millones", "body": "La startup de herramientas para crear agentes de IA declara 7.000 clientes de LangSmith, su plataforma para probar y vigilar agentes, según TechCrunch.", "lesson": "Las herramientas que ayudan a otros a construir crecen con toda la ola. Piensa en qué necesita tu cliente para usar una tecnología nueva.", "tool": "02_tendencias_consumo", "sources": [["AIToolly", "https://aitoolly.com/ai-news/2026-11-14"]]}, {"tag": "Mercado", "title": "Gartner prevé que el mercado de plataformas de IA crezca un 63 % en 2026", "body": "La consultora estima que el mercado mundial de plataformas y modelos de IA crecerá un 63,4 % este año, con la IA generativa creciendo más rápido que el resto.", "lesson": "Un mercado que crece así deja huecos para muchos nichos. Detecta cuál encaja con una necesidad que conoces bien.", "tool": "01_identificacion_necesidad", "sources": [["The Missing Link", "https://www.themissinglink.com.au/news/the-neural-link-edition-17"]]}]}</script>
+<script id="learn-data" type="application/json">{"featured": {"name": "Podcast de Itnig · Historias de startups", "by": "Bernat Farrero, Jordi Romero y el equipo de Itnig", "desc": "Fundadores e inversores cuentan cómo han creado, escalado o vendido sus empresas, con cifras reales. Tertulias de actualidad y entrevistas cada semana.", "links": [["YouTube", "https://www.youtube.com/channel/UCCbCxpkzNKxWXYf0AtZDsZw"], ["Spotify", "https://open.spotify.com/show/75ao7vbM0cH7SKIsyYN3iZ"], ["Apple Podcasts", "http://bit.ly/itnigapple"], ["iVoox", "https://www.ivoox.com/en/podcast-itnig_sq_f1393142_1.html"], ["Web de Itnig", "https://itnig.net/podcast"]]}, "more": [{"name": "Libros para Emprendedores", "why": "Luis Ramos resume libros de negocio en clave práctica.", "url": "https://www.ivoox.com/blog/?p=86518"}, {"name": "Así empecé", "why": "Grandes emprendedores cuentan sus comienzos.", "url": "https://www.ivoox.com/blog/podcasts-de-negocios/"}, {"name": "Más podcasts de emprendimiento en español", "why": "La selección de iVoox con los mejores de 2026.", "url": "https://www.ivoox.com/blog/?p=86518"}], "top": [{"rank": 1, "title": "Nothing: crear un ecosistema de productos tech", "num": "#283", "views": "228 mil", "url": "https://www.youtube.com/watch?v=aP-UZ97lnaY", "why": "Cómo una marca nueva de móviles se abre hueco frente a gigantes con un ecosistema propio.", "tool": "06_value_proposition_canvas"}, {"rank": 2, "title": "Mercadona Online con Juana Roig: la startup española que más factura", "num": "#271", "views": "223 mil", "url": "https://www.youtube.com/watch?v=bIHILg-pT_I", "why": "Cómo se monta la operación online de un gigante: procesos, logística y experiencia de cliente.", "tool": "10_service_blueprint"}, {"rank": 3, "title": "La historia de ThePowerMBA y Hugo Arévalo", "num": "#221", "views": "137 mil", "url": "https://www.youtube.com/watch?v=RwikPmaPQ1A", "why": "De idea a escuela de negocio digital: modelo, canales y crecimiento.", "tool": "09_business_model_canvas"}, {"rank": 4, "title": "Nude Project: el arte de crear una marca icónica a los 20 años", "num": "#265", "views": "107 mil", "url": "https://www.youtube.com/watch?v=BafczxSQHKM", "why": "Construir una marca conociendo muy bien a tu público.", "tool": "05_personas"}, {"rank": 5, "title": "La historia completa de Glovo con Óscar Pierre", "num": "#107", "views": "98 mil", "url": "https://www.youtube.com/watch?v=AnqAIuxPiO8", "why": "Los primeros pasos de Glovo hasta encontrar el encaje con el mercado.", "tool": "11_product_market_fit"}, {"rank": 6, "title": "Willyrex explica el negocio real de YouTube", "num": "", "views": "97 mil", "url": "https://www.youtube.com/watch?v=hJkFABnhc9U", "why": "Ingresos, patrocinios y costes de un negocio de creador de contenido, con números reales.", "tool": "14_plan_negocio"}, {"rank": 7, "title": "¿Dónde invertir tu dinero? Indexa Capital", "num": "#333", "views": "95 mil", "url": "https://www.youtube.com/watch?v=GF60B1hKh88", "why": "Riesgo, largo plazo y decisiones financieras explicadas con claridad.", "tool": "16_riesgos"}, {"rank": 8, "title": "El negocio que mueve 20.000 millones en España", "num": "#284", "views": "81 mil", "url": "https://www.youtube.com/watch?v=5ratQVugh7o", "why": "Cómo dimensionar un mercado enorme y encontrar tu parte.", "tool": "08_calculo_mercado"}, {"rank": 9, "title": "VICIO: la marca más buscada en Glovo, con Aleix Puig", "num": "#232", "views": "63 mil", "url": "https://www.youtube.com/watch?v=DgFrQ2vGSvw", "why": "Diferenciarse en un mercado saturado como el de las hamburguesas.", "tool": "07_matriz_competencia"}, {"rank": 10, "title": "La verdad del caso Hawkers según David Moreno", "num": "#227", "views": "62 mil", "url": "https://www.youtube.com/watch?v=wQfbd-20Ybg", "why": "Crecer muy rápido y gestionar los escenarios cuando las cosas se tuercen.", "tool": "15_escenarios"}, {"rank": 11, "title": "De amigos en Facebook a vender Holded por 200 millones", "num": "#318", "views": "57 mil", "url": "https://www.youtube.com/watch?v=fW9GaiTX7A8", "why": "Objetivos, equipo y ejecución hasta una gran venta.", "tool": "13_okrs"}, {"rank": 12, "title": "Cómo se construye una aerolínea de éxito · Carlos Muñoz (Volotea y Vueling)", "num": "", "views": "52 mil", "url": "https://www.youtube.com/watch?v=6qlHbEBUnW4", "why": "Visión a largo plazo en uno de los sectores más difíciles.", "tool": "12_vision_futuro"}], "topNote": "Visualizaciones en YouTube a 20 de noviembre de 2026.", "popularUrl": "https://www.youtube.com/@itnig/videos?view=0&sort=p"}</script>
+<script>
+const DATA = JSON.parse(document.getElementById("tools-data").textContent);
+const NEWS = JSON.parse(document.getElementById("news-data").textContent);
+const TOOLS = DATA.tools, PHASES = DATA.phases;
+const LEARN = JSON.parse(document.getElementById("learn-data").textContent);
+const app = document.getElementById("app");
+const state = { phase: null, q: "", videos: {}, db: null, assets: null };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const hashOf = t => "h-" + t.slug.replace(/_/g, "-");
+const bySlug = Object.fromEntries(TOOLS.map(t => [t.slug, t]));
+const pad = n => String(n).padStart(2, "0");
+
+function videoSrc(key) { const v = state.videos[key]; return v && v.assetId ? "/_blob/" + v.assetId : null; }
+
+function setNav(name) {
+  document.querySelectorAll("nav.main a").forEach(a => { if (a.dataset.nav === name) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+}
+
+function adminBlock() { return "";
+
+  return `<section class="admin" id="admin" hidden>
+    <h2>Subir los vídeos de las píldoras</h2>
+    <p>Solo lo ves tú como editor. Descarga los MP4 de ElevenLabs y arrástralos aquí todos a la vez: cada archivo se coloca en su herramienta por su nombre (Pildora_01_…mp4) y el resumen de noticias por IA_negocios_semana_….mp4.</p>
+    <label class="drop" id="drop" for="file-in">Arrastra aquí los MP4 o haz clic para elegirlos</label>
+    <input class="sr" type="file" id="file-in" accept="video/mp4" multiple>
+    <div class="log" id="log" aria-live="polite"></div>
+  </section>`;
+}
+
+function renderLibrary() {
+  setNav("herramientas");
+  const counts = PHASES.map((_, i) => TOOLS.filter(t => t.ph === i).length);
+  const withVideo = TOOLS.filter(t => videoSrc(t.slug)).length;
+  app.innerHTML = `
+  <section class="hero"><div class="hero-in">
+    <span class="eyebrow">17 píldoras de 1 minuto</span>
+    <h1>Las herramientas para emprender, en el orden en que las necesitas</h1>
+    <p>Cada herramienta tiene su plantilla descargable, un vídeo de un minuto y el guion completo: para qué sirve, cómo se usa y en qué momento del proyecto te conviene.</p>
+    <div class="route" role="group" aria-label="Filtrar por fase">
+      ${PHASES.map((p, i) => `<button type="button" data-ph="${i}" aria-pressed="${state.phase === i}"><span class="dot">${i + 1}</span><span class="nm">${esc(p)}</span><span class="ct">${counts[i]} herramientas</span></button>`).join("")}
+    </div>
+  </div></section>
+  ${adminBlock()}
+  <div class="toolbar">
+    <label class="search" for="q"><span aria-hidden="true">⌕</span><span class="sr">Buscar herramienta</span><input id="q" type="search" placeholder="Busca: clientes, mercado, OKR, riesgos…" value="${esc(state.q)}"></label>
+    <span class="count" id="count"></span>
+    <span class="chip ok" id="vcount">${withVideo} de ${TOOLS.length} con vídeo</span>
+  </div>
+  <div class="grid" id="grid"></div>`;
+  drawGrid();
+  app.querySelectorAll(".route button").forEach(b => b.onclick = () => { const i = +b.dataset.ph; state.phase = state.phase === i ? null : i; renderLibrary(); });
+  const q = document.getElementById("q");
+  q.oninput = () => { state.q = q.value; drawGrid(); };
+  wireAdmin();
+}
+
+function drawGrid() {
+  const q = state.q.trim().toLowerCase();
+  const list = TOOLS.filter(t => (state.phase === null || t.ph === state.phase) &&
+    (!q || (t.name + " " + t.para + " " + t.blocks.join(" ") + " " + t.guion.join(" ")).toLowerCase().includes(q)));
+  document.getElementById("count").textContent = list.length === TOOLS.length ? `${list.length} herramientas` : `${list.length} de ${TOOLS.length} herramientas`;
+  document.getElementById("grid").innerHTML = list.length ? list.map(t => `
+    <a class="card" href="#${hashOf(t)}">
+      <span class="num"><span>${pad(t.n)}</span></span>
+      <h3>${esc(t.name)}</h3>
+      <p>${esc(t.para)}</p>
+      <span class="chips"><span class="chip phase">Fase ${t.ph + 1} · ${esc(PHASES[t.ph])}</span>${videoSrc(t.slug) ? '<span class="chip ok">▶ Vídeo 1 min</span>' : '<span class="chip">Guion y plantilla</span>'}</span>
+    </a>`).join("") : `<p>No hay herramientas con «${esc(state.q)}». Prueba con otra palabra o quita el filtro de fase.</p>`;
+}
+
+function renderTool(t) {
+  setNav("herramientas");
+  const i = TOOLS.indexOf(t), prev = TOOLS[i - 1], next = TOOLS[i + 1];
+  const src = videoSrc(t.slug);
+  app.innerHTML = `
+  <article class="detail">
+    <div class="crumbs"><a href="#herramientas">Herramientas</a><span aria-hidden="true">/</span><span>Fase ${t.ph + 1} · ${esc(PHASES[t.ph])}</span></div>
+    <div class="dhead"><span class="eyebrow">Píldora ${pad(t.n)} de ${TOOLS.length}</span><h1>${esc(t.name)}</h1></div>
+    <div class="layout">
+      <div style="display:grid;gap:20px">
+        <div class="player"><video controls preload="metadata" playsinline src="videos/EDEBE_Pildora_${t.slug}.mp4" onerror="this.parentNode.classList.add('novid')"></video>
+          <div class="poster"><span class="k">PÍLDORA ${pad(t.n)} / ${TOOLS.length}</span><span class="t">${esc(t.name)}</span><span class="s">El vídeo de esta píldora estará disponible muy pronto. Mientras, tienes el guion completo aquí debajo.</span></div></div>
+        <section class="panel guion" aria-labelledby="g-h"><h2 id="g-h">Guion de la píldora</h2>${t.guion.map(p => `<p>${esc(p)}</p>`).join("")}</section>
+      </div>
+      <aside class="side">
+        <section class="panel"><h2>¿Para qué sirve?</h2><p class="big">${esc(t.para)}</p></section>
+        <section class="panel"><h2>¿Cómo se usa?</h2><div class="blocks">${t.blocks.map(b => `<span>${esc(b)}</span>`).join("")}</div></section>
+        <section class="panel"><h2>¿Cuándo usarla?</h2><p class="big">${esc(t.cuando)}</p><div class="minroute" aria-hidden="true">${PHASES.map((_, k) => `<span class="${k === t.ph ? "on" : ""}"></span>`).join("")}</div><small>Fase ${t.ph + 1} de 5: ${esc(PHASES[t.ph])}</small></section>
+        <section class="panel tpl"><h2>Plantilla</h2>
+          <img src="${tplFile(t, "jpg")}" alt="Vista previa de la plantilla ${esc(t.name)}" loading="lazy">
+          <a class="btn primary" href="${tplFile(t, "pdf")}" download>Descargar plantilla (PDF)</a>
+          <small class="dlmsg" id="dlmsg" aria-live="polite"></small>
+        </section>
+      </aside>
+    </div>
+    <nav class="pager" aria-label="Otras píldoras">
+      ${prev ? `<a href="#${hashOf(prev)}"><small>← Anterior</small>${esc(prev.name)}</a>` : "<span></span>"}
+      ${next ? `<a class="next" href="#${hashOf(next)}"><small>Siguiente →</small>${esc(next.name)}</a>` : "<span></span>"}
+    </nav>
+  </article>`;
+  app.querySelectorAll("[data-dl]").forEach(b => b.onclick = () => downloadTpl(bySlug[b.dataset.dl]));
+  window.scrollTo(0, 0);
+}
+
+function tplFile(t, ext) { return `plantillas/EDEBE_Plantilla_${t.slug}.${ext}`; }
+async function downloadTpl(t) {
+  const msg = document.getElementById("dlmsg");
+  const name = `EDEBE_Plantilla_${t.slug}.pdf`;
+  try {
+    const dl = window.claude && window.claude.use ? await window.claude.use("downloads") : null;
+    if (!dl) { msg.innerHTML = `Abre la plantilla y guárdala desde ahí: <a href="${tplFile(t, "pdf")}" target="_blank" rel="noopener">${name}</a>`; return; }
+    msg.textContent = "Preparando la descarga…";
+    const blob = await (await fetch(tplFile(t, "pdf"))).blob();
+    await dl.save({ filename: name, data: blob });
+    msg.textContent = "Plantilla descargada.";
+  } catch (e) {
+    if (e && e.code === "declined") { msg.textContent = "Descarga cancelada."; return; }
+    msg.innerHTML = `No se pudo descargar aquí. Ábrela y guárdala desde ahí: <a href="${tplFile(t, "pdf")}" target="_blank" rel="noopener">${name}</a>`;
+  }
+}
+
+function renderNews() {
+  setNav("noticias");
+  const src = videoSrc(NEWS.videoKey);
+  app.innerHTML = `
+  <section class="news-head">
+    <span class="eyebrow">${esc(NEWS.week)}</span>
+    <h1>Noticias de tecnología y negocios para inspirarte</h1>
+    <p>Lo que ha movido el sector esta semana, con una lección práctica para tu proyecto y la herramienta de la caja que te ayuda a aplicarla.</p>
+  </section>
+  ${adminBlock()}
+  <div class="news-top">
+    <div class="player"><video controls preload="metadata" playsinline src="videos/${NEWS.videoFile}" onerror="this.parentNode.classList.add('novid')"></video>
+      <div class="poster"><span class="k">RESUMEN EN VÍDEO · 2 MIN</span><span class="t">La semana en IA y negocios</span><span class="s">El vídeo resumen, narrado por Xabi, estará disponible muy pronto.</span></div></div>
+    <div class="panel"><h2>Cómo leer esta sección</h2><p>Cada noticia trae tres cosas: qué ha pasado, qué puedes aprender de ello como emprendedor y qué herramienta usar para llevarlo a tu proyecto. Pulsa la fuente para leer la noticia original.</p></div>
+  </div>
+  <div class="news">${NEWS.items.map(n => { const t = bySlug[n.tool]; return `
+    <article class="story">
+      <span class="chips"><span class="chip phase">${esc(n.tag)}</span></span>
+      <h3>${esc(n.title)}</h3>
+      <p>${esc(n.body)}</p>
+      <div class="lesson"><b>Lección para emprender</b><span>${esc(n.lesson)}</span>${t ? `<a href="#${hashOf(t)}">Herramienta: ${esc(t.name)} →</a>` : ""}</div>
+      <div class="srcs">Fuente: ${n.sources.map(s => `<a href="${esc(s[1])}" target="_blank" rel="noopener">${esc(s[0])}</a>`).join("")}</div>
+    </article>`; }).join("")}</div>`;
+  wireAdmin();
+  window.scrollTo(0, 0);
+}
+
+function ext(links, primary) {
+  return links.map((l, i) => `<a class="btn ${i === 0 && primary ? "primary" : ""}" href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join("");
+}
+function ytId(u) { const m = String(u).match(/[?&]v=([\w-]{6,})/); return m ? m[1] : ""; }
+function wireYT() {
+  app.querySelectorAll("button.yt").forEach(b => b.onclick = () => {
+    const f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + b.dataset.yt + "?autoplay=1&rel=0";
+    f.title = b.getAttribute("aria-label");
+    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    f.allowFullscreen = true; f.className = "ytf";
+    b.replaceWith(f);
+  });
+}
+function toolLink(slug) { const t = bySlug[slug]; return t ? `<a class="tl" href="#${hashOf(t)}">Herramienta: ${esc(t.name)} →</a>` : ""; }
+function renderLearn() {
+  setNav("aprende");
+  const f = LEARN.featured;
+  app.innerHTML = `
+  <section class="news-head">
+    <span class="eyebrow">Vídeos y podcasts</span>
+    <h1>Aprende a emprender con quienes ya lo han hecho</h1>
+    <p>Los episodios con más éxito del podcast de Itnig para ver mientras trabajas en tu proyecto. Cada uno va unido a la herramienta de la caja que mejor encaja con lo que cuenta.</p>
+  </section>
+  <section class="feat">
+    <div class="feat-art" aria-hidden="true"><span>itnig</span><small>PODCAST</small></div>
+    <div class="feat-body">
+      <span class="eyebrow">Podcast recomendado</span>
+      <h2>${esc(f.name)}</h2>
+      <p class="by">${esc(f.by)}</p>
+      <p>${esc(f.desc)}</p>
+      <div class="btns">${ext(f.links, true)}</div>
+      <small class="note">Los episodios más vistos se reproducen aquí mismo. El resto de plataformas se abren en una pestaña nueva.</small>
+    </div>
+  </section>
+  <div class="sec-row"><h2 class="sec-h">Los 12 episodios más vistos de Itnig</h2><a class="btn" href="${esc(LEARN.popularUrl)}" target="_blank" rel="noopener">Ver el ranking completo en YouTube ↗</a></div>
+  <p class="note">${esc(LEARN.topNote)}</p>
+  <div class="eps">${LEARN.top.map(e => `
+    <article class="ep">
+      <button class="yt" type="button" data-yt="${esc(ytId(e.url))}" aria-label="Reproducir ${esc(e.title)}"><img src="https://i.ytimg.com/vi/${esc(ytId(e.url))}/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><b>${e.rank}</b><span>▶</span></button>
+      <div class="ep-body">
+        <span class="chips"><span class="chip ok">${esc(e.views)} visualizaciones</span>${e.num ? `<span class="chip phase">Podcast ${esc(e.num)}</span>` : ""}</span>
+        <h3>${esc(e.title)}</h3>
+        <p>${esc(e.why)}</p>
+        ${toolLink(e.tool)}
+        <div class="btns"><a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">Abrir en YouTube ↗</a></div>
+      </div>
+    </article>`).join("")}</div>
+  <h2 class="sec-h">Más podcasts en español</h2>
+  <div class="news last">${LEARN.more.map(e => `
+    <article class="story">
+      <h3>${esc(e.name)}</h3>
+      <p>${esc(e.why)}</p>
+      <div class="btns"><a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">Ver en iVoox ↗</a></div>
+    </article>`).join("")}</div>`;
+  wireYT();
+  window.scrollTo(0, 0);
+}
+
+function route() {
+  const h = location.hash.replace("#", "");
+  if (h === "aprende") return renderLearn();
+  if (h === "noticias") return renderNews();
+  const t = TOOLS.find(x => hashOf(x) === h);
+  if (t) return renderTool(t);
+  renderLibrary();
+}
+window.addEventListener("hashchange", route);
+route();
+
+/* Vídeos guardados: db (quién va con qué) + assets (los MP4). */
+function keyForFile(name) {
+  const n = name.toLowerCase();
+  if (n.startsWith("ia_negocios_semana")) return NEWS.videoKey;
+  const m = n.match(/pildora_(\d{2})_/);
+  if (m) { const t = TOOLS.find(x => x.n === +m[1]); return t ? t.slug : null; }
+  const t = TOOLS.find(x => n.includes(x.slug)); return t ? t.slug : null;
+}
+
+function wireAdmin() {
+  const box = document.getElementById("admin");
+  if (!box || !state.assets || !state.db) return;
+  box.hidden = false;
+  const input = document.getElementById("file-in"), drop = document.getElementById("drop"), log = document.getElementById("log");
+  const line = (txt, cls) => { const d = document.createElement("div"); d.className = cls || ""; d.textContent = txt; log.prepend(d); };
+  async function handle(files) {
+    for (const f of files) {
+      const key = keyForFile(f.name);
+      if (!key) { line(`${f.name}: no sé a qué píldora pertenece. Renómbralo como Pildora_NN_….mp4.`, "bad"); continue; }
+      try {
+        line(`Subiendo ${f.name}…`);
+        const a = await state.assets.upload(f);
+        await state.db.doc("videos/" + key).set({ assetId: a.id, file: f.name, updated: new Date().toISOString() });
+        line(`${f.name}: listo`, "good");
+      } catch (e) { line(`${f.name}: no se pudo subir (${e && e.message ? e.message : e}). Vuelve a intentarlo.`, "bad"); }
+    }
+  }
+  input.onchange = () => handle([...input.files]);
+  drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
+  drop.ondragleave = () => drop.classList.remove("over");
+  drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); handle([...e.dataTransfer.files]); };
+}
+
+(async () => {
+  try {
+    if (!window.claude || !window.claude.use) return;
+    const db = await window.claude.use("db");
+    if (db) {
+      state.db = db;
+      db.collection("videos").onSnapshot(snap => {
+        const v = {};
+        (snap.docs || snap).forEach(d => { const data = typeof d.data === "function" ? d.data() : d.data; v[d.id] = data; });
+        state.videos = v;
+        const playing = document.querySelector("video");
+        if (!playing || playing.paused) route();
+      }, () => {});
+    }
+    const assets = await window.claude.use("assets");
+    if (assets) { state.assets = assets; wireAdmin(); }
+  } catch (e) { /* la página funciona sin vídeos guardados */ }
+})();
+</script>
+</body>
+</html>
