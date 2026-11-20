@@ -452,7 +452,6 @@ function renderLearn() {
   window.scrollTo(0, 0);
 }
 
-const CONTACT = "xabmurua@gmail.com";
 const STAGES = [
   { r: "0 → 100.000 €", n: "Validar", d: "De la idea a los primeros clientes que pagan. Buscamos la necesidad real, afinamos la propuesta de valor y diseñamos los primeros experimentos.", tools: ["01_identificacion_necesidad", "04_mapa_empatia", "06_value_proposition_canvas"] },
   { r: "100.000 → 500.000 €", n: "Traccionar", d: "Convertir las primeras ventas en un modelo repetible: canales que funcionan, precios, operación y primeros fichajes.", tools: ["09_business_model_canvas", "11_product_market_fit", "10_service_blueprint"] },
@@ -496,7 +495,7 @@ function renderConsejo() {
     <div>
       <span class="eyebrow">Solicitud</span>
       <h2>Cuéntanos tu proyecto</h2>
-      <p>Al enviar se abrirá tu correo con el mensaje preparado. Si no se abre, escríbenos directamente a <b>${CONTACT}</b>.</p>
+      <p>Déjanos tus datos y te escribimos para concertar una primera conversación.</p>
       <p class="for">Pensado para fundadoras y fundadores con un proyecto en marcha que todavía no ha llegado al millón de euros de facturación anual, incluido quien aún no factura.</p>
     </div>
     <form id="apply-form" class="aform" novalidate>
@@ -506,19 +505,28 @@ function renderConsejo() {
       <label for="f-stage">Facturación anual</label>
       <select id="f-stage" name="stage"><option>Todavía no facturamos</option><option>Menos de 100.000 €</option><option>100.000 – 500.000 €</option><option>500.000 € – 1 M€</option></select>
       <label for="f-msg">¿Cuál es tu principal reto ahora?</label><textarea id="f-msg" name="msg" rows="4"></textarea>
+      <div class="sr" aria-hidden="true"><label for="f-web">No rellenar</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
       <button class="btn primary" type="submit">Enviar solicitud</button>
       <small class="dlmsg" id="f-out" aria-live="polite"></small>
     </form>
   </section>`;
   const form = document.getElementById("apply-form");
-  form.onsubmit = e => {
+  form.onsubmit = async e => {
     e.preventDefault();
     const out = document.getElementById("f-out");
+    const btn = form.querySelector("button[type=submit]");
     const v = Object.fromEntries(new FormData(form));
     if (!v.name.trim() || !v.email.trim() || !v.project.trim()) { out.textContent = "Rellena nombre, email y proyecto para enviar la solicitud."; return; }
-    const body = `Nombre: ${v.name}\nEmail: ${v.email}\nProyecto: ${v.project}\nFacturación anual: ${v.stage}\n\nPrincipal reto:\n${v.msg}`;
-    location.href = `mailto:${CONTACT}?subject=${encodeURIComponent("Consejo asesor Branka · " + v.project)}&body=${encodeURIComponent(body)}`;
-    out.textContent = `Se ha abierto tu correo con la solicitud. Si no ves el mensaje, escríbenos a ${CONTACT}.`;
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.email.trim())) { out.textContent = "Revisa el email: parece que no es válido."; return; }
+    btn.disabled = true; out.textContent = "Enviando…";
+    try {
+      const r = await fetch("/api/solicitud", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(v) });
+      if (!r.ok) throw new Error(String(r.status));
+      form.reset();
+      out.textContent = "¡Gracias! Hemos recibido tu solicitud y te escribiremos pronto.";
+    } catch (err) {
+      out.textContent = "No hemos podido enviar la solicitud ahora mismo. Inténtalo de nuevo en unos minutos.";
+    } finally { btn.disabled = false; }
   };
   if (location.hash === "#solicitar") document.getElementById("solicitar").scrollIntoView(); else window.scrollTo(0, 0);
 }
