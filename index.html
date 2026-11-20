@@ -71,7 +71,7 @@ nav.main a[aria-current="page"] { background: rgba(255,255,255,.16); color: #fff
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; padding: 12px 18px; font-weight: 700; text-decoration: none; border: 0; background: var(--surface-2); color: var(--text); cursor: pointer; }
 .btn.primary { background: var(--grad); color: #fff; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; padding-bottom: 56px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; padding-bottom: 28px; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px 18px 16px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 10px; text-decoration: none; color: var(--text); position: relative; overflow: hidden; transition: box-shadow .15s, transform .15s; }
 .card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: var(--grad); }
 .card:hover { box-shadow: 0 10px 28px rgba(165,43,23,.14); transform: translateY(-2px); }
@@ -177,6 +177,39 @@ footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 14px
 .tl { font-weight: 700; font-size: 15px; }
 .news.last { padding-bottom: 64px; }
 
+nav.main a.navcta { background: #fff; color: var(--brand); }
+nav.main a.navcta[aria-current="page"] { background: #fff; color: var(--red); }
+.btn.white { background: #fff; color: var(--red); }
+.news-head .btns { margin-top: 8px; }
+.band { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; background: var(--grad); color: #fff; border-radius: 16px; padding: 20px 24px; text-decoration: none; margin-bottom: 56px; }
+.band b { font-family: var(--font-display); font-size: 20px; display: block; }
+.stages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 880px) { .stages { grid-template-columns: 1fr; } .apply { grid-template-columns: 1fr !important; } }
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 10px; align-content: start; position: relative; overflow: hidden; }
+.stage::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: var(--grad); }
+.srange { font-family: var(--font-display); font-weight: 800; font-size: 22px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; width: max-content; font-variant-numeric: tabular-nums; }
+.stage h3 { font-size: 22px; font-weight: 800; }
+.stage p { margin: 0; color: #4a2a20; }
+.stage .chip { text-decoration: none; }
+.incl { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.inc { display: grid; grid-template-columns: auto 1fr; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.inc .n { font-family: var(--font-display); font-weight: 800; color: var(--red); font-size: 18px; }
+.inc h3 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.inc p { margin: 0; color: var(--muted); font-size: 15.5px; }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; counter-reset: st; }
+.steps li { counter-increment: st; background: var(--surface-2); border-radius: 14px; padding: 16px 18px; display: grid; gap: 4px; }
+.steps li::before { content: counter(st); width: 32px; height: 32px; border-radius: 50%; background: var(--grad); color: #fff; display: grid; place-items: center; font-weight: 800; margin-bottom: 6px; }
+.steps b { font-size: 17px; }
+.steps span { color: var(--muted); font-size: 15px; }
+.apply { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 28px; margin: 34px 0 64px; scroll-margin-top: 80px; }
+.apply h2 { font-size: 30px; font-weight: 800; margin: 6px 0 10px; }
+.apply p { margin: 0 0 10px; color: #4a2a20; }
+.apply .for { color: var(--muted); font-size: 15px; }
+.aform { display: grid; gap: 6px; }
+.aform label { font-weight: 700; font-size: 14px; margin-top: 6px; }
+.aform input, .aform select, .aform textarea { border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; background: var(--bg); width: 100%; }
+.aform input:focus, .aform select:focus, .aform textarea:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(236,143,53,.2); }
+.aform .btn { margin-top: 10px; }
 .player video { position: relative; z-index: 1; }
 .player .poster { z-index: 0; }
 .player.novid video { display: none; }
@@ -199,6 +232,7 @@ footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 14px
       <a href="#herramientas" data-nav="herramientas">Herramientas</a>
       <a href="#aprende" data-nav="aprende">Aprende</a>
       <a href="#noticias" data-nav="noticias">Noticias</a>
+      <a href="#consejo" data-nav="consejo" class="navcta">Consejo asesor</a>
     </nav>
   </div>
 </header>
@@ -260,7 +294,8 @@ function renderLibrary() {
     <span class="count" id="count"></span>
     <span class="chip ok" id="vcount">${withVideo} de ${TOOLS.length} con vídeo</span>
   </div>
-  <div class="grid" id="grid"></div>`;
+  <div class="grid" id="grid"></div>
+  <a class="band" href="#consejo"><span><b>¿Tu proyecto está entre 0 y 1 M€ de facturación?</b> Te acompañamos con un consejo asesor mensual.</span><span class="btn white">Conocer el consejo asesor →</span></a>`;
   drawGrid();
   app.querySelectorAll(".route button").forEach(b => b.onclick = () => { const i = +b.dataset.ph; state.phase = state.phase === i ? null : i; renderLibrary(); });
   const q = document.getElementById("q");
@@ -417,8 +452,80 @@ function renderLearn() {
   window.scrollTo(0, 0);
 }
 
+const CONTACT = "xabmurua@gmail.com";
+const STAGES = [
+  { r: "0 → 100.000 €", n: "Validar", d: "De la idea a los primeros clientes que pagan. Buscamos la necesidad real, afinamos la propuesta de valor y diseñamos los primeros experimentos.", tools: ["01_identificacion_necesidad", "04_mapa_empatia", "06_value_proposition_canvas"] },
+  { r: "100.000 → 500.000 €", n: "Traccionar", d: "Convertir las primeras ventas en un modelo repetible: canales que funcionan, precios, operación y primeros fichajes.", tools: ["09_business_model_canvas", "11_product_market_fit", "10_service_blueprint"] },
+  { r: "500.000 → 1 M€", n: "Escalar", d: "Ordenar la casa para crecer: objetivos trimestrales, números bajo control, escenarios, riesgos y, si toca, financiación.", tools: ["13_okrs", "14_plan_negocio", "15_escenarios"] }
+];
+const INCL = [
+  ["Sesión mensual de consejo", "Una reunión de trabajo cada mes para revisar avances y tomar las decisiones clave del periodo."],
+  ["Revisión de tus números", "Repasamos tu reporting y tus indicadores antes de cada sesión para llegar con el diagnóstico hecho."],
+  ["OKRs trimestrales", "Fijamos contigo los objetivos y resultados clave de cada trimestre y hacemos su seguimiento."],
+  ["Método y plantillas Branka", "Trabajamos con las 17 herramientas de la caja, adaptadas a tu proyecto."],
+  ["Red de contactos", "Te conectamos con clientes, proveedores, talento e inversores cuando tu proyecto lo necesite."],
+  ["Apoyo entre sesiones", "Un canal directo para dudas urgentes y decisiones que no pueden esperar al mes siguiente."]
+];
+function renderConsejo() {
+  setNav("consejo");
+  app.innerHTML = `
+  <section class="news-head">
+    <span class="eyebrow">Servicio de consejo asesor</span>
+    <h1>Un consejo asesor para llevar tu proyecto de 0 a 1 M€</h1>
+    <p>Un consejo de personas con experiencia que se sienta contigo cada mes para ayudarte a decidir mejor, con método y con tus números delante, hasta tu primer millón de facturación.</p>
+    <div class="btns"><a class="btn white" href="#solicitar">Solicitar una primera conversación</a></div>
+  </section>
+  <h2 class="sec-h">Te acompañamos en cada tramo</h2>
+  <div class="stages">${STAGES.map((s, i) => `
+    <article class="stage">
+      <span class="srange">${esc(s.r)}</span>
+      <h3>${i + 1}. ${esc(s.n)}</h3>
+      <p>${esc(s.d)}</p>
+      <div class="chips">${s.tools.map(k => bySlug[k] ? `<a class="chip phase" href="#${hashOf(bySlug[k])}">${esc(bySlug[k].name)}</a>` : "").join("")}</div>
+    </article>`).join("")}</div>
+  <h2 class="sec-h">Qué incluye</h2>
+  <div class="incl">${INCL.map((x, i) => `<div class="inc"><span class="n">${pad(i + 1)}</span><div><h3>${esc(x[0])}</h3><p>${esc(x[1])}</p></div></div>`).join("")}</div>
+  <h2 class="sec-h">Cómo funciona</h2>
+  <ol class="steps">
+    <li><b>Primera conversación</b><span>Nos cuentas tu proyecto, en qué punto está y qué te preocupa.</span></li>
+    <li><b>Diagnóstico</b><span>Revisamos tu modelo y tus números con las herramientas Branka.</span></li>
+    <li><b>Propuesta a medida</b><span>Te proponemos el formato y el precio según tu etapa y tus necesidades.</span></li>
+    <li><b>Consejo en marcha</b><span>Sesiones mensuales, OKRs trimestrales y seguimiento continuo.</span></li>
+  </ol>
+  <section class="apply" id="solicitar">
+    <div>
+      <span class="eyebrow">Solicitud</span>
+      <h2>Cuéntanos tu proyecto</h2>
+      <p>Al enviar se abrirá tu correo con el mensaje preparado. Si no se abre, escríbenos directamente a <b>${CONTACT}</b>.</p>
+      <p class="for">Pensado para fundadoras y fundadores con un proyecto en marcha que todavía no ha llegado al millón de euros de facturación anual, incluido quien aún no factura.</p>
+    </div>
+    <form id="apply-form" class="aform" novalidate>
+      <label for="f-name">Nombre</label><input id="f-name" name="name" required autocomplete="name">
+      <label for="f-mail">Email</label><input id="f-mail" name="email" type="email" required autocomplete="email">
+      <label for="f-proj">Proyecto</label><input id="f-proj" name="project" required placeholder="Nombre y a qué se dedica">
+      <label for="f-stage">Facturación anual</label>
+      <select id="f-stage" name="stage"><option>Todavía no facturamos</option><option>Menos de 100.000 €</option><option>100.000 – 500.000 €</option><option>500.000 € – 1 M€</option></select>
+      <label for="f-msg">¿Cuál es tu principal reto ahora?</label><textarea id="f-msg" name="msg" rows="4"></textarea>
+      <button class="btn primary" type="submit">Enviar solicitud</button>
+      <small class="dlmsg" id="f-out" aria-live="polite"></small>
+    </form>
+  </section>`;
+  const form = document.getElementById("apply-form");
+  form.onsubmit = e => {
+    e.preventDefault();
+    const out = document.getElementById("f-out");
+    const v = Object.fromEntries(new FormData(form));
+    if (!v.name.trim() || !v.email.trim() || !v.project.trim()) { out.textContent = "Rellena nombre, email y proyecto para enviar la solicitud."; return; }
+    const body = `Nombre: ${v.name}\nEmail: ${v.email}\nProyecto: ${v.project}\nFacturación anual: ${v.stage}\n\nPrincipal reto:\n${v.msg}`;
+    location.href = `mailto:${CONTACT}?subject=${encodeURIComponent("Consejo asesor Branka · " + v.project)}&body=${encodeURIComponent(body)}`;
+    out.textContent = `Se ha abierto tu correo con la solicitud. Si no ves el mensaje, escríbenos a ${CONTACT}.`;
+  };
+  if (location.hash === "#solicitar") document.getElementById("solicitar").scrollIntoView(); else window.scrollTo(0, 0);
+}
+
 function route() {
   const h = location.hash.replace("#", "");
+  if (h === "consejo" || h === "solicitar") return renderConsejo();
   if (h === "aprende") return renderLearn();
   if (h === "noticias") return renderNews();
   const t = TOOLS.find(x => hashOf(x) === h);
