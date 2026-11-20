@@ -585,7 +585,7 @@ function renderHome() {
     <span class="eyebrow">Mentorías de emprendedores a emprendedores</span>
     <h1>Emprende acompañado por quien ya ha pasado por ahí</h1>
     <p>En Branka, emprendedores con experiencia acompañan a quienes están empezando. Mentorías cercanas y prácticas para tomar mejores decisiones desde el primer día.</p>
-    <div class="btns"><a class="btn white" href="#solicitar">Quiero un mentor</a><a class="btn ghost" href="#mentor">Quiero ser mentor</a></div>
+    <div class="btns"><a class="btn white" href="#solicitar">Quiero un mentor</a><a class="btn ghost" href="#como">Cómo funciona</a></div>
   </div></section>
 
   <h2 class="sec-h">Por qué de emprendedor a emprendedor</h2>
@@ -602,15 +602,6 @@ function renderHome() {
   <h2 class="sec-h" id="como">Cómo funciona</h2>
   <ol class="steps">${HOW.map(x => `<li><b>${esc(x[0])}</b><span>${esc(x[1])}</span></li>`).join("")}</ol>
 
-  <section class="mentor-band" id="mentor">
-    <div>
-      <span class="eyebrow">¿Has emprendido?</span>
-      <h2>Hazte mentor y devuelve lo que aprendiste</h2>
-      <p>Si has montado tu propia empresa y quieres ayudar a quien empieza, únete a la red de mentores de Branka.</p>
-    </div>
-    <a class="btn white" href="#solicitar" data-role="Quiero ser mentor/a">Quiero ser mentor</a>
-  </section>
-
   <section class="res">
     <div><span class="eyebrow">Recursos gratuitos</span><h2>Para que llegues a tu mentoría con los deberes hechos</h2></div>
     <div class="res-grid">
@@ -623,35 +614,23 @@ function renderHome() {
   <section class="apply" id="solicitar">
     <div>
       <span class="eyebrow">Solicitud</span>
-      <h2>Cuéntanos quién eres</h2>
-      <p>Déjanos tus datos y te escribimos para conocerte. Tanto si buscas mentor como si quieres serlo.</p>
+      <h2>Cuéntanos tu proyecto</h2>
+      <p>Déjanos tus datos y te escribimos para conocerte y presentarte a tu mentor.</p>
       <p class="for">Las mentorías son para emprendedores que están empezando: desde quien aún no factura hasta proyectos que todavía no han llegado al millón de euros.</p>
     </div>
     <form id="apply-form" class="aform" novalidate>
-      <label for="f-role">Quiero…</label>
-      <select id="f-role" name="role"><option>Tener un mentor</option><option>Ser mentor/a</option></select>
       <label for="f-name">Nombre</label><input id="f-name" name="name" required autocomplete="name">
       <label for="f-mail">Email</label><input id="f-mail" name="email" type="email" required autocomplete="email">
       <label for="f-proj">Proyecto o empresa</label><input id="f-proj" name="project" required placeholder="Nombre y a qué se dedica">
-      <label for="f-stage" id="f-stage-l">Etapa del proyecto</label>
+      <label for="f-stage">Etapa del proyecto</label>
       <select id="f-stage" name="stage"><option>Idea, todavía sin clientes</option><option>Primeros clientes</option><option>Facturamos menos de 100.000 €</option><option>Entre 100.000 € y 1 M€</option></select>
-      <label for="f-msg" id="f-msg-l">¿En qué te gustaría que te ayudara tu mentor?</label><textarea id="f-msg" name="msg" rows="4"></textarea>
+      <label for="f-msg">¿En qué te gustaría que te ayudara tu mentor?</label><textarea id="f-msg" name="msg" rows="4"></textarea>
       <div class="sr" aria-hidden="true"><label for="f-web">No rellenar</label><input id="f-web" name="website" tabindex="-1" autocomplete="off"></div>
       <button class="btn primary" type="submit">Enviar solicitud</button>
       <small class="dlmsg" id="f-out" aria-live="polite"></small>
     </form>
   </section>`;
   const form = document.getElementById("apply-form");
-  const role = document.getElementById("f-role");
-  const syncRole = () => {
-    const mentor = role.value === "Ser mentor/a";
-    document.getElementById("f-stage-l").textContent = mentor ? "Tu experiencia emprendiendo" : "Etapa del proyecto";
-    document.getElementById("f-stage").innerHTML = (mentor ? ["He fundado una empresa", "He fundado varias empresas", "He vendido una empresa", "Otra experiencia"] : ["Idea, todavía sin clientes", "Primeros clientes", "Facturamos menos de 100.000 €", "Entre 100.000 € y 1 M€"]).map(o => `<option>${o}</option>`).join("");
-    document.getElementById("f-msg-l").textContent = mentor ? "¿Qué te gustaría aportar como mentor/a?" : "¿En qué te gustaría que te ayudara tu mentor?";
-  };
-  role.onchange = syncRole;
-  app.querySelectorAll("[data-role]").forEach(a => a.addEventListener("click", () => { role.value = "Ser mentor/a"; syncRole(); }));
-  app.querySelectorAll('a[href="#solicitar"]:not([data-role])').forEach(a => a.addEventListener("click", () => { role.value = "Tener un mentor"; syncRole(); }));
   form.onsubmit = async e => {
     e.preventDefault();
     const out = document.getElementById("f-out");
@@ -663,13 +642,13 @@ function renderHome() {
     try {
       const r = await fetch("/api/solicitud", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(v) });
       if (!r.ok) throw new Error(String(r.status));
-      form.reset(); syncRole();
+      form.reset();
       out.textContent = "¡Gracias! Hemos recibido tu solicitud y te escribiremos pronto.";
     } catch (err) {
       out.textContent = "No hemos podido enviar la solicitud ahora mismo. Inténtalo de nuevo en unos minutos.";
     } finally { btn.disabled = false; }
   };
-  const target = { solicitar: "solicitar", mentor: "mentor", como: "como" }[location.hash.replace("#", "")];
+  const target = { solicitar: "solicitar", como: "como" }[location.hash.replace("#", "")];
   if (target) document.getElementById(target).scrollIntoView(); else window.scrollTo(0, 0);
 }
 

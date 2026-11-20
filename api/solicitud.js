@@ -1,4 +1,4 @@
-// Recibe las solicitudes de mentoría (y de quien quiere ser mentor) y las reenvía por correo con Resend.
+// Recibe las solicitudes de mentoría y las reenvía por correo con Resend.
 // El correo de destino nunca aparece en la web: se guarda en las variables de entorno de Vercel.
 //   RESEND_API_KEY  clave de API de Resend (resend.com)
 //   CONTACT_EMAIL   correo que recibe las solicitudes
@@ -25,7 +25,6 @@ module.exports = async function handler(req, res) {
   // Campo trampa para bots: las personas no lo ven ni lo rellenan.
   if (body.website) return res.status(200).json({ ok: true });
 
-  const role = clean(body.role, 40) || "Tener un mentor";
   const name = clean(body.name, 120);
   const email = clean(body.email, 200);
   const project = clean(body.project, 200);
@@ -37,11 +36,10 @@ module.exports = async function handler(req, res) {
   }
 
   const text = [
-    `Quiere: ${role}`,
     `Nombre: ${name}`,
     `Email: ${email}`,
     `Proyecto: ${project}`,
-    `Etapa / experiencia: ${stage}`,
+    `Etapa del proyecto: ${stage}`,
     "",
     "Mensaje:",
     msg || "(sin indicar)",
@@ -55,7 +53,7 @@ module.exports = async function handler(req, res) {
         from: FROM_EMAIL || "Branka <onboarding@resend.dev>",
         to: [CONTACT_EMAIL],
         reply_to: email,
-        subject: `Branka · ${role === "Ser mentor/a" ? "Nuevo mentor" : "Solicitud de mentoría"} · ${project}`,
+        subject: `Branka · Solicitud de mentoría · ${project}`,
         text,
       }),
     });
