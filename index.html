@@ -703,6 +703,7 @@ function renderHome() {
     <form id="apply-form" class="aform" novalidate>
       <label for="f-name">Nombre</label><input id="f-name" name="name" required autocomplete="name">
       <label for="f-mail">Email</label><input id="f-mail" name="email" type="email" required autocomplete="email">
+      <label for="f-phone">Móvil</label><input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+34 600 000 000" required minlength="7">
       <label for="f-proj">Proyecto o empresa</label><input id="f-proj" name="project" required placeholder="Nombre y a qué se dedica">
       <label for="f-stage">Etapa del proyecto</label>
       <select id="f-stage" name="stage"><option>Idea, todavía sin clientes</option><option>Primeros clientes</option><option>Facturamos menos de 100.000 €</option><option>Entre 100.000 € y 1 M€</option></select>
@@ -718,7 +719,8 @@ function renderHome() {
     const out = document.getElementById("f-out");
     const btn = form.querySelector("button[type=submit]");
     const v = Object.fromEntries(new FormData(form));
-    if (!v.name.trim() || !v.email.trim() || !v.project.trim()) { out.textContent = "Rellena nombre, email y proyecto para enviar la solicitud."; return; }
+    if (!v.name.trim() || !v.email.trim() || !v.project.trim() || !v.phone.trim()) { out.textContent = "Rellena nombre, email, móvil y proyecto para enviar la solicitud."; return; }
+    if (v.phone.replace(/\D/g, "").length < 7) { out.textContent = "Revisa el número de móvil e incluye el prefijo del país si corresponde."; return; }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.email.trim())) { out.textContent = "Revisa el email: parece que no es válido."; return; }
     btn.disabled = true; out.textContent = "Enviando…";
     try {
@@ -727,7 +729,7 @@ function renderHome() {
       form.reset();
       out.textContent = "¡Gracias! Hemos recibido tu solicitud y te escribiremos pronto.";
     } catch (err) {
-      out.textContent = "No hemos podido enviar la solicitud ahora mismo. Inténtalo de nuevo en unos minutos.";
+      out.textContent = err.message === "503" ? "El envío por correo aún no está configurado. Contacta con Branka por otro canal mientras se activa." : "No se ha podido enviar. Comprueba la configuración de correo de Branka o vuelve a intentarlo.";
     } finally { btn.disabled = false; }
   };
   const target = { solicitar: "solicitar", como: "como" }[location.hash.replace("#", "")];
