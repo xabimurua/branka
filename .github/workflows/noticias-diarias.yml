@@ -43,7 +43,7 @@ jobs:
       - name: Crear páginas HTML indexables y sitemap
         if: steps.hora.outputs.publicar == 'true'
         env:
-          SITE_URL: ${{ vars.SITE_URL }}
+          SITE_URL: https://branka.es
         run: python scripts/generar_paginas_seo.py
       - name: Publicar los cambios en main
         if: steps.hora.outputs.publicar == 'true'
