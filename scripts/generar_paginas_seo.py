@@ -27,7 +27,8 @@ def slug(s):
 
 def layout(title, description, content, relpath, schema=None):
     canonical = f'<link rel="canonical" href="{esc(SITE_URL + "/" + relpath)}">' if SITE_URL else ""
-    jsonld = f'<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False).replace("<", "\\u003c")}</script>' if schema else ""
+    safe_json = json.dumps(schema, ensure_ascii=False).replace("<", "\\u003c") if schema else ""
+    jsonld = f'<script type="application/ld+json">{safe_json}</script>' if schema else ""
     return f'''<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)} | Branka</title><meta name="description" content="{esc(description[:155])}">
@@ -122,7 +123,7 @@ def main():
 <h2>Cuándo utilizarla</h2><p>{esc(t.get("cuando", ""))}</p>
 {example}<p><a href="/#h-{esc(t["slug"].replace("_", "-"))}">Abrir la herramienta y su plantilla en Branka</a></p>
 <p><a href="/noticias.html">Noticias relacionadas con emprendimiento</a></p></article>'''
-        tool_schema = {"@context":"https://schema.org","@type":"TechArticle","headline":title,"description":short,"inLanguage":"es","publisher":{"@type":"Organization","name":"Branka"}}
+        tool_schema = {"@context":"https://schema.org","@type":"Article","headline":title,"description":short,"inLanguage":"es","publisher":{"@type":"Organization","name":"Branka"}}
         if SITE_URL:
             tool_schema["mainEntityOfPage"] = SITE_URL + "/" + reltool
         (tools_dir / slug_path).write_text(layout(title, short, content, reltool, tool_schema),encoding="utf-8")
