@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+"""Crea páginas HTML rastreables para noticias y un sitemap si SITE_URL está definido."""
+import datetime as dt
+import hashlib
+import html
+import json
+import os
+import re
+import unicodedata
+from pathlib import Path
+from urllib.parse import urlsplit
+
+ROOT = Path(__file__).resolve().parents[1]
+INDEX = ROOT / "index.html"
+NEWS_DIR = ROOT / "noticias"
+SITE_URL = os.getenv("SITE_URL", "").strip().rstrip("/")
+if SITE_URL and (not SITE_URL.startswith("https://") or not urlsplit(SITE_URL).netloc):
+    raise SystemExit("SITE_URL debe contener una URL HTTPS de la web pública.")
+
+def esc(s):
+    return html.escape(str(s or ""), quote=True)
+
+def slug(s):
+    a = unicodedata.normalize("NFKD", s.lower())
+    a = "".join(ch for ch in a if not unicodedata.combining(ch))
+    return re.sub(r"[^a-z0-9]+", "-", a).strip("-")[:66] or "noticia"
+
+def layout(title, description, content, relpath, schema=None):
+    canonical = f'<link rel="canonical" href="{esc(SITE_URL + "/" + relpath)}">' if SITE_URL else ""
+    jsonld = f'<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False).replace("<", "\\u003c")}</script>' if schema else ""
+    return f'''<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{esc(title)} | Branka</title><meta name="description" content="{esc(description[:155])}">
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+{canonical}<meta property="og:type" content="article"><meta property="og:title" content="{esc(title)}">
+<meta property="og:description" content="{esc(description[:155])}">
+{jsonld}
+<style>
+:root{{--red:#c73920;--ink:#2b110b;--bg:#fdf7f3;--line:#eecdbb}}
+*{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 system-ui,Arial,sans-serif}}
+header{{background:#a52b17;color:white;padding:18px max(20px,calc((100vw - 980px)/2))}}
+header a{{color:white;text-decoration:none;font-weight:800;font-size:24px}}
+main{{max-width:980px;margin:0 auto;padding:34px 20px 70px}}
+h1{{font-size:clamp(30px,4vw,45px);line-height:1.17;letter-spacing:-.03em}}
+h2{{font-size:23px;line-height:1.3}}a{{color:#b3331e}}a:hover{{text-decoration-thickness:2px}}
+.kicker{{color:#a52b17;font-weight:750;font-size:14px;text-transform:uppercase;letter-spacing:.07em}}
+.cards{{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px;padding-top:14px}}
+.card{{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}}
+.card h2{{font-size:20px;margin:7px 0}}.card p{{color:#674c41}}
+.panel{{border-left:4px solid #e66c2f;background:#fff0e6;padding:16px 22px;margin:30px 0}}
+.meta,footer{{color:#6c4e43;font-size:14px}}
+footer{{border-top:1px solid var(--line);padding:20px 0;margin-top:45px}}
+nav a{{margin-right:18px}}time{{font-variant-numeric:tabular-nums}}
+</style></head><body><header><a href="/">BRANKA</a></header><main>
+<nav aria-label="Navegación"><a href="/">Inicio</a><a href="/noticias.html">Noticias</a><a href="/#herramientas">Herramientas</a></nav>
+{content}<footer>Branka · Recursos para emprender. Esta sección enlaza fuentes originales y ofrece una lectura práctica; no sustituye a las fuentes ni constituye asesoramiento financiero.</footer>
+</main></body></html>'''
+
+def main():
+    raw = INDEX.read_text(encoding="utf-8")
+    match = re.search(r'<script id="news-data" type="application/json">(.*?)</script>', raw, re.S)
+    if not match:
+        raise SystemExit("No se encontró news-data")
+    feed = json.loads(match.group(1))
+    NEWS_DIR.mkdir(exist_ok=True)
+    entries = []
+    # No convertir en artículos indexables el contenido editorial anterior sin contrastar.
+    for item in feed.get("items", []) if feed.get("auto") is True else []:
+        sources = item.get("sources") or []
+        link = sources[0][1] if sources and len(sources[0]) >= 2 else ""
+        if not link.startswith("https://") or not item.get("published"):
+            continue
+        try:
+            published = dt.datetime.fromisoformat(item["published"].replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        title = item.get("title", "").strip()
+        if not title:
+            continue
+        filename = slug(title) + "-" + hashlib.sha256(link.encode()).hexdigest()[:8] + ".html"
+        relpath = "noticias/" + filename
+        source_name = sources[0][0]
+        intro = "Una noticia sobre " + (item.get("tag") or "emprendimiento").lower() + " publicada por " + source_name + "."
+        content = f'''<article><p class="kicker">{esc(item.get("tag", "Actualidad"))}</p>
+<h1>{esc(title)}</h1><p class="meta">Fuente: {esc(source_name)} · <time datetime="{esc(published.date().isoformat())}">{esc(published.strftime("%d/%m/%Y"))}</time></p>
+<p>{esc(intro)} Branka comparte el enlace original y una pregunta para aplicar este tema a proyectos emprendedores.</p>
+<p><a href="{esc(link)}" target="_blank" rel="noopener noreferrer">Leer la noticia completa en {esc(source_name)}</a></p>
+<section class="panel" aria-labelledby="leccion"><h2 id="leccion">Qué puede aprender un emprendedor</h2><p>{esc(item.get("lesson", ""))}</p></section>
+<p>Esta página es una curación editorial automatizada, no una reproducción ni una verificación independiente del artículo original. Comprueba allí los detalles antes de tomar decisiones.</p>
+<p><a href="/#herramientas">Explorar herramientas prácticas de Branka</a></p></article>'''
+        schema = {"@context":"https://schema.org","@type":"BlogPosting","headline":title,"description":intro,"datePublished":published.date().isoformat(),"inLanguage":"es","isBasedOn":link,"publisher":{"@type":"Organization","name":"Branka"}}
+        if SITE_URL:
+            schema["mainEntityOfPage"] = SITE_URL + "/" + relpath
+        (ROOT / relpath).write_text(layout(title, intro, content, relpath, schema), encoding="utf-8")
+        entries.append({"title":title,"url":relpath,"tag":item.get("tag","Actualidad"),"published":published.date().isoformat(),"intro":intro})
+    # Preservar artículos antiguos para mantener sus URLs indexadas.
+    articles = []
+    for entry in entries:
+        articles.append(f'''<article class="card"><div class="kicker">{esc(entry["tag"])}</div>
+<h2><a href="/{esc(entry["url"])}">{esc(entry["title"])}</a></h2>
+<p><time datetime="{esc(entry["published"])}">{esc(entry["published"])}</time></p><p>{esc(entry["intro"])}</p></article>''')
+    summary = f'<div class="cards">{"".join(articles)}</div>' if articles else '<p>Aquí aparecerán las noticias verificables seleccionadas por Branka en las próximas actualizaciones diarias. Mientras tanto, puedes consultar nuestras herramientas.</p>'
+    page = f'''<section><p class="kicker">Actualidad para emprender</p><h1>Noticias sobre emprendimiento, inversión, inteligencia artificial e impacto social</h1>
+<p>Una selección de noticias recientes con enlaces a los medios de origen, fecha de publicación y preguntas útiles para quienes están creando o desarrollando un negocio.</p>
+{summary}<section class="panel"><h2>Cómo seleccionamos las noticias</h2>
+<p>Revisamos fuentes RSS públicas y descartamos artículos sin fecha o enlace verificable. No inventamos titulares ni atribuimos afirmaciones a una fuente que no las publique. Las sugerencias de Branka son ideas para reflexionar, no asesoramiento profesional.</p></section></section>'''
+    webschema = {"@context":"https://schema.org","@type":"CollectionPage","name":"Noticias para emprendedores | Branka","description":"Actualidad de emprendimiento, financiación, inteligencia artificial e impacto social."}
+    if SITE_URL:
+        webschema["url"] = SITE_URL + "/noticias.html"
+    (ROOT/"noticias.html").write_text(layout("Noticias para emprendedores", "Actualidad sobre financiación, innovación, inteligencia artificial e impacto social con fuentes originales.", page, "noticias.html", webschema),encoding="utf-8")
+    if SITE_URL:
+        all_paths = ["","noticias.html"] + ["noticias/"+p.name for p in sorted(NEWS_DIR.glob("*.html"))]
+        urls = "".join(f"<url><loc>{esc(SITE_URL + '/' + p)}</loc></url>" for p in all_paths)
+        (ROOT/"sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+urls+"</urlset>",encoding="utf-8")
+        (ROOT/"robots.txt").write_text("User-agent: *\nAllow: /\n\nSitemap: "+SITE_URL+"/sitemap.xml\n",encoding="utf-8")
+    else:
+        (ROOT/"robots.txt").write_text("User-agent: *\nAllow: /\n\n# Para generar sitemap.xml y canonical absolutos, configurar SITE_URL en GitHub Actions.\n",encoding="utf-8")
+    print(f"SEO: {len(entries)} artículos nuevos, página de noticias y robots.txt generados. SITE_URL configurada: {bool(SITE_URL)}")
+
+if __name__=="__main__":
+    main()
