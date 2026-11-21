@@ -1,0 +1,121 @@
+{
+  "items": [
+    {
+      "tag": "Financiación",
+      "title": "Anthropic sale a bolsa en el Nasdaq",
+      "body": "La creadora de Claude fijó el precio de su salida a bolsa en 83 dólares por acción, por encima del rango previsto, con una demanda de unas seis veces la oferta. Eso la valora en torno a 1,5 billones de dólares y la sitúa entre las mayores salidas a bolsa de la historia. Empezó a cotizar el jueves 19 de noviembre.",
+      "lesson": "El capital sigue apostando fuerte por la IA. Si tu proyecto la usa para resolver un problema concreto, hoy es más fácil explicar por qué el mercado es grande.",
+      "tool": "08_calculo_mercado",
+      "sources": [
+        [
+          "The Next Web",
+          "https://thenextweb.com/news/anthropic-ipo-prices-83-share-1-5-trillion-record-raise"
+        ],
+        [
+          "AI Weekly (CNBC)",
+          "https://aiweekly.co/alerts/anthropic-prices-ipo-at-83-above-range-trades-thursday-as-ant"
+        ]
+      ]
+    },
+    {
+      "tag": "Liderazgo",
+      "title": "Nvidia cambia de CEO y aun así bate récords",
+      "body": "Jensen Huang dimitió el 12 de noviembre tras 33 años al frente, en medio de una investigación del consejo. La directora financiera, Colette Kress, es la consejera delegada interina. Cinco días después, Nvidia presentó unos ingresos trimestrales de 115.800 millones de dólares, un 103 % más que hace un año.",
+      "lesson": "Depender de una sola persona es un riesgo, incluso en la empresa más valiosa del sector. Inclúyelo en tu análisis de riesgos.",
+      "tool": "16_riesgos",
+      "sources": [
+        [
+          "TechCrunch",
+          "https://techcrunch.com/?p=3187751"
+        ],
+        [
+          "Stock Analysis",
+          "https://stockanalysis.com/news/nvda-q3-fy2027-earnings-beat/"
+        ]
+      ]
+    },
+    {
+      "tag": "Producto",
+      "title": "OpenAI lanza GPT-6.2 Astra y Sol",
+      "body": "Son dos modelos nuevos pensados para el trabajo profesional, con menos coste de computación para tareas complejas. Llegan dos semanas después de que GPT-6 Sol y Luna rebajaran precios a la mitad.",
+      "lesson": "Lo que hace un año era caro de automatizar hoy cuesta mucho menos. Vuelve a puntuar la viabilidad de tus ideas.",
+      "tool": "03_tecnologia_disruptiva",
+      "sources": [
+        [
+          "The Neuron",
+          "https://www.theneuron.ai/digest/everything-that-happened-in-ai-today-wednesday-november-18-2026/"
+        ],
+        [
+          "Anicca",
+          "https://anicca.co.uk/?p=63488"
+        ]
+      ]
+    },
+    {
+      "tag": "Producto",
+      "title": "Google abre Gemini 4 Carbon a su API de pago",
+      "body": "El modelo, antes limitado a un programa de ciberseguridad, ya está disponible en Google AI Studio y en Gemini para empresas, con un precio de lanzamiento de 2 dólares por millón de tokens de entrada y 10 de salida hasta el 30 de noviembre.",
+      "lesson": "Los precios de lanzamiento son una ventana para prototipar barato. Aprovéchala para tu producto mínimo viable.",
+      "tool": "11_product_market_fit",
+      "sources": [
+        [
+          "OpenTools",
+          "https://opentools.ai/news/rezolve-ai-gears-up-to-revolutionize-retail-with-trumps-dollar500-billion-stargate-ai-initiative"
+        ]
+      ]
+    },
+    {
+      "tag": "Organización",
+      "title": "Cognizant reorganiza a 68.000 personas por plataforma de IA",
+      "body": "La consultora ha dividido a 68.000 empleados en unidades especializadas en Claude, OpenAI y Gemini, apostando por la especialización para ganar contratos de implantación de IA en empresas.",
+      "lesson": "Especializarse en un nicho claro es una propuesta de valor. Defínela en una frase.",
+      "tool": "06_value_proposition_canvas",
+      "sources": [
+        [
+          "OpenTools",
+          "https://opentools.ai/news/building-the-future-why-robust-it-infrastructure-is-key-to-ai-success"
+        ]
+      ]
+    },
+    {
+      "tag": "Marketing",
+      "title": "ChatGPT abre perfiles de empresa y agentes de marca",
+      "body": "OpenAI ha lanzado en beta un espacio para que las empresas verifiquen su presencia en ChatGPT, consulten métricas de visibilidad y creen agentes que atienden a posibles clientes.",
+      "lesson": "Tus clientes ya preguntan a la IA antes de comprar. Revisa tus canales: ¿apareces ahí?",
+      "tool": "09_business_model_canvas",
+      "sources": [
+        [
+          "MarketingProfs",
+          "https://www.marketingprofs.com/opinions/2026/56258/ai-update-november-13-2026-ai-news-and-views-from-the-past-week"
+        ]
+      ]
+    },
+    {
+      "tag": "Startups",
+      "title": "LangChain alcanza una valoración de 3.000 millones",
+      "body": "La startup de herramientas para crear agentes de IA declara 7.000 clientes de LangSmith, su plataforma para probar y vigilar agentes, según TechCrunch.",
+      "lesson": "Las herramientas que ayudan a otros a construir crecen con toda la ola. Piensa en qué necesita tu cliente para usar una tecnología nueva.",
+      "tool": "02_tendencias_consumo",
+      "sources": [
+        [
+          "AIToolly",
+          "https://aitoolly.com/ai-news/2026-11-14"
+        ]
+      ]
+    },
+    {
+      "tag": "Mercado",
+      "title": "Gartner prevé que el mercado de plataformas de IA crezca un 63 % en 2026",
+      "body": "La consultora estima que el mercado mundial de plataformas y modelos de IA crecerá un 63,4 % este año, con la IA generativa creciendo más rápido que el resto.",
+      "lesson": "Un mercado que crece así deja huecos para muchos nichos. Detecta cuál encaja con una necesidad que conoces bien.",
+      "tool": "01_identificacion_necesidad",
+      "sources": [
+        [
+          "The Missing Link",
+          "https://www.themissinglink.com.au/news/the-neural-link-edition-17"
+        ]
+      ]
+    }
+  ],
+  "updated": "2026-11-21T14:04:41.032Z"
+}
