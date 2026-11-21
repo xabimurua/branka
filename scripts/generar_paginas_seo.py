@@ -93,6 +93,42 @@ def main():
             schema["mainEntityOfPage"] = SITE_URL + "/" + relpath
         (ROOT / relpath).write_text(layout(title, intro, content, relpath, schema), encoding="utf-8")
         entries.append({"title":title,"url":relpath,"tag":item.get("tag","Actualidad"),"published":published.date().isoformat(),"intro":intro})
+    # Guías originales: las herramientas de Branka son más valiosas para SEO que
+    # simples reseñas de noticias. Cada ficha tiene contenido útil, URL propia y
+    # enlaces internos visibles sin JavaScript.
+    tools_match = re.search(r'<script id="tools-data" type="application/json">(.*?)</script>', raw, re.S)
+    if not tools_match:
+        raise SystemExit("No se encontró tools-data")
+    tools_data = json.loads(tools_match.group(1))
+    tools_dir = ROOT / "herramientas"
+    tools_dir.mkdir(exist_ok=True)
+    tool_entries = []
+    phase_names = tools_data.get("phases", [])
+    for t in tools_data.get("tools", []):
+        title = str(t.get("name", "")).strip()
+        if not title:
+            continue
+        slug_path = slug(title) + ".html"
+        reltool = "herramientas/" + slug_path
+        short = str(t.get("para", "")).strip()
+        phase = phase_names[t["ph"]] if isinstance(t.get("ph"), int) and 0 <= t["ph"] < len(phase_names) else "Emprendimiento"
+        guide = "".join("<p>" + esc(p) + "</p>" for p in t.get("guion", []) if p)
+        blocks = "".join("<li>" + esc(b) + "</li>" for b in t.get("blocks", []))
+        example = "<section class=\"panel\"><h2>Ejemplo orientativo</h2><p>" + esc(t["example"]) + "</p></section>" if t.get("example") else ""
+        content = f'''<article><p class="kicker">Herramienta {esc(t.get("n", ""))} · {esc(phase)}</p>
+<h1>{esc(title)}</h1><p>{esc(short)}</p>
+<h2>Para qué sirve y cómo utilizarla</h2>{guide}
+<h2>Pasos y apartados que debes trabajar</h2><ol>{blocks}</ol>
+<h2>Cuándo utilizarla</h2><p>{esc(t.get("cuando", ""))}</p>
+{example}<p><a href="/#h-{esc(t["slug"].replace("_", "-"))}">Abrir la herramienta y su plantilla en Branka</a></p>
+<p><a href="/noticias.html">Noticias relacionadas con emprendimiento</a></p></article>'''
+        tool_schema = {"@context":"https://schema.org","@type":"TechArticle","headline":title,"description":short,"inLanguage":"es","publisher":{"@type":"Organization","name":"Branka"}}
+        if SITE_URL:
+            tool_schema["mainEntityOfPage"] = SITE_URL + "/" + reltool
+        (tools_dir / slug_path).write_text(layout(title, short, content, reltool, tool_schema),encoding="utf-8")
+        tool_entries.append((title, reltool, short, phase))
+    listing = "<div class=\"cards\">" + "".join(f'<article class="card"><p class="kicker">{esc(ph)}</p><h2><a href="/{esc(path)}">{esc(title)}</a></h2><p>{esc(desc)}</p></article>' for title,path,desc,ph in tool_entries) + "</div>"
+    (ROOT/"guias.html").write_text(layout("Guías y herramientas para emprender", "Guías prácticas sobre financiación, rondas de inversión, inteligencia artificial, impacto social y modelos de negocio.", '<h1>Guías prácticas para emprender</h1><p>Herramientas y explicaciones originales de Branka para validar ideas, conseguir financiación, preparar una ronda de inversión y utilizar IA de forma responsable.</p>'+listing, "guias.html", {"@context":"https://schema.org","@type":"CollectionPage","name":"Guías y herramientas para emprender | Branka"}), encoding="utf-8")
     # Preservar artículos antiguos para mantener sus URLs indexadas.
     articles = []
     for entry in entries:
@@ -109,13 +145,13 @@ def main():
         webschema["url"] = SITE_URL + "/noticias.html"
     (ROOT/"noticias.html").write_text(layout("Noticias para emprendedores", "Actualidad sobre financiación, innovación, inteligencia artificial e impacto social con fuentes originales.", page, "noticias.html", webschema),encoding="utf-8")
     if SITE_URL:
-        all_paths = ["","noticias.html"] + ["noticias/"+p.name for p in sorted(NEWS_DIR.glob("*.html"))]
+        all_paths = ["","noticias.html","guias.html"] + ["noticias/"+p.name for p in sorted(NEWS_DIR.glob("*.html"))] + ["herramientas/"+p.name for p in sorted(tools_dir.glob("*.html"))]
         urls = "".join(f"<url><loc>{esc(SITE_URL + '/' + p)}</loc></url>" for p in all_paths)
         (ROOT/"sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+urls+"</urlset>",encoding="utf-8")
         (ROOT/"robots.txt").write_text("User-agent: *\nAllow: /\n\nSitemap: "+SITE_URL+"/sitemap.xml\n",encoding="utf-8")
     else:
         (ROOT/"robots.txt").write_text("User-agent: *\nAllow: /\n\n# Para generar sitemap.xml y canonical absolutos, configurar SITE_URL en GitHub Actions.\n",encoding="utf-8")
-    print(f"SEO: {len(entries)} artículos nuevos, página de noticias y robots.txt generados. SITE_URL configurada: {bool(SITE_URL)}")
+    print(f"SEO: {len(entries)} noticias nuevas y {len(tool_entries)} guías propias generadas. SITE_URL configurada: {bool(SITE_URL)}")
 
 if __name__=="__main__":
     main()
