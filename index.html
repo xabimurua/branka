@@ -571,12 +571,12 @@ function renderNews() {
   <section class="news-head">
     <span class="eyebrow">${esc(NEWS.week)}</span>
     <h1>Noticias de tecnología y negocios para inspirarte</h1>
-    <p>Lo que ha movido el sector esta semana, con una lección práctica para tu proyecto y la herramienta de la caja que te ayuda a aplicarla.</p>
+    <p>Selección de noticias recientes con enlace a su fuente original, una idea para emprender y una herramienta práctica relacionada.</p>
   </section>
   ${adminBlock()}
   <div class="news-top">
 
-    <div class="panel"><h2>Cómo leer esta sección</h2><p>Cada noticia trae tres cosas: qué ha pasado, qué puedes aprender de ello como emprendedor y qué herramienta usar para llevarlo a tu proyecto. Pulsa la fuente para leer la noticia original.</p></div>
+    <div class="panel"><h2>Cómo leer esta sección</h2><p>Cada artículo enlaza su fuente, ofrece una pregunta o aprendizaje para tu proyecto y conecta con una herramienta de Branka. Consulta la fuente original antes de tomar decisiones.</p></div>
   </div>
   <div class="news">${NEWS.items.map(n => { const t = bySlug[n.tool]; return `
     <article class="story">
