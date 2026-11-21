@@ -147,7 +147,7 @@ def main():
     # No modificar noticias.html: esa URL lleva al diseño original de Branka.
     # Las fichas SEO de cada noticia se publican independientemente en /noticias/.
     if SITE_URL:
-        all_paths = ["","noticias.html","guias.html"] + ["noticias/"+p.name for p in sorted(NEWS_DIR.glob("*.html"))] + ["herramientas/"+p.name for p in sorted(tools_dir.glob("*.html"))]
+        all_paths = ["","guias.html"] + ["noticias/"+p.name for p in sorted(NEWS_DIR.glob("*.html"))] + ["herramientas/"+p.name for p in sorted(tools_dir.glob("*.html"))]
         urls = "".join(f"<url><loc>{esc(SITE_URL + '/' + p)}</loc></url>" for p in all_paths)
         (ROOT/"sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+urls+"</urlset>",encoding="utf-8")
         (ROOT/"robots.txt").write_text("User-agent: *\nAllow: /\n\nSitemap: "+SITE_URL+"/sitemap.xml\n",encoding="utf-8")
