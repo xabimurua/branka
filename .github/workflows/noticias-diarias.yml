@@ -43,6 +43,9 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           BRANKA_NEWS_MODEL: gpt-4.1-mini
         run: python scripts/publicar_noticias.py
+      - name: Actualizar catálogo de podcasts y episodios
+        if: steps.hora.outputs.publicar == 'true'
+        run: python scripts/actualizar_podcasts.py
       - name: Crear páginas HTML indexables y sitemap
         if: steps.hora.outputs.publicar == 'true'
         env:
@@ -51,7 +54,7 @@ jobs:
       - name: Publicar los cambios en main
         if: steps.hora.outputs.publicar == 'true'
         run: |
-          git add index.html noticias.html guias.html robots.txt noticias/ herramientas/
+          git add index.html noticias.html guias.html robots.txt noticias/ herramientas/ contenido/
           if [ -f sitemap.xml ]; then git add sitemap.xml; fi
           if git diff --cached --quiet; then
             echo "No hay noticias nuevas verificadas. La web se mantiene intacta."
