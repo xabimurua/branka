@@ -65,35 +65,46 @@ def main():
     feed = json.loads(match.group(1))
     NEWS_DIR.mkdir(exist_ok=True)
     entries = []
-    # No convertir en artículos indexables el contenido editorial anterior sin contrastar.
+    # Solo las piezas originales con análisis suficiente reciben URL individual.
     for item in feed.get("items", []) if feed.get("auto") is True else []:
-        sources = item.get("sources") or []
-        link = sources[0][1] if sources and len(sources[0]) >= 2 else ""
-        if not link.startswith("https://") or not item.get("published"):
+        paragraphs = item.get("paragraphs", [])
+        sources = item.get("sources", [])
+        if not item.get("generated_with_ai") or not isinstance(paragraphs,list) or len(paragraphs) < 4 or len(sources) < 2:
+            continue
+        if not all(isinstance(x,list) and len(x) >= 2 and str(x[1]).startswith("https://") for x in sources):
             continue
         try:
-            published = dt.datetime.fromisoformat(item["published"].replace("Z", "+00:00"))
-        except ValueError:
+            published = dt.datetime.fromisoformat(item["published"].replace("Z","+00:00"))
+        except (KeyError, ValueError, AttributeError):
             continue
         title = item.get("title", "").strip()
         if not title:
             continue
-        filename = slug(title) + "-" + hashlib.sha256(link.encode()).hexdigest()[:8] + ".html"
+        key = "|".join(source[1] for source in sources)
+        filename = slug(title) + "-" + hashlib.sha256(key.encode()).hexdigest()[:8] + ".html"
         relpath = "noticias/" + filename
-        source_name = sources[0][0]
-        intro = "Una noticia sobre " + (item.get("tag") or "emprendimiento").lower() + " publicada por " + source_name + "."
-        content = f'''<article><p class="kicker">{esc(item.get("tag", "Actualidad"))}</p>
-<h1>{esc(title)}</h1><p class="meta">Fuente: {esc(source_name)} · <time datetime="{esc(published.date().isoformat())}">{esc(published.strftime("%d/%m/%Y"))}</time></p>
-<p>{esc(intro)} Branka comparte el enlace original y una pregunta para aplicar este tema a proyectos emprendedores.</p>
-<p><a href="{esc(link)}" target="_blank" rel="noopener noreferrer">Leer la noticia completa en {esc(source_name)}</a></p>
-<section class="panel" aria-labelledby="leccion"><h2 id="leccion">Qué puede aprender un emprendedor</h2><p>{esc(item.get("lesson", ""))}</p></section>
-<p>Esta página es una curación editorial automatizada, no una reproducción ni una verificación independiente del artículo original. Comprueba allí los detalles antes de tomar decisiones.</p>
+        intro = item.get("body","").strip()
+        bodytext = "".join("<p>" + esc(p) + "</p>" for p in paragraphs)
+        ref_links = "".join('<li><a href="'+esc(src[1])+'" target="_blank" rel="noopener noreferrer">'+esc(src[0])+'</a></li>' for src in sources)
+        content = f'''<article><p class="kicker">{esc(item.get("tag", "Branka Insights"))} · Análisis Branka</p>
+<h1>{esc(title)}</h1><p class="meta">Branka · Publicado el <time datetime="{esc(published.date().isoformat())}">{esc(published.strftime("%d/%m/%Y"))}</time></p>
+<p><strong>{esc(intro)}</strong></p>
+{bodytext}
+<section class="panel"><h2>Qué significa para tu proyecto</h2><p>{esc(item.get("lesson",""))}</p>
+<h2>Una acción para empezar</h2><p>{esc(item.get("action",""))}</p></section>
+<h2>Noticias utilizadas como fuentes</h2><p>Este análisis original de Branka combina noticias publicadas por medios independientes. Contrasta los detalles en las fuentes.</p><ul>{ref_links}</ul>
+<p class="meta">Análisis redactado con asistencia de IA a partir de titulares y extractos RSS. Los hechos provienen de las fuentes enlazadas y las recomendaciones son interpretación editorial de Branka.</p>
 <p><a href="/#herramientas">Explorar herramientas prácticas de Branka</a></p></article>'''
-        schema = {"@context":"https://schema.org","@type":"BlogPosting","headline":title,"description":intro,"datePublished":published.date().isoformat(),"inLanguage":"es","isBasedOn":link,"publisher":{"@type":"Organization","name":"Branka"}}
+        schema = {"@context":"https://schema.org","@type":"Article","headline":title,"description":intro,
+                  "datePublished":published.isoformat(),"inLanguage":"es",
+                  "author":{"@type":"Organization","name":"Branka"},
+                  "publisher":{"@type":"Organization","name":"Branka"},
+                  "citation":[source[1] for source in sources]}
         if SITE_URL:
             schema["mainEntityOfPage"] = SITE_URL + "/" + relpath
-        (ROOT / relpath).write_text(layout(title, intro, content, relpath, schema), encoding="utf-8")
-        entries.append({"title":title,"url":relpath,"tag":item.get("tag","Actualidad"),"published":published.date().isoformat(),"intro":intro})
+        (ROOT / relpath).write_text(layout(title,intro,content,relpath,schema),encoding="utf-8")
+        entries.append({"title":title,"url":relpath,"tag":item.get("tag","Actualidad"),
+                        "published":published.date().isoformat(),"intro":intro})
     # Guías originales: las herramientas de Branka son más valiosas para SEO que
     # simples reseñas de noticias. Cada ficha tiene contenido útil, URL propia y
     # enlaces internos visibles sin JavaScript.
