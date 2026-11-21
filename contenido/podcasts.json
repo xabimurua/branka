@@ -1,0 +1,112 @@
+{
+  "updated": "2026-11-21T14:59:00+01:00",
+  "podcasts": [
+    {
+      "name": "Startups for the Rest of Us",
+      "host": "Rob Walling",
+      "lang": "EN",
+      "desc": "Estrategias de producto, crecimiento y gestión para startups SaaS que quieren construir negocios sostenibles.",
+      "best": "Crecer",
+      "links": [
+        [
+          "Escuchar",
+          "https://www.startupsfortherestofus.com/"
+        ]
+      ]
+    },
+    {
+      "name": "Yo Emprendedora",
+      "host": "Laura Urzaiz",
+      "lang": "ES",
+      "desc": "Historias, retos y estrategias prácticas para emprender, consolidar una comunidad y desarrollar un negocio.",
+      "best": "Arrancar",
+      "links": [
+        [
+          "Escuchar",
+          "https://yoemprendedora.es/podcast/"
+        ]
+      ]
+    },
+    {
+      "name": "Oso Trava Podcast",
+      "host": "Oso Trava",
+      "lang": "ES",
+      "desc": "Conversaciones sobre empresa, decisiones, mentalidad e iniciativas emprendedoras.",
+      "best": "Arrancar",
+      "links": [
+        [
+          "Escuchar",
+          "https://podcast.osotrava.com/"
+        ]
+      ]
+    },
+    {
+      "name": "The Startup Ideas Podcast",
+      "host": "Greg Isenberg",
+      "lang": "EN",
+      "desc": "Ideas de startups, oportunidades digitales y aplicación práctica de nuevas tecnologías.",
+      "best": "Innovar",
+      "links": [
+        [
+          "Escuchar",
+          "https://podcasts.apple.com/es/podcast/the-startup-ideas-podcast/id1593424985"
+        ]
+      ]
+    },
+    {
+      "name": "En Compañía",
+      "host": "Escuela de Economía Social",
+      "lang": "ES",
+      "desc": "Historias de emprendimiento colectivo y economía social que ponen a las personas en el centro.",
+      "best": "Impacto social",
+      "links": [
+        [
+          "Conocer el podcast",
+          "https://escueladeeconomiasocial.es/2026/07/16/lanzamos-en-compania-un-podcast-para-descubrir-historias-que-demuestran-que-otra-forma-de-hacer-economia-es-posible/"
+        ]
+      ]
+    },
+    {
+      "name": "Cultura Emprende",
+      "host": "Radio Intereconomía",
+      "lang": "ES",
+      "desc": "Entrevistas y actualidad sobre pequeñas empresas, emprendimiento, ventas, innovación y financiación.",
+      "best": "Emprender",
+      "links": [
+        [
+          "Escuchar",
+          "https://podcasts.apple.com/es/podcast/cultura-emprende/id1644862392"
+        ]
+      ]
+    }
+  ],
+  "episodes": [
+    {
+      "show": "Startups for the Rest of Us",
+      "title": "Success Patterns of $1M+ SaaS Founders",
+      "why": "Lecciones sobre cómo pasar de operador a líder y construir un negocio SaaS capaz de crecer.",
+      "url": "https://www.startupsfortherestofus.com/episodes/episode-843-success-patterns-of-1m-saas-founders",
+      "lang": "EN",
+      "tool": "15_plan_accion",
+      "published": "2026-07-28T12:00:00+00:00"
+    },
+    {
+      "show": "Startups for the Rest of Us",
+      "title": "What is the Future of SaaS in an AI World?",
+      "why": "Reflexión sobre modelos de software y las oportunidades de la inteligencia artificial.",
+      "url": "https://www.startupsfortherestofus.com/episodes/episode-842-what-is-the-future-of-saas-in-an-ai-world-rob-solo",
+      "lang": "EN",
+      "tool": "33_canvas_de_caso_de_uso_de_ia",
+      "published": "2026-07-21T12:00:00+00:00"
+    },
+    {
+      "show": "Oso Trava Podcast",
+      "title": "Human OS: inteligencia artificial con Adrián Villaseñor",
+      "why": "Una conversación sobre cómo la IA puede ayudar a sistematizar procesos de una empresa sin perder control.",
+      "url": "https://podcast.osotrava.com/1595866/episodes/19565198-human-os-inteligencia-artificial-con-adrian-villasenor",
+      "lang": "ES",
+      "tool": "32_mapa_de_procesos_para_automatizar_con_ia",
+      "published": "2026-07-28T12:00:00+00:00"
+    }
+  ]
+}
