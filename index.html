@@ -587,7 +587,7 @@ async function loadMoreNews() {
   btn.hidden = paging.news >= all.length;
   btn.disabled = false;
 }
-function newsItemsHtml(items) { return `<div class="news-batch">${items.map(n => { const t = bySlug[n.tool]; return `
+function newsItemsHtml(items) { return `${items.map(n => { const t = bySlug[n.tool]; return `
     <article class="story">
       <span class="chips"><span class="chip phase">${esc(n.tag)}</span></span>
       <h3>${n.url ? `<a href="${esc(n.url)}">${esc(n.title)}</a>` : esc(n.title)}</h3>
@@ -595,7 +595,7 @@ function newsItemsHtml(items) { return `<div class="news-batch">${items.map(n =>
       ${n.url ? `<p><a class="btn" href="${esc(n.url)}">Leer análisis completo de Branka →</a></p>` : ""}
       <div class="lesson"><b>Lección para emprender</b><span>${esc(n.lesson)}</span>${t ? `<a href="#${hashOf(t)}">Herramienta: ${esc(t.name)} →</a>` : ""}</div>
       <div class="srcs">Fuente: ${n.sources.map(s => `<a href="${esc(s[1])}" target="_blank" rel="noopener">${esc(s[0])}</a>`).join("")}</div>
-    </article>`; }).join("")}</div>`; }
+    </article>`; }).join("")}`; }
 function renderNews() {
   paging.news=6;
   setNav("noticias");
@@ -675,7 +675,7 @@ function renderLearn() {
     <p>Una selección de podcasts sobre emprendimiento, economía social e innovación de impacto, en español y en inglés, junto con episodios útiles para poner ideas en marcha. Cada episodio va unido a la herramienta que mejor encaja con lo que cuenta.</p>
   </section>
   <h2 class="sec-h">Episodios recomendados</h2>
-  <div class="eps">${LEARN.episodes.slice(0,paging.episodes).map((e, n) => {
+  <div class="eps">${[...LEARN.episodes,...paging.extraEpisodes].slice(0,paging.episodes).map((e, n) => {
     const id = ytId(e.url);
     const art = id
       ? `<button class="yt" type="button" data-yt="${esc(id)}" aria-label="Reproducir ${esc(e.title)}"><img src="https://i.ytimg.com/vi/${esc(id)}/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><b>${n + 1}</b><span>▶</span></button>`
