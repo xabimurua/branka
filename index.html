@@ -578,8 +578,8 @@ function renderNews() {
   app.innerHTML = `
   <section class="news-head">
     <span class="eyebrow">${esc(NEWS.week)}</span>
-    <h1>Noticias de tecnología y negocios para inspirarte</h1>
-    <p>Selección de noticias recientes con enlace a su fuente original, una idea para emprender y una herramienta práctica relacionada.</p>
+    <h1>Branka Insights: noticias con perspectiva emprendedora</h1>
+    <p>Artículos originales que conectan las noticias del sector, con fuentes contrastables, análisis y herramientas para aplicarlo a tu proyecto.</p>
   </section>
   ${adminBlock()}
   <div class="news-top">
@@ -589,8 +589,9 @@ function renderNews() {
   <div class="news">${NEWS.items.map(n => { const t = bySlug[n.tool]; return `
     <article class="story">
       <span class="chips"><span class="chip phase">${esc(n.tag)}</span></span>
-      <h3>${esc(n.title)}</h3>
+      <h3>${n.url ? `<a href="${esc(n.url)}">${esc(n.title)}</a>` : esc(n.title)}</h3>
       <p>${esc(n.body)}</p>
+      ${n.url ? `<p><a class="btn" href="${esc(n.url)}">Leer análisis completo de Branka →</a></p>` : ""}
       <div class="lesson"><b>Lección para emprender</b><span>${esc(n.lesson)}</span>${t ? `<a href="#${hashOf(t)}">Herramienta: ${esc(t.name)} →</a>` : ""}</div>
       <div class="srcs">Fuente: ${n.sources.map(s => `<a href="${esc(s[1])}" target="_blank" rel="noopener">${esc(s[0])}</a>`).join("")}</div>
     </article>`; }).join("")}</div>`;
