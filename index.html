@@ -611,7 +611,7 @@ function renderNews() {
 
     <div class="panel"><h2>Cómo leer esta sección</h2><p>Cada artículo enlaza su fuente, ofrece una pregunta o aprendizaje para tu proyecto y conecta con una herramienta de Branka. Consulta la fuente original antes de tomar decisiones.</p></div>
   </div>
-  <div class="news" id="news-list">${newsItemsHtml(NEWS.items.slice(0,6))}}</div><div class="load-more"><button type="button" class="btn primary" id="news-more" onclick="loadMoreNews()">Ver más noticias ↓</button></div>`;
+  <div class="news" id="news-list">${newsItemsHtml(NEWS.items.slice(0,6))}</div><div class="load-more"><button type="button" class="btn primary" id="news-more" onclick="loadMoreNews()">Ver más noticias ↓</button></div>`;
   const more=document.getElementById('news-more'); if(more) more.hidden=NEWS.items.length<=6 && !NEWS.auto;
   wireAdmin();
   window.scrollTo(0, 0);
@@ -632,6 +632,35 @@ function wireYT() {
     b.replaceWith(f);
   });
 }
+async function loadPodcastArchive() {
+  if(paging.fetched) return;
+  paging.fetched=true;
+  try{
+    const r=await fetch("/contenido/podcasts.json",{cache:"no-store"});
+    if(r.ok){const data=await r.json();if(Array.isArray(data.episodes)){
+      const seen=new Set(LEARN.episodes.map(e=>e.url));
+      paging.extraEpisodes=data.episodes.filter(e=>e.url && !seen.has(e.url));
+    }}
+  }catch(err){console.warn("Podcast RSS no disponible",err);}
+}
+async function moreEpisodes(){
+  await loadPodcastArchive();
+  const previous=paging.episodes;
+  const combined=[...LEARN.episodes,...paging.extraEpisodes];
+  paging.episodes=Math.min(previous+6,combined.length);
+  if(paging.episodes>previous){const arr=combined.slice(previous,paging.episodes);const el=document.querySelector(".eps");
+    if(el){el.insertAdjacentHTML("beforeend",arr.map((e,n)=> {
+      const id=ytId(e.url);
+      const art=id?'<button class="yt" data-yt="'+esc(id)+'" type="button" aria-label="Reproducir '+esc(e.title)+'"><img src="https://i.ytimg.com/vi/'+esc(id)+'/hqdefault.jpg" loading="lazy" alt=""><b>'+(n+previous+1)+'</b><span>▶</span></button>':'<a class="pod-art" href="'+esc(e.url)+'" target="_blank" rel="noopener"><b>'+(n+previous+1)+'</b><i>'+esc(e.show)+'</i><span>▶</span></a>';
+      return '<article class="ep">'+art+'<div class="ep-body"><span class="chips"><span class="chip phase">'+esc(e.show)+'</span></span><h3>'+esc(e.title)+'</h3><p>'+esc(e.why||"Escucha el episodio")+'</p>'+(e.tool?toolLink(e.tool):'')+'<div class="btns"><a class="btn" href="'+esc(e.url)+'" target="_blank" rel="noopener">Escuchar episodio ↗</a></div></div></article>';
+    }).join(""));wireYT();}
+  }
+  const button=document.getElementById("episodes-more");if(button)button.hidden=paging.episodes>=combined.length;
+}
+function morePodcasts(){
+  paging.podcasts=Math.min(paging.podcasts+6,LEARN.podcasts.length);
+  renderLearn();
+}
 function renderLearn() {
   setNav("aprende");
   app.innerHTML = `
@@ -641,7 +670,7 @@ function renderLearn() {
     <p>Una selección de podcasts sobre emprendimiento, economía social e innovación de impacto, en español y en inglés, junto con episodios útiles para poner ideas en marcha. Cada episodio va unido a la herramienta que mejor encaja con lo que cuenta.</p>
   </section>
   <h2 class="sec-h">Episodios recomendados</h2>
-  <div class="eps">${LEARN.episodes.map((e, n) => {
+  <div class="eps">${LEARN.episodes.slice(0,paging.episodes).map((e, n) => {
     const id = ytId(e.url);
     const art = id
       ? `<button class="yt" type="button" data-yt="${esc(id)}" aria-label="Reproducir ${esc(e.title)}"><img src="https://i.ytimg.com/vi/${esc(id)}/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><b>${n + 1}</b><span>▶</span></button>`
@@ -657,15 +686,19 @@ function renderLearn() {
         <div class="btns"><a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">${id ? "Abrir en YouTube" : "Escuchar el episodio"} ↗</a></div>
       </div>
     </article>`; }).join("")}</div>
+  <div class="load-more"><button class="btn primary" type="button" id="episodes-more" onclick="moreEpisodes()">Ver más episodios ↓</button></div>
   <h2 class="sec-h">Los podcasts que recomendamos</h2>
-  <div class="pods last">${LEARN.podcasts.map(p => `
+  <div class="pods last">${LEARN.podcasts.slice(0,paging.podcasts).map(p => `
     <article class="pod">
       <div class="pod-top"><span class="chip phase">${esc(p.best)}</span><span class="chip">${p.lang === "EN" ? "Inglés" : "Español"}</span></div>
       <h3>${esc(p.name)}</h3>
       <p class="by">${esc(p.host)}</p>
       <p>${esc(p.desc)}</p>
       <div class="btns">${ext(p.links, true)}</div>
-    </article>`).join("")}</div>`;
+    </article>`).join("")}</div>
+  <div class="load-more"><button class="btn primary" type="button" id="podcasts-more" onclick="morePodcasts()">Ver más podcasts ↓</button></div>`;
+  const eb=document.getElementById('episodes-more'); if(eb) eb.hidden=LEARN.episodes.length<=paging.episodes && !paging.extraEpisodes.length;
+  const pb=document.getElementById('podcasts-more'); if(pb) pb.hidden=LEARN.podcasts.length<=paging.podcasts;
   wireYT();
   window.scrollTo(0, 0);
 }
