@@ -702,7 +702,7 @@ function renderLearn() {
       <div class="btns">${ext(p.links, true)}</div>
     </article>`).join("")}</div>
   <div class="load-more"><button class="btn primary" type="button" id="podcasts-more" onclick="morePodcasts()">Ver más podcasts ↓</button></div>`;
-  const eb=document.getElementById('episodes-more'); if(eb) eb.hidden=false;
+  const eb=document.getElementById('episodes-more'); if(eb) eb.hidden=paging.fetched && paging.episodes >= LEARN.episodes.length + paging.extraEpisodes.length;
   const pb=document.getElementById('podcasts-more'); if(pb) pb.hidden=LEARN.podcasts.length<=paging.podcasts && paging.extraShows.length<=0;
   wireYT();
   window.scrollTo(0, 0);
