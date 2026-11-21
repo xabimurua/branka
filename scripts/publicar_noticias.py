@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Actualiza la sección Noticias de Branka con titulares de fuentes RSS verificables.
+"""Redacta análisis propios de Branka combinando noticias RSS verificables.
 
-No genera afirmaciones sobre noticias mediante IA; enlaza la fuente primaria.
-Solo sustituye noticias cuando encuentra artículos recientes y aptos.
+Necesita OPENAI_API_KEY en GitHub Actions. Sin clave, o sin dos fuentes independientes,
+no se publica nada. No se presenta la síntesis automática como periodismo investigado.
 """
 import datetime as dt
 import email.utils
+import hashlib
 import html
 import json
+import os
 import re
 import sys
 import urllib.parse
@@ -19,135 +21,208 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "index.html"
 SOURCES = [
-    ("EU-Startups", "https://www.eu-startups.com/feed/", "www.eu-startups.com"),
+    ("EU-Startups", "https://www.eu-startups.com/feed/", "eu-startups.com"),
     ("TechCrunch", "https://techcrunch.com/category/startups/feed/", "techcrunch.com"),
-    ("TechCrunch", "https://techcrunch.com/category/artificial-intelligence/feed/", "techcrunch.com"),
     ("TechCrunch", "https://techcrunch.com/category/venture/feed/", "techcrunch.com"),
-    ("MIT Technology Review", "https://www.technologyreview.com/feed/", "www.technologyreview.com"),
+    ("TechCrunch", "https://techcrunch.com/category/artificial-intelligence/feed/", "techcrunch.com"),
+    ("MIT Technology Review", "https://www.technologyreview.com/feed/", "technologyreview.com"),
+    ("Sifted", "https://sifted.eu/feed", "sifted.eu"),
 ]
-RULES = [
-    ("Impacto social", "30_teoria_del_cambio", ("social enterprise", "social impact", "social innovation", "impact investing", "circular economy", "climate tech", "sustainability", "social startup"), "¿Qué cambio social se propone y cómo se mediría? Define indicadores y comprueba resultados."),
-    ("Financiación", "21_estrategia_de_ronda_de_inversion", ("funding", "raises", "raised", "investment", "seed round", "series a", "series b", "venture capital", "investor", "acquisition", "grant", "financing", "fintech"), "Antes de captar fondos, relaciona el dinero solicitado con hitos medibles y necesidades reales de caja."),
-    ("Inteligencia artificial", "33_canvas_de_caso_de_uso_de_ia", ("artificial intelligence", "ai agent", "agents", " generative ai", " ai ", "llm", "openai", "anthropic", "machine learning"), "Identifica un caso de uso concreto y prueba su utilidad, coste y riesgos antes de escalar."),
-    ("Emprendimiento", "09_business_model_canvas", ("startup", "founder", "entrepreneur", "launches", "scaleup", "business model", "product", "marketplace"), "Analiza quién es el cliente, cómo se crea valor y qué modelo de ingresos sostiene el proyecto."),
-    ("Innovación", "03_tecnologia_disruptiva", ("technology", "innovation", "research", "software", "platform", "robotics", "battery"), "Valora qué necesidad resuelve esta innovación y si es viable aplicarla a tu proyecto."),
+# Los identificadores tienen que coincidir con los de tools-data en index.html.
+TOPICS = [
+    ("Financiación", "21_estrategia_de_ronda_de_inversion", ("funding", "raises", "raised", "venture capital", "investment", "investor", "seed", "series a", "series b", "financing", "fundraising", "round", "grant")),
+    ("Inteligencia artificial", "33_canvas_de_caso_de_uso_de_ia", ("artificial intelligence", "ai agents", "ai agent", "generative ai", "machine learning", "llm", "openai", "anthropic", "gemini", "ai startup")),
+    ("Impacto social", "30_teoria_del_cambio", ("social enterprise", "social impact", "impact investing", "social innovation", "climate tech", "sustainability", "circular economy", "clean energy")),
+    ("Emprendimiento", "09_business_model_canvas", ("startup", "founder", "entrepreneur", "business model", "scaleup", "marketplace", "early-stage")),
+    ("Innovación", "03_tecnologia_disruptiva", ("innovation", "technology", "robotics", "software", "research", "platform")),
 ]
-MAX_STORIES = 5
-MAX_AGE_HOURS = 96
+MAX_HOURS = 120
+MAX_ARTICLES = 2
+MODEL = os.getenv("BRANKA_NEWS_MODEL", "gpt-4.1-mini")
 
-def simple_text(value):
+def compact(value):
     return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", value or "")).split())
 
-def parse_date(raw):
-    try:
-        result = email.utils.parsedate_to_datetime(raw)
-        return result.astimezone(dt.timezone.utc)
-    except (ValueError, TypeError, IndexError):
-        pass
-    try:
-        result = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
-        return result.astimezone(dt.timezone.utc)
-    except (ValueError, AttributeError):
+def date_from(value):
+    if not value:
         return None
+    try:
+        return email.utils.parsedate_to_datetime(value).astimezone(dt.timezone.utc)
+    except (ValueError, TypeError, IndexError):
+        try:
+            return dt.datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(dt.timezone.utc)
+        except (ValueError, TypeError):
+            return None
 
-def fetch_items(name, feed_url, domain):
-    req = urllib.request.Request(feed_url, headers={"User-Agent": "BrankaNewsBot/1.0 (+https://github.com/xabimurua/branka)", "Accept": "application/rss+xml, application/atom+xml, application/xml"})
-    with urllib.request.urlopen(req, timeout=16) as response:
-        raw = response.read(2_000_000)
-    root = ET.fromstring(raw)
-    rss = root.findall(".//item")
+def get_feed(name, url, domain):
+    request = urllib.request.Request(url, headers={
+        "User-Agent": "BrankaInsights/1.0 (+https://branka.es)",
+        "Accept": "application/rss+xml, application/atom+xml, application/xml",
+    })
+    with urllib.request.urlopen(request, timeout=20) as response:
+        document = response.read(2_000_000)
+    root = ET.fromstring(document)
     atom = "{http://www.w3.org/2005/Atom}"
-    entries = rss if rss else root.findall(f".//{atom}entry")
+    nodes = root.findall(".//item")
+    rss = bool(nodes)
+    if not rss:
+        nodes = root.findall(f".//{atom}entry")
     result = []
-    for node in entries:
+    for node in nodes:
         if rss:
-            title = simple_text(node.findtext("title"))
-            link = (node.findtext("link") or "").strip()
-            description = simple_text(node.findtext("description"))
-            date = parse_date(node.findtext("pubDate"))
+            title = compact(node.findtext("title"))
+            description = compact(node.findtext("description"))
+            url = (node.findtext("link") or "").strip()
+            published = date_from(node.findtext("pubDate"))
         else:
-            title = simple_text(node.findtext(f"{atom}title"))
-            candidates = node.findall(f"{atom}link")
-            link = next((x.attrib.get("href", "") for x in candidates if x.attrib.get("rel", "alternate") == "alternate"), "")
-            description = simple_text(node.findtext(f"{atom}summary") or node.findtext(f"{atom}content"))
-            date = parse_date(node.findtext(f"{atom}published") or node.findtext(f"{atom}updated"))
-        parsed = urllib.parse.urlparse(link)
-        host = (parsed.hostname or "").lower()
-        if not title or not link.startswith("https://") or not (host == domain or host == domain.removeprefix("www.")) or not date:
+            title = compact(node.findtext(f"{atom}title"))
+            description = compact(node.findtext(f"{atom}summary") or node.findtext(f"{atom}content"))
+            links = node.findall(f"{atom}link")
+            url = next((l.attrib.get("href", "") for l in links if l.attrib.get("rel", "alternate") == "alternate"), "")
+            published = date_from(node.findtext(f"{atom}published") or node.findtext(f"{atom}updated"))
+        host = (urllib.parse.urlparse(url).hostname or "").lower().removeprefix("www.")
+        if host != domain or not url.startswith("https://") or not title or not description or not published:
             continue
-        # No enlaces de agregadores ni artículos sin fecha contrastable.
-        result.append({"title": title[:180], "link": link.split("#")[0], "desc": description[:250], "date": date, "source": name})
+        result.append({"title": title[:180], "summary": description[:520],
+                       "url": url.split("#")[0], "date": published, "source": name, "domain": host})
     return result
 
-def classify(item):
-    text = " " + (item["title"] + " " + item["desc"]).lower() + " "
-    for tag, tool, terms, lesson in RULES:
-        if any(term in text for term in terms):
-            return tag, tool, lesson
+def topic_for(item):
+    body = " " + (item["title"] + " " + item["summary"]).lower() + " "
+    for label, tool, words in TOPICS:
+        if any(term in body for term in words):
+            return label, tool
     return None
 
-def main():
+def groups_for(items, previous_sources):
+    by_topic = {}
     now = dt.datetime.now(dt.timezone.utc)
-    stories = []
-    for name, url, domain in SOURCES:
+    for item in items:
+        hours = (now - item["date"]).total_seconds() / 3600
+        if not -2 <= hours <= MAX_HOURS or item["url"] in previous_sources:
+            continue
+        topic = topic_for(item)
+        if topic:
+            by_topic.setdefault(topic, []).append(item)
+    result = []
+    for topic, candidates in by_topic.items():
+        candidates.sort(key=lambda x: x["date"], reverse=True)
+        selected = []
+        domains = set()
+        for article in candidates:
+            if article["domain"] not in domains:
+                selected.append(article)
+                domains.add(article["domain"])
+            if len(selected) == 3:
+                break
+        if len(selected) >= 2:
+            result.append((topic, selected))
+    result.sort(key=lambda g: max(i["date"] for i in g[1]), reverse=True)
+    return result[:MAX_ARTICLES]
+
+def request_article(topic, sources):
+    # La API recibe extractos, no acceso a textos íntegros. No debe inventar datos.
+    evidence = [{"id":i+1, "medio":s["source"], "titular":s["title"],
+                 "extracto":s["summary"], "fecha":s["date"].date().isoformat()}
+                for i,s in enumerate(sources)]
+    instructions = """Eres un editor especializado en emprendimiento de Branka.
+Redacta en español de España un ARTÍCULO ORIGINAL de análisis útil, NO un copiado ni
+un agregado de titulares. Combina 2-3 noticias distintas únicamente como señales
+de una tendencia del sector. No afirmes que tratan del mismo hecho si no es cierto.
+Los únicos hechos comprobados a tu disposición son los títulos, fechas y fragmentos RSS.
+No añadas números, valoraciones, citas, cronologías, declaraciones, legislación o
+nombres nuevos que no aparezcan en estos datos. No presentes interpretaciones como hechos.
+Si no hay sustancia para escribir con rigor, responde publish=false.
+Escribe con voz propia, sin lenguaje publicitario ni sensacionalismo, y sin repetir
+literalmente frases extensas de los extractos.
+Devuelve SOLO un objeto JSON:
+{"publish":true|false,"title":"titular propio, claro y específico, sin clickbait",
+"dek":"entradilla breve","paragraphs":["4-6 párrafos, cada uno de 35-80 palabras"],
+"insight":"conclusión propia explícita, como recomendación o hipótesis",
+"action":"una pregunta o acción concreta para un emprendedor"}
+Cubre qué está cambiando, qué tienen en común las señales, qué matices hay,
+qué oportunidad/riesgo ve Branka y cómo aplicarlo. Evita conclusiones infundadas.
+No incluyas markdown, HTML, enlaces ni enumeración en los párrafos.
+"""
+    body = {"model": MODEL, "temperature": 0.25,
+            "response_format": {"type": "json_object"},
+            "messages": [{"role": "system", "content": instructions},
+                         {"role": "user", "content": json.dumps({"tema":topic, "fuentes":evidence},ensure_ascii=False)}]}
+    payload = json.dumps(body).encode()
+    req = urllib.request.Request("https://api.openai.com/v1/chat/completions", data=payload,
+        headers={"Authorization": "Bearer " + os.environ["OPENAI_API_KEY"],
+                 "Content-Type": "application/json"}, method="POST")
+    with urllib.request.urlopen(req, timeout=75) as response:
+        raw = json.load(response)
+    result = json.loads(raw["choices"][0]["message"]["content"])
+    if not result.get("publish"):
+        return None
+    pars = result.get("paragraphs")
+    if not isinstance(pars, list) or not 4 <= len(pars) <= 6:
+        return None
+    if not all(isinstance(p,str) and 80 <= len(p) <= 700 and "<" not in p for p in pars):
+        return None
+    for key in ("title","dek","insight","action"):
+        if not isinstance(result.get(key),str) or not result[key].strip():
+            return None
+    if len(result["title"]) > 150 or len(result["dek"]) > 300:
+        return None
+    return result
+
+def main():
+    if not os.getenv("OPENAI_API_KEY"):
+        print("OPENAI_API_KEY no está configurada; no se generan ni publican artículos.")
+        return 0
+    raw = PAGE.read_text(encoding="utf-8")
+    match = re.search(r'(<script id="news-data" type="application/json">)(.*?)(</script>)', raw, re.S)
+    if not match:
+        raise RuntimeError("Falta news-data en index.html")
+    feed = json.loads(match.group(2))
+    previous = set(feed.get("used_source_urls", []))
+    previous_titles = {i.get("title","").lower() for i in feed.get("items", [])}
+    items = []
+    for name,url,domain in SOURCES:
         try:
-            found = fetch_items(name, url, domain)
-            print(f"{name}: {len(found)} artículos leídos de {url}")
-            stories.extend(found)
-        except Exception as ex:
-            print(f"Advertencia: no se pudo consultar {url}: {ex}", file=sys.stderr)
-    dedup = {}
-    for item in stories:
-        age = (now - item["date"]).total_seconds() / 3600
-        if not -2 <= age <= MAX_AGE_HOURS:
+            result = get_feed(name,url,domain)
+            print(f"RSS {name}: {len(result)} entradas")
+            items.extend(result)
+        except Exception as exc:
+            print(f"RSS no accesible: {name} ({str(exc)[:160]})", file=sys.stderr)
+    fresh = list({i["url"]:i for i in items}.values())
+    selected = groups_for(fresh, previous)
+    created = []
+    for (topic, tool), sources in selected:
+        try:
+            article = request_article(topic, sources)
+        except Exception as exc:
+            print(f"No se pudo redactar {topic}: {str(exc)[:180]}",file=sys.stderr)
             continue
-        topic = classify(item)
-        if not topic:
+        if not article or article["title"].lower() in previous_titles:
             continue
-        item["topic"] = topic
-        dedup.setdefault(item["link"].split("?")[0], item)
-    # Prioriza diversidad temática y artículos recientes.
-    ranked = sorted(dedup.values(), key=lambda x: x["date"], reverse=True)
-    selected, taken = [], set()
-    for item in ranked:
-        if item["topic"][0] not in taken:
-            selected.append(item)
-            taken.add(item["topic"][0])
-        if len(selected) >= MAX_STORIES:
-            break
-    for item in ranked:
-        if len(selected) >= MAX_STORIES:
-            break
-        if item not in selected:
-            selected.append(item)
-    if not selected:
-        print("Sin nuevas noticias comprobables: no se cambia la web.")
+        now = dt.datetime.now(dt.timezone.utc)
+        source_links = [[s["source"],s["url"]] for s in sources]
+        paragraphs = article["paragraphs"]
+        created.append({
+            "tag":topic, "title":article["title"].strip(), "body":article["dek"].strip(),
+            "lesson":article["insight"].strip(), "action":article["action"].strip(),
+            "tool":tool,"sources":source_links, "paragraphs":paragraphs,
+            "published":now.isoformat(),"generated_with_ai":True,
+            "source_facts": [{"title":s["title"],"date":s["date"].date().isoformat(),"url":s["url"]} for s in sources],
+        })
+    if not created:
+        print("No hay suficiente evidencia para publicar artículos nuevos. Se mantienen los existentes.")
         return 0
-    news = []
-    for item in selected:
-        tag, tool, lesson = item["topic"]
-        local = item["date"].astimezone(ZoneInfo("Europe/Madrid"))
-        body = f"{item['source']} publicó esta noticia el {local:%d/%m/%Y}. Consulta la información original para conocer los detalles y los datos."
-        news.append({"tag": tag, "title": item["title"], "body": body, "lesson": lesson, "tool": tool, "sources": [[item["source"], item["link"]]], "published": item["date"].isoformat()})
-    page = PAGE.read_text(encoding="utf-8")
-    pattern = r'(<script id="news-data" type="application/json">)(.*?)(</script>)'
-    current = re.search(pattern, page, flags=re.S)
-    if not current:
-        raise RuntimeError("No se encuentra news-data en index.html")
-    old = json.loads(current.group(2))
-    # No hacer commits si no hay titulares distintos.
-    old_urls = [i["sources"][0][1] for i in old.get("items", []) if i.get("sources")]
-    new_urls = [i["sources"][0][1] for i in news]
-    if old_urls == new_urls:
-        print("Los titulares no han cambiado; se omite la publicación.")
-        return 0
-    local_now = now.astimezone(ZoneInfo("Europe/Madrid"))
-    updated = {**old, "week": "Actualizado el " + local_now.strftime("%d/%m/%Y"), "items": news, "auto": True}
-    encoded = json.dumps(updated, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
-    page = page[:current.start(2)] + encoded + page[current.end(2):]
-    PAGE.write_text(page, encoding="utf-8")
-    print(f"Listas para publicar {len(news)} noticias, todas con fuente y fecha.")
+    new_sources = {url for item in created for _,url in item["sources"]}
+    used = list(dict.fromkeys(list(previous) + list(new_sources)))[-500:]
+    # Lo reciente primero, pero conservar las últimas piezas para que la sección no quede vacía.
+    updated = {**feed,
+      "week":"Branka Insights · actualizado el "+dt.datetime.now(ZoneInfo("Europe/Madrid")).strftime("%d/%m/%Y"),
+      "items":created + feed.get("items", [])[:6],
+      "auto":True, "used_source_urls":used}
+    encoded = json.dumps(updated,ensure_ascii=False,separators=(",",":")).replace("<", "\\u003c")
+    PAGE.write_text(raw[:match.start(2)] + encoded + raw[match.end(2):],encoding="utf-8")
+    print(f"Redactados {len(created)} artículos originales con {len(new_sources)} fuentes contrastables.")
     return 0
 
-if __name__ == "__main__":
+if __name__=="__main__":
     raise SystemExit(main())
