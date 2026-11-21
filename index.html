@@ -595,7 +595,7 @@ function newsItemsHtml(items) { return `<div class="news-batch">${items.map(n =>
       ${n.url ? `<p><a class="btn" href="${esc(n.url)}">Leer análisis completo de Branka →</a></p>` : ""}
       <div class="lesson"><b>Lección para emprender</b><span>${esc(n.lesson)}</span>${t ? `<a href="#${hashOf(t)}">Herramienta: ${esc(t.name)} →</a>` : ""}</div>
       <div class="srcs">Fuente: ${n.sources.map(s => `<a href="${esc(s[1])}" target="_blank" rel="noopener">${esc(s[0])}</a>`).join("")}</div>
-    </article>`; }).join("")</div>`; }
+    </article>`; }).join("")}</div>`; }
 function renderNews() {
   paging.news=6;
   setNav("noticias");
@@ -697,7 +697,7 @@ function renderLearn() {
       <div class="btns">${ext(p.links, true)}</div>
     </article>`).join("")}</div>
   <div class="load-more"><button class="btn primary" type="button" id="podcasts-more" onclick="morePodcasts()">Ver más podcasts ↓</button></div>`;
-  const eb=document.getElementById('episodes-more'); if(eb) eb.hidden=LEARN.episodes.length<=paging.episodes && !paging.extraEpisodes.length;
+  const eb=document.getElementById('episodes-more'); if(eb) eb.hidden=false;
   const pb=document.getElementById('podcasts-more'); if(pb) pb.hidden=LEARN.podcasts.length<=paging.podcasts;
   wireYT();
   window.scrollTo(0, 0);
