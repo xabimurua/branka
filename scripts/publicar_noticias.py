@@ -224,6 +224,23 @@ def main():
         return 0
     new_sources = {url for item in created for _,url in item["sources"]}
     used = list(dict.fromkeys(list(previous) + list(new_sources)))[-500:]
+    # Archivo acumulativo para que "Ver más" permita recuperar artículos antiguos.
+    archive_path = ROOT / "contenido" / "noticias.json"
+    archive_path.parent.mkdir(parents=True, exist_ok=True)
+    previous_archive = []
+    if archive_path.exists():
+        try:
+            previous_archive = json.loads(archive_path.read_text(encoding="utf-8")).get("items", [])
+        except (OSError, ValueError):
+            pass
+    seen = set()
+    accumulated = []
+    for item in created + feed.get("items", []) + previous_archive:
+        identifier = item.get("url") or item.get("title")
+        if identifier and identifier not in seen:
+            accumulated.append(item)
+            seen.add(identifier)
+    archive_path.write_text(json.dumps({"items": accumulated[:1500]}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     # Lo reciente primero, pero conservar las últimas piezas para que la sección no quede vacía.
     updated = {**feed,
       "week":"Branka Insights · actualizado el "+dt.datetime.now(ZoneInfo("Europe/Madrid")).strftime("%d/%m/%Y"),
