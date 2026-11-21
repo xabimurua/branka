@@ -127,7 +127,12 @@ def main():
         if ep.get("url","").startswith("https://") and ep.get("title"):
             unique.setdefault(key,ep)
     result = sorted(unique.values(),key=lambda x:x.get("published",""),reverse=True)[:500]
-    extra_shows = discover_shows({simplify(p["name"]) for p in shows}) or previous.get("podcasts", [])
+    extra_dict = {}
+    for show in previous.get("podcasts", []) + discover_shows({simplify(p["name"]) for p in shows}):
+        key = simplify(show.get("name", ""))
+        if key:
+            extra_dict.setdefault(key, show)
+    extra_shows = list(extra_dict.values())[:100]
     OUTPUT.parent.mkdir(parents=True,exist_ok=True)
     content=json.dumps({"episodes":result,"podcasts":extra_shows,"updated":dt.datetime.now(dt.timezone.utc).isoformat()},ensure_ascii=False,indent=2)+"\n"
     if not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8")!=content:
