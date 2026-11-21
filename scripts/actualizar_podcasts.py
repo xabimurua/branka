@@ -75,13 +75,35 @@ def read_episodes(feed,collection,show):
             break
     return episodes
 
+def discover_shows(manual_names):
+    searches = [("emprendimiento startups","es"),("innovacion social","es"),("inversion startups","es"),("entrepreneurs startups","us"),("social entrepreneurship","us"),("impact investing","us")]
+    result = {}
+    words = ("emprend","startup","business","entrepreneur","founder","innovaci","innovation","social impact","venture","finanz","negocio","marketing")
+    for term,country in searches:
+        try:
+            params = urllib.parse.urlencode({"term":term,"media":"podcast","entity":"podcast","country":country,"limit":40})
+            for p in json_request("https://itunes.apple.com/search?"+params).get("results",[]):
+                name = p.get("collectionName","").strip()
+                url = p.get("collectionViewUrl","")
+                if not name or not url.startswith("https://") or simplify(name) in manual_names:
+                    continue
+                if not any(word in simplify(name+" "+p.get("primaryGenreName","")+" "+p.get("artistName","")) for word in words):
+                    continue
+                result.setdefault(simplify(name), {"name":name[:110],"host":p.get("artistName","")[:130],
+                    "lang":"ES" if country=="es" else "EN",
+                    "desc":"Podcast del catalogo de Apple Podcasts. Consulta su ficha para explorar episodios.",
+                    "best":"Emprender","links":[["Escuchar",url]]})
+        except Exception as exc:
+            print("Catalogo no disponible:",term,str(exc)[:120])
+    return list(result.values())[:65]
+
 def main():
     raw = INDEX.read_text(encoding="utf-8")
     match = re.search(r'<script id="learn-data" type="application/json">(.*?)</script>',raw,re.S)
     if not match:
         raise SystemExit("Falta learn-data")
     shows = json.loads(match.group(1)).get("podcasts",[])
-    previous = {"episodes":[]}
+    previous = {"episodes":[],"podcasts":[]}
     if OUTPUT.exists():
         try:
             previous = json.loads(OUTPUT.read_text(encoding="utf-8"))
@@ -105,8 +127,9 @@ def main():
         if ep.get("url","").startswith("https://") and ep.get("title"):
             unique.setdefault(key,ep)
     result = sorted(unique.values(),key=lambda x:x.get("published",""),reverse=True)[:500]
+    extra_shows = discover_shows({simplify(p["name"]) for p in shows}) or previous.get("podcasts", [])
     OUTPUT.parent.mkdir(parents=True,exist_ok=True)
-    content=json.dumps({"episodes":result,"updated":dt.datetime.now(dt.timezone.utc).isoformat()},ensure_ascii=False,indent=2)+"\n"
+    content=json.dumps({"episodes":result,"podcasts":extra_shows,"updated":dt.datetime.now(dt.timezone.utc).isoformat()},ensure_ascii=False,indent=2)+"\n"
     if not OUTPUT.exists() or OUTPUT.read_text(encoding="utf-8")!=content:
         OUTPUT.write_text(content,encoding="utf-8")
     print("Catálogo de episodios:",len(result))
