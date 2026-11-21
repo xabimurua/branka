@@ -2,7 +2,7 @@ name: Publicar noticias de Branka cada día
 
 on:
   schedule:
-    # 08:15 Europe/Madrid: 06:15 UTC en verano y 07:15 UTC en invierno.
+    # Ventana diaria de las 08:15 (hora de Madrid); GitHub puede demorar ejecuciones.
     - cron: '15 6,7 * * *'
   workflow_dispatch:
 
@@ -22,7 +22,7 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ "$(TZ=Europe/Madrid date +%H:%M)" = "08:15" ]; then
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ "$(TZ=Europe/Madrid date +%H)" = "08" ]; then
             echo "publicar=true" >> "$GITHUB_OUTPUT"
           else
             echo "publicar=false" >> "$GITHUB_OUTPUT"
