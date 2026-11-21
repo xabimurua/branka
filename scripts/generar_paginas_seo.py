@@ -144,7 +144,8 @@ def main():
     webschema = {"@context":"https://schema.org","@type":"CollectionPage","name":"Noticias para emprendedores | Branka","description":"Actualidad de emprendimiento, financiación, inteligencia artificial e impacto social."}
     if SITE_URL:
         webschema["url"] = SITE_URL + "/noticias.html"
-    # No modificar noticias.html: esa URL lleva al diseño original de Branka.\n    # Las fichas SEO de cada noticia se publican independientemente en /noticias/.
+    # No modificar noticias.html: esa URL lleva al diseño original de Branka.
+    # Las fichas SEO de cada noticia se publican independientemente en /noticias/.
     if SITE_URL:
         all_paths = ["","noticias.html","guias.html"] + ["noticias/"+p.name for p in sorted(NEWS_DIR.glob("*.html"))] + ["herramientas/"+p.name for p in sorted(tools_dir.glob("*.html"))]
         urls = "".join(f"<url><loc>{esc(SITE_URL + '/' + p)}</loc></url>" for p in all_paths)
