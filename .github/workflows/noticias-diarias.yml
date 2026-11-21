@@ -48,7 +48,7 @@ jobs:
       - name: Publicar los cambios en main
         if: steps.hora.outputs.publicar == 'true'
         run: |
-          git add index.html noticias.html robots.txt noticias/
+          git add index.html noticias.html guias.html robots.txt noticias/ herramientas/
           if [ -f sitemap.xml ]; then git add sitemap.xml; fi
           if git diff --cached --quiet; then
             echo "No hay noticias nuevas verificadas. La web se mantiene intacta."
