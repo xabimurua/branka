@@ -353,7 +353,7 @@ nav.main a.navcta { animation: pulse 3.2s ease-in-out infinite; }
   .card, .res-card, .stage, .inc, .story, .ep, .steps li, .mentor-band, .apply, .feat, .sec-h, .panel, .tpl { animation: none !important; }
 }
 
-</style>
+.load-more{display:flex;justify-content:center;padding:26px 0 42px}.load-more .btn{cursor:pointer;min-width:200px}.load-more .btn[hidden]{display:none}</style>
 </head>
 <body>
 <header class="top">
@@ -572,7 +572,32 @@ async function downloadTpl(t) {
   }
 }
 
+
+const paging = { news: 6, podcasts: 6, episodes: 4, archive: [], extraEpisodes: [], fetched: false };
+async function loadMoreNews() {
+  const btn = document.getElementById("news-more");
+  if (!btn) return;
+  btn.disabled = true;
+  try { const r = await fetch("/contenido/noticias.json", {cache:"no-store"}); if (r.ok) { const d = await r.json(); paging.archive = Array.isArray(d.items) ? d.items : []; } } catch(e) {}
+  const all = [...NEWS.items, ...paging.archive.filter(x=>!NEWS.items.some(y=>(y.url||y.title)===(x.url||x.title)))];
+  const old = paging.news;
+  paging.news = Math.min(paging.news + 6, all.length);
+  const list = document.getElementById("news-list");
+  if (list) list.insertAdjacentHTML("beforeend", newsItemsHtml(all.slice(old,paging.news)));
+  btn.hidden = paging.news >= all.length;
+  btn.disabled = false;
+}
+function newsItemsHtml(items) { return `<div class="news-batch">${items.map(n => { const t = bySlug[n.tool]; return `
+    <article class="story">
+      <span class="chips"><span class="chip phase">${esc(n.tag)}</span></span>
+      <h3>${n.url ? `<a href="${esc(n.url)}">${esc(n.title)}</a>` : esc(n.title)}</h3>
+      <p>${esc(n.body)}</p>
+      ${n.url ? `<p><a class="btn" href="${esc(n.url)}">Leer análisis completo de Branka →</a></p>` : ""}
+      <div class="lesson"><b>Lección para emprender</b><span>${esc(n.lesson)}</span>${t ? `<a href="#${hashOf(t)}">Herramienta: ${esc(t.name)} →</a>` : ""}</div>
+      <div class="srcs">Fuente: ${n.sources.map(s => `<a href="${esc(s[1])}" target="_blank" rel="noopener">${esc(s[0])}</a>`).join("")}</div>
+    </article>`; }).join("")</div>`; }
 function renderNews() {
+  paging.news=6;
   setNav("noticias");
   const src = videoSrc(NEWS.videoKey);
   app.innerHTML = `
@@ -586,15 +611,8 @@ function renderNews() {
 
     <div class="panel"><h2>Cómo leer esta sección</h2><p>Cada artículo enlaza su fuente, ofrece una pregunta o aprendizaje para tu proyecto y conecta con una herramienta de Branka. Consulta la fuente original antes de tomar decisiones.</p></div>
   </div>
-  <div class="news">${NEWS.items.map(n => { const t = bySlug[n.tool]; return `
-    <article class="story">
-      <span class="chips"><span class="chip phase">${esc(n.tag)}</span></span>
-      <h3>${n.url ? `<a href="${esc(n.url)}">${esc(n.title)}</a>` : esc(n.title)}</h3>
-      <p>${esc(n.body)}</p>
-      ${n.url ? `<p><a class="btn" href="${esc(n.url)}">Leer análisis completo de Branka →</a></p>` : ""}
-      <div class="lesson"><b>Lección para emprender</b><span>${esc(n.lesson)}</span>${t ? `<a href="#${hashOf(t)}">Herramienta: ${esc(t.name)} →</a>` : ""}</div>
-      <div class="srcs">Fuente: ${n.sources.map(s => `<a href="${esc(s[1])}" target="_blank" rel="noopener">${esc(s[0])}</a>`).join("")}</div>
-    </article>`; }).join("")}</div>`;
+  <div class="news" id="news-list">${newsItemsHtml(NEWS.items.slice(0,6))}}</div><div class="load-more"><button type="button" class="btn primary" id="news-more" onclick="loadMoreNews()">Ver más noticias ↓</button></div>`;
+  const more=document.getElementById('news-more'); if(more) more.hidden=NEWS.items.length<=6 && !NEWS.auto;
   wireAdmin();
   window.scrollTo(0, 0);
 }
