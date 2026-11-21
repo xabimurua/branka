@@ -14,6 +14,7 @@ import re
 import sys
 import urllib.parse
 import urllib.request
+import unicodedata
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -169,6 +170,14 @@ No incluyas markdown, HTML, enlaces ni enumeración en los párrafos.
         return None
     return result
 
+def article_path(title, sources):
+    normalized = unicodedata.normalize("NFKD", title.lower())
+    normalized = "".join(c for c in normalized if not unicodedata.combining(c))
+    short = re.sub(r"[^a-z0-9]+", "-", normalized).strip("-")[:66] or "noticia"
+    link_key = "|".join(src["url"] for src in sources)
+    digest = hashlib.sha256(link_key.encode()).hexdigest()[:8]
+    return "noticias/" + short + "-" + digest + ".html"
+
 def main():
     if not os.getenv("OPENAI_API_KEY"):
         print("OPENAI_API_KEY no está configurada; no se generan ni publican artículos.")
@@ -203,6 +212,7 @@ def main():
         source_links = [[s["source"],s["url"]] for s in sources]
         paragraphs = article["paragraphs"]
         created.append({
+            "url": "/" + article_path(article["title"].strip(), sources),
             "tag":topic, "title":article["title"].strip(), "body":article["dek"].strip(),
             "lesson":article["insight"].strip(), "action":article["action"].strip(),
             "tool":tool,"sources":source_links, "paragraphs":paragraphs,
