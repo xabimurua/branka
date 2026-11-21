@@ -1,0 +1,54 @@
+name: Publicar noticias de Branka cada día
+
+on:
+  schedule:
+    # 08:15 Europe/Madrid: 06:15 UTC en verano y 07:15 UTC en invierno.
+    - cron: '15 6,7 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: branka-noticias-diarias
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comprobar horario de España
+        id: hora
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ "$(TZ=Europe/Madrid date +%H:%M)" = "08:15" ]; then
+            echo "publicar=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "publicar=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Descargar repositorio
+        if: steps.hora.outputs.publicar == 'true'
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Configurar Python
+        if: steps.hora.outputs.publicar == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Buscar y seleccionar noticias recientes
+        if: steps.hora.outputs.publicar == 'true'
+        run: python scripts/publicar_noticias.py
+      - name: Publicar los cambios en main
+        if: steps.hora.outputs.publicar == 'true'
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No hay noticias nuevas verificadas. La web se mantiene intacta."
+            exit 0
+          fi
+          git config user.name "Branka Noticias Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Noticias: actualización diaria automática"
+          git push
