@@ -40,15 +40,21 @@ jobs:
       - name: Buscar y seleccionar noticias recientes
         if: steps.hora.outputs.publicar == 'true'
         run: python scripts/publicar_noticias.py
+      - name: Crear páginas HTML indexables y sitemap
+        if: steps.hora.outputs.publicar == 'true'
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: python scripts/generar_paginas_seo.py
       - name: Publicar los cambios en main
         if: steps.hora.outputs.publicar == 'true'
         run: |
-          if git diff --quiet -- index.html; then
+          git add index.html noticias.html robots.txt noticias/
+          if [ -f sitemap.xml ]; then git add sitemap.xml; fi
+          if git diff --cached --quiet; then
             echo "No hay noticias nuevas verificadas. La web se mantiene intacta."
             exit 0
           fi
           git config user.name "Branka Noticias Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
           git commit -m "Noticias: actualización diaria automática"
           git push
