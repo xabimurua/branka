@@ -573,7 +573,7 @@ async function downloadTpl(t) {
 }
 
 
-const paging = { news: 6, podcasts: 6, episodes: 4, archive: [], extraEpisodes: [], fetched: false };
+const paging = { news: 6, podcasts: 6, episodes: 4, archive: [], extraEpisodes: [], extraShows: [], fetched: false };
 async function loadMoreNews() {
   const btn = document.getElementById("news-more");
   if (!btn) return;
@@ -640,6 +640,7 @@ async function loadPodcastArchive() {
     if(r.ok){const data=await r.json();if(Array.isArray(data.episodes)){
       const seen=new Set(LEARN.episodes.map(e=>e.url));
       paging.extraEpisodes=data.episodes.filter(e=>e.url && !seen.has(e.url));
+      if(Array.isArray(data.podcasts)){const existing=new Set(LEARN.podcasts.map(p=>p.name.toLowerCase()));paging.extraShows=data.podcasts.filter(p=>p.name && !existing.has(p.name.toLowerCase()));}
     }}
   }catch(err){console.warn("Podcast RSS no disponible",err);}
 }
@@ -657,9 +658,13 @@ async function moreEpisodes(){
   }
   const button=document.getElementById("episodes-more");if(button)button.hidden=paging.episodes>=combined.length;
 }
-function morePodcasts(){
-  paging.podcasts=Math.min(paging.podcasts+6,LEARN.podcasts.length);
+async function morePodcasts(){
+  await loadPodcastArchive();
+  const all=[...LEARN.podcasts,...paging.extraShows];
+  paging.podcasts=Math.min(paging.podcasts+6,all.length);
+  const scroll=window.scrollY;
   renderLearn();
+  window.scrollTo(0,scroll);
 }
 function renderLearn() {
   setNav("aprende");
@@ -688,7 +693,7 @@ function renderLearn() {
     </article>`; }).join("")}</div>
   <div class="load-more"><button class="btn primary" type="button" id="episodes-more" onclick="moreEpisodes()">Ver más episodios ↓</button></div>
   <h2 class="sec-h">Los podcasts que recomendamos</h2>
-  <div class="pods last">${LEARN.podcasts.slice(0,paging.podcasts).map(p => `
+  <div class="pods last">${[...LEARN.podcasts,...paging.extraShows].slice(0,paging.podcasts).map(p => `
     <article class="pod">
       <div class="pod-top"><span class="chip phase">${esc(p.best)}</span><span class="chip">${p.lang === "EN" ? "Inglés" : "Español"}</span></div>
       <h3>${esc(p.name)}</h3>
@@ -698,7 +703,7 @@ function renderLearn() {
     </article>`).join("")}</div>
   <div class="load-more"><button class="btn primary" type="button" id="podcasts-more" onclick="morePodcasts()">Ver más podcasts ↓</button></div>`;
   const eb=document.getElementById('episodes-more'); if(eb) eb.hidden=false;
-  const pb=document.getElementById('podcasts-more'); if(pb) pb.hidden=LEARN.podcasts.length<=paging.podcasts;
+  const pb=document.getElementById('podcasts-more'); if(pb) pb.hidden=LEARN.podcasts.length<=paging.podcasts && paging.extraShows.length<=0;
   wireYT();
   window.scrollTo(0, 0);
 }
