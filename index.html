@@ -363,7 +363,7 @@ nav.main a.navcta { animation: pulse 3.2s ease-in-out infinite; }
       <a href="#inicio" data-nav="inicio">Consejo asesor</a>
       <a href="#herramientas" data-nav="herramientas">Herramientas</a>
       <a href="#aprende" data-nav="aprende">Aprende</a>
-      <a href="/noticias.html">Noticias</a>
+      <a href="#noticias" data-nav="noticias">Noticias</a>
       <a href="#solicitar" data-nav="solicitar" class="navcta">Monta tu consejo</a>
     </nav>
   </div>
@@ -697,7 +697,7 @@ function renderHome() {
     <div class="res-grid">
       <a class="res-card" href="#herramientas"><b>Herramientas</b><span>Plantillas descargables para validar, diseñar y planificar tu proyecto.</span></a>
       <a class="res-card" href="#aprende"><b>Aprende</b><span>Los mejores podcasts para emprendedores y los episodios que más nos han enseñado.</span></a>
-      <a class="res-card" href="/noticias.html"><b>Noticias</b><span>La actualidad de tecnología y negocios, con una lección para tu proyecto.</span></a>
+      <a class="res-card" href="#noticias"><b>Noticias</b><span>La actualidad de tecnología y negocios, con una lección para tu proyecto.</span></a>
     </div>
   </section>
 
@@ -767,7 +767,7 @@ function route() {
   const h = location.hash.replace("#", "");
   if (["", "inicio", "consejo", "solicitar", "mentor", "como"].includes(h)) return renderHome();
   if (h === "aprende") return renderLearn();
-  if (h === "noticias") { location.replace("/noticias.html"); return; }
+  if (h === "noticias") return renderNews();
   const t = TOOLS.find(x => hashOf(x) === h);
   if (t) return renderTool(t);
   if (h === "herramientas") return renderLibrary();
