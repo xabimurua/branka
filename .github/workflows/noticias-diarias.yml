@@ -37,8 +37,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Buscar y seleccionar noticias recientes
+      - name: Redactar análisis originales con varias fuentes
         if: steps.hora.outputs.publicar == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BRANKA_NEWS_MODEL: gpt-4.1-mini
         run: python scripts/publicar_noticias.py
       - name: Crear páginas HTML indexables y sitemap
         if: steps.hora.outputs.publicar == 'true'
