@@ -1,7 +1,7 @@
 // Recibe las solicitudes de consejo asesor y las reenvía por correo con Resend.
 // El correo de destino nunca aparece en la web: se guarda en las variables de entorno de Vercel.
 //   RESEND_API_KEY  clave de API de Resend (resend.com)
-//   Destinatario fijo: xabmurua@gmail.com
+//   CONTACT_EMAIL   correo que recibe las solicitudes (solo en Vercel, nunca en el código)
 //   FROM_EMAIL      opcional; remitente verificado en Resend (por defecto onboarding@resend.dev)
 
 const clean = (v, max) => String(v || "").replace(/[\r\n]+/g, " ").trim().slice(0, max);
@@ -12,9 +12,8 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ ok: false });
   }
 
-  const { RESEND_API_KEY, FROM_EMAIL } = process.env;
-  const CONTACT_EMAIL = "xabmurua@gmail.com";
-  if (!RESEND_API_KEY) {
+  const { RESEND_API_KEY, FROM_EMAIL, CONTACT_EMAIL } = process.env;
+  if (!RESEND_API_KEY || !CONTACT_EMAIL) {
     return res.status(503).json({ ok: false, error: "not_configured" });
   }
 

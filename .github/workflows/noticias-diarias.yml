@@ -1,9 +1,8 @@
-name: Publicar noticias de Branka cada día
+name: Publicar noticias de Branka (manual, desactivado)
 
+# Desactivado: la publicación diaria la hace ahora una tarea programada de Claude
+# (ver scripts/ACTUALIZACION_DIARIA.md). Solo se puede lanzar a mano.
 on:
-  schedule:
-    # Ventana diaria de las 08:15 (hora de Madrid); GitHub puede demorar ejecuciones.
-    - cron: '15 6,7 * * *'
   workflow_dispatch:
 
 permissions:

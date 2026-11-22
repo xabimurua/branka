@@ -808,26 +808,7 @@ function renderHome() {
       form.reset();
       out.textContent = "¡Gracias! Hemos recibido tu solicitud y te escribiremos pronto.";
     } catch (err) {
-      const content = [
-        "Nombre: " + v.name,
-        "Email: " + v.email,
-        "Móvil: " + v.phone,
-        "Proyecto: " + v.project,
-        "Etapa: " + v.stage,
-        "",
-        "¿En qué necesitas ayuda?",
-        v.msg || "(sin indicar)"
-      ].join("\n");
-      const subject = "Branka · Solicitud de acompañamiento · " + v.project;
-      const mailto = "mailto:xabmurua@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(content);
-      out.replaceChildren();
-      const note = document.createElement("span");
-      note.textContent = "No se ha enviado automáticamente. Puedes enviar la solicitud con tu aplicación de correo: ";
-      const link = document.createElement("a");
-      link.href = mailto;
-      link.textContent = "Abrir correo con la solicitud preparada";
-      link.style.fontWeight = "700";
-      out.append(note, link);
+      out.textContent = "No hemos podido enviar tu solicitud ahora mismo. Inténtalo de nuevo en unos minutos.";
     } finally { btn.disabled = false; }
   };
   const target = { solicitar: "solicitar", como: "como" }[location.hash.replace("#", "")];
