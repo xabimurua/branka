@@ -1,8 +1,10 @@
-// Recibe las solicitudes de consejo asesor y las reenvía por correo con Resend.
-// El correo de destino nunca aparece en la web: se guarda en las variables de entorno de Vercel.
-//   RESEND_API_KEY  clave de API de Resend (resend.com)
-//   CONTACT_EMAIL   correo que recibe las solicitudes (solo en Vercel, nunca en el código)
-//   FROM_EMAIL      opcional; remitente verificado en Resend (por defecto onboarding@resend.dev)
+// Recibe las solicitudes de consejo asesor y las reenvía por correo desde tu propia cuenta de Gmail (gratis).
+// Ni el correo ni la contraseña aparecen en la web: se guardan en las variables de entorno de Vercel.
+//   GMAIL_USER          cuenta de Gmail que envía las solicitudes
+//   GMAIL_APP_PASSWORD  contraseña de aplicación de esa cuenta (myaccount.google.com/apppasswords)
+//   CONTACT_EMAIL       opcional; correo que recibe las solicitudes (por defecto, GMAIL_USER)
+
+const nodemailer = require("nodemailer");
 
 const clean = (v, max) => String(v || "").replace(/[\r\n]+/g, " ").trim().slice(0, max);
 
@@ -12,8 +14,9 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ ok: false });
   }
 
-  const { RESEND_API_KEY, FROM_EMAIL, CONTACT_EMAIL } = process.env;
-  if (!RESEND_API_KEY || !CONTACT_EMAIL) {
+  const { GMAIL_USER, GMAIL_APP_PASSWORD } = process.env;
+  const CONTACT_EMAIL = process.env.CONTACT_EMAIL || GMAIL_USER;
+  if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
     return res.status(503).json({ ok: false, error: "not_configured" });
   }
 
@@ -48,20 +51,20 @@ module.exports = async function handler(req, res) {
   ].join("\n");
 
   try {
-    const r = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: FROM_EMAIL || "Branka <onboarding@resend.dev>",
-        to: [CONTACT_EMAIL],
-        reply_to: email,
-        subject: `Branka · Solicitud de consejo asesor · ${project}`,
-        text,
-      }),
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user: GMAIL_USER, pass: GMAIL_APP_PASSWORD.replace(/\s+/g, "") },
     });
-    if (!r.ok) return res.status(502).json({ ok: false, error: "send_failed" });
+    await transporter.sendMail({
+      from: `"Branka" <${GMAIL_USER}>`,
+      to: CONTACT_EMAIL,
+      replyTo: `"${name.replace(/"/g, "")}" <${email}>`,
+      subject: `Branka · Solicitud de consejo asesor · ${project}`,
+      text,
+    });
     return res.status(200).json({ ok: true });
-  } catch {
+  } catch (err) {
+    console.error("send_failed", err && err.message);
     return res.status(502).json({ ok: false, error: "send_failed" });
   }
 };

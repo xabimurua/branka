@@ -11,4 +11,4 @@ Se despliega en Vercel como sitio estático: cada cambio en `main` se publica so
 
 ## Formulario de solicitud
 
-Las solicitudes se envían a `/api/solicitud`, una función de Vercel que las reenvía por correo con [Resend](https://resend.com). El correo de destino no aparece en la web: se configura en Vercel → Settings → Environment Variables con `RESEND_API_KEY` y `CONTACT_EMAIL` (y, opcionalmente, `FROM_EMAIL`).
+Las solicitudes se envían a `/api/solicitud`, una función de Vercel que las reenvía por correo desde una cuenta de Gmail (gratis, con Nodemailer). Ni el correo ni la contraseña aparecen en la web: se configuran en Vercel → Settings → Environment Variables con `GMAIL_USER` y `GMAIL_APP_PASSWORD` (una contraseña de aplicación de Google) y, opcionalmente, `CONTACT_EMAIL` si las solicitudes deben llegar a otro correo.
