@@ -17,6 +17,14 @@ SITE_URL = os.getenv("SITE_URL", "").strip().rstrip("/")
 if SITE_URL and (not SITE_URL.startswith("https://") or not urlsplit(SITE_URL).netloc):
     raise SystemExit("SITE_URL debe contener una URL HTTPS de la web pública.")
 
+# Etiqueta de Google (contenedor GTM-N6LTTBFW): una sola vez por página, justo después de <head>.
+GOOGLE_TAG = '''<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-N6LTTBFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>'''
+
 def esc(s):
     return html.escape(str(s or ""), quote=True)
 
@@ -42,7 +50,9 @@ def layout(title, description, content, relpath, schema=None):
         f'<meta name="twitter:image" content="{image}">'
     )
     return f'''<!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="es"><head>
+{GOOGLE_TAG}
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)} | Branka</title><meta name="description" content="{esc(description[:155])}">
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
 {canonical}<meta property="og:type" content="article"><meta property="og:title" content="{esc(title)}">
