@@ -51,7 +51,7 @@ python3 scripts/validar_ayudas.py
 
 Cada día:
 
-1. Busca convocatorias **nuevas** para emprender en Euskadi (Gobierno Vasco, SPRI, Lanbide, diputaciones de Gipuzkoa, Bizkaia y Araba), España (ENISA, CDTI, ministerios) y Europa (EIC y similares). Prioriza las fuentes oficiales (BOPV, BOG, BOB, BOTHA, BOE, webs de los organismos).
+1. Busca convocatorias **nuevas** para emprender en **toda España**: estatales (SEPE, Seguridad Social, ENISA, CDTI, ICO, ministerios), de **cada comunidad autónoma** (gobiernos autonómicos, agencias de desarrollo como SPRI, ACCIÓ, IDEPA, IVACE, Agencia IDEA, IGAPE…, diputaciones y cabildos) y europeas (EIC y similares). Rota cada día varias comunidades para cubrirlas todas a lo largo de la semana, empezando por las que tienen menos fichas. Prioriza las fuentes oficiales (BOE, boletines autonómicos y provinciales, webs de los organismos) y la Base de Datos Nacional de Subvenciones (infosubvenciones.es).
 2. Revisa las que ya están: si ha cambiado el plazo, el importe o el estado, corrígelo. Si una cerrada se vuelve a convocar, actualiza la ficha (nombre con el nuevo año, nueva fecha, `status`).
 3. Añade solo ayudas comprobadas en su convocatoria oficial. No inventes importes ni fechas: si no sabes el plazo, usa `"status": "consultar"` y `"deadline": null`.
 4. Elimina fichas cerradas hace más de 6 meses que no vayan a repetirse.
@@ -63,12 +63,14 @@ Formato de cada ficha:
 {
   "name": "Nombre de la convocatoria y año",
   "org": "Organismo",
-  "scope": "Euskadi | Gipuzkoa | Bizkaia | Araba | Navarra | España | Europa",
+  "scope": "España (estatal) | Europa | nombre de la comunidad: Andalucía, Aragón, Asturias, Illes Balears, Canarias, Cantabria, Castilla-La Mancha, Castilla y León, Cataluña, Comunitat Valenciana, Extremadura, Galicia, Madrid, Murcia, Navarra, Euskadi, La Rioja, Ceuta, Melilla",
+  "area": "opcional: provincia, isla o municipio (p. ej. Gipuzkoa)",
   "type": "Subvención | Préstamo | Capital | Mixta | Programa",
   "amount": "Qué da y cuánto, en una frase",
   "for": "A quién va dirigida y requisitos clave (30-600 caracteres)",
   "deadline": "AAAA-MM-DD o null",
-  "status": "abierta (con deadline) | permanente | consultar | cerrada",
+  "opens": "AAAA-MM-DD, solo si aún no ha abierto",
+  "status": "abierta (con deadline) | proxima (con opens) | permanente | consultar | cerrada",
   "url": "https://enlace a la convocatoria oficial",
   "sources": [["Nombre de la fuente", "https://..."]],
   "tool": "slug de herramienta de tools-data en index.html",

@@ -469,7 +469,11 @@ nav.main a.navcta { animation: pulse 3.2s ease-in-out infinite; }
 .ay-filters { display: grid; gap: 10px; margin: 24px 0 6px; }
 .ay-filters > div { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .ay-filters > div > span:first-child { font-weight: 700; margin-right: 6px; min-width: 64px; }
-#ay-scopes { display: contents; }
+.ay-where { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-weight: 700; }
+.ay-where select { font: inherit; font-weight: 600; padding: 10px 14px; border-radius: 12px; border: 2px solid #e0602b; background: #fff; min-width: 240px; }
+.ay-count { margin: 4px 0 0; color: var(--muted); font-weight: 600; }
+.ay.ay-proxima { border-top-color: #7c3aed; }
+.ay-proxima .ay-st { color: #7c3aed; }
 .chipbtn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text); }
 .chipbtn.on { background: var(--grad); color: #fff; border-color: transparent; }
 .ay-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; margin: 16px 0; }
@@ -889,7 +893,7 @@ function renderHome() {
     <div class="res-grid">
       <a class="res-card" href="#herramientas"><b>Herramientas</b><span>Plantillas descargables para validar, diseñar y planificar tu proyecto.</span></a>
       <a class="res-card" href="#aprende"><b>Aprende</b><span>Los mejores podcasts para emprendedores y los episodios que más nos han enseñado.</span></a>
-      <a class="res-card" href="#ayudas"><b>Ayudas y subvenciones</b><span>Las convocatorias abiertas para emprender en Euskadi, España y Europa, actualizadas cada día.</span></a>
+      <a class="res-card" href="#ayudas"><b>Ayudas y subvenciones</b><span>Las convocatorias para emprender en tu comunidad, en toda España y en Europa, actualizadas cada día.</span></a>
       <a class="res-card" href="#gratis"><b>Tests y calculadoras</b><span>Descubre tu perfil como emprendedor y haz los números de tu proyecto en 2 minutos.</span></a>
       <a class="res-card" href="#noticias"><b>Noticias</b><span>La actualidad de tecnología y negocios, con una lección para tu proyecto.</span></a>
     </div>
@@ -1260,27 +1264,34 @@ function wireNewsletter() {
 
 /* ---------- Mapa de ayudas y subvenciones ---------- */
 let AYUDAS = null;
-const AY_STATUS = { abierta: "Abierta", permanente: "Siempre abierta", consultar: "Consulta el plazo", cerrada: "Cerrada" };
+const CCAA = ["Andalucía", "Aragón", "Asturias", "Illes Balears", "Canarias", "Cantabria", "Castilla-La Mancha", "Castilla y León", "Cataluña", "Comunitat Valenciana", "Extremadura", "Galicia", "Madrid", "Murcia", "Navarra", "Euskadi", "La Rioja", "Ceuta", "Melilla"];
+const AY_STATUS = { abierta: "Abierta", permanente: "Siempre abierta", consultar: "Consulta el plazo", proxima: "Próxima apertura", cerrada: "Cerrada" };
+const fdate = (s, y) => new Date(s + "T12:00:00").toLocaleDateString("es-ES", y ? { day: "numeric", month: "long", year: "numeric" } : { day: "numeric", month: "long" });
 function ayState(a) {
-  if (a.deadline) {
-    const d = new Date(a.deadline + "T23:59:59"), now = new Date();
-    if (d < now) return ["cerrada", "Cerrada el " + d.toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })];
-    const days = Math.ceil((d - now) / 864e5);
-    if (a.status !== "cerrada") return ["abierta", days <= 15 ? `¡Cierra en ${days} día${days === 1 ? "" : "s"}!` : "Abierta hasta el " + d.toLocaleDateString("es-ES", { day: "numeric", month: "long" })];
+  const now = new Date();
+  if (a.deadline && new Date(a.deadline + "T23:59:59") < now) return ["cerrada", "Cerrada el " + fdate(a.deadline, true)];
+  if (a.opens && new Date(a.opens + "T00:00:00") > now) return ["proxima", "Abre el " + fdate(a.opens, true)];
+  if (a.deadline && a.status !== "cerrada") {
+    const days = Math.ceil((new Date(a.deadline + "T23:59:59") - now) / 864e5);
+    return ["abierta", days <= 15 ? `¡Cierra en ${days} día${days === 1 ? "" : "s"}!` : "Abierta hasta el " + fdate(a.deadline)];
   }
-  return [a.status, AY_STATUS[a.status] || a.status];
+  return [a.status === "proxima" ? "consultar" : a.status, AY_STATUS[a.status] || a.status];
 }
 async function renderAyudas() {
   setNav("ayudas");
+  let saved = ""; try { saved = localStorage.getItem("branka-ccaa") || ""; } catch (e) {}
   app.innerHTML = `
   <section class="news-head"><span class="eyebrow">Actualizado cada día</span><h1>Mapa de ayudas y subvenciones para emprender</h1>
-  <p>Convocatorias abiertas y próximas para quien emprende en Euskadi, España y Europa: subvenciones, préstamos sin avales y programas de inversión. Cada ficha enlaza a la fuente oficial.</p></section>
+  <p>Convocatorias para quien emprende en cualquier comunidad de España: ayudas estatales, autonómicas y europeas, con subvenciones, préstamos sin avales y programas de inversión. Cada ficha enlaza a la fuente oficial.</p></section>
   <div class="ay-filters" role="group" aria-label="Filtros">
-    <div><span>Estado</span>${[["todas", "Todas"], ["abiertas", "Abiertas"], ["cerrada", "Cerradas"]].map((o, i) => `<button type="button" class="chipbtn${i === 1 ? " on" : ""}" data-f="st" data-v="${o[0]}">${o[1]}</button>`).join("")}</div>
-    <div><span>Ámbito</span><span id="ay-scopes"></span></div>
+    <label class="ay-where"><span>¿Dónde emprendes?</span>
+      <select id="ay-ccaa"><option value="">Toda España</option>${CCAA.map(c => `<option${c === saved ? " selected" : ""}>${c}</option>`).join("")}</select></label>
+    <div><span>Estado</span>${[["abiertas", "Abiertas y próximas"], ["todas", "Todas"], ["cerrada", "Cerradas"]].map((o, i) => `<button type="button" class="chipbtn${i === 0 ? " on" : ""}" data-f="st" data-v="${o[0]}">${o[1]}</button>`).join("")}</div>
+    <div><span>Tipo</span>${[["todos", "Todos"], ["Subvención", "Subvenciones"], ["Préstamo", "Préstamos"], ["Capital", "Inversión"], ["Mixta", "Mixtas"]].map((o, i) => `<button type="button" class="chipbtn${i === 0 ? " on" : ""}" data-f="ty" data-v="${o[0]}">${o[1]}</button>`).join("")}</div>
   </div>
+  <p class="ay-count" id="ay-count" aria-live="polite"></p>
   <div id="ay-list" class="ay-list"><p>Cargando convocatorias…</p></div>
-  <p class="risk-note">Información orientativa revisada en las fuentes enlazadas. Antes de solicitar una ayuda, comprueba siempre los requisitos y plazos en la convocatoria oficial.</p>
+  <p class="risk-note">Información orientativa revisada en las fuentes enlazadas. Antes de solicitar una ayuda, comprueba siempre los requisitos y plazos en la convocatoria oficial. ¿Echas en falta alguna? Se añaden convocatorias nuevas cada día.</p>
   ${newsletterBox()}`;
   wireNewsletter();
   window.scrollTo(0, 0);
@@ -1289,27 +1300,30 @@ async function renderAyudas() {
     catch (e) { AYUDAS = { items: [] }; }
   }
   if (!document.getElementById("ay-list")) return;
-  const scopes = [...new Set(AYUDAS.items.map(a => a.scope))];
-  const f = { st: "abiertas", sc: "todos" };
-  document.getElementById("ay-scopes").innerHTML = [["todos", "Todos"], ...scopes.map(s => [s, s])].map((o, i) => `<button type="button" class="chipbtn${i === 0 ? " on" : ""}" data-f="sc" data-v="${esc(o[0])}">${esc(o[1])}</button>`).join("");
-  const order = { abierta: 0, permanente: 1, consultar: 2, cerrada: 3 };
+  const f = { st: "abiertas", ty: "todos", cc: document.getElementById("ay-ccaa").value };
+  const order = { abierta: 0, proxima: 1, permanente: 2, consultar: 3, cerrada: 4 };
+  const level = a => a.scope === "Europa" ? "Europea" : a.scope === "España" ? "Estatal" : a.scope + (a.area ? " · " + a.area : "");
   const draw = () => {
     const list = AYUDAS.items.map(a => ({ a, s: ayState(a) }))
+      .filter(x => !f.cc || [f.cc, "España", "Europa"].includes(x.a.scope))
       .filter(x => f.st === "todas" || (f.st === "abiertas" ? x.s[0] !== "cerrada" : x.s[0] === "cerrada"))
-      .filter(x => f.sc === "todos" || x.a.scope === f.sc)
-      .sort((x, y) => (order[x.s[0]] - order[y.s[0]]) || String(x.a.deadline || "9").localeCompare(String(y.a.deadline || "9")));
+      .filter(x => f.ty === "todos" || x.a.type === f.ty)
+      .sort((x, y) => ((x.a.scope === f.cc ? -1 : 0) - (y.a.scope === f.cc ? -1 : 0)) || (order[x.s[0]] - order[y.s[0]]) || String(x.a.deadline || "9").localeCompare(String(y.a.deadline || "9")));
+    const regional = list.filter(x => !["España", "Europa"].includes(x.a.scope)).length;
+    document.getElementById("ay-count").textContent = `${list.length} convocatoria${list.length === 1 ? "" : "s"}` + (f.cc ? ` · ${regional} de ${f.cc}, el resto estatales y europeas` : "");
     document.getElementById("ay-list").innerHTML = list.length ? list.map(({ a, s }) => `
       <article class="ay ay-${s[0]}">
-        <div class="ay-top"><span class="chip phase">${esc(a.scope)}</span><span class="chip">${esc(a.type)}</span><span class="ay-st">${esc(s[1])}</span></div>
+        <div class="ay-top"><span class="chip phase">${esc(level(a))}</span><span class="chip">${esc(a.type)}</span><span class="ay-st">${esc(s[1])}</span></div>
         <h3>${esc(a.name)}</h3>
         <p class="by">${esc(a.org)}</p>
         <p class="ay-amount">${esc(a.amount)}</p>
         <p>${esc(a.for)}</p>
         ${toolLink(a.tool)}
-        <div class="btns"><a class="btn ${s[0] === "cerrada" ? "" : "primary"}" href="${esc(a.url)}" target="_blank" rel="noopener">Ver convocatoria oficial ↗</a></div>
+        <div class="btns"><a class="btn ${s[0] === "cerrada" ? "" : "primary"}" href="${esc(a.url)}" target="_blank" rel="noopener">Ver convocatoria ↗</a></div>
         <small class="ay-src">Fuentes: ${(a.sources || []).map(x => `<a href="${esc(x[1])}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")} · Revisado el ${esc(new Date(a.checked + "T12:00:00").toLocaleDateString("es-ES"))}</small>
-      </article>`).join("") : `<p>No hay convocatorias con estos filtros ahora mismo.</p>`;
+      </article>`).join("") : `<p>${f.cc ? `Todavía no tenemos convocatorias de ${esc(f.cc)} con estos filtros. Mira las estatales y europeas, que también te aplican.` : "No hay convocatorias con estos filtros ahora mismo."}</p>`;
   };
+  document.getElementById("ay-ccaa").onchange = e => { f.cc = e.target.value; try { localStorage.setItem("branka-ccaa", f.cc); } catch (er) {} draw(); };
   document.querySelector(".ay-filters").onclick = e => {
     const b = e.target.closest(".chipbtn"); if (!b) return;
     f[b.dataset.f] = b.dataset.v;

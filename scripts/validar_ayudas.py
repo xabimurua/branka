@@ -12,9 +12,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FILE = ROOT / "contenido" / "ayudas.json"
-SCOPES = {"Euskadi", "Gipuzkoa", "Bizkaia", "Araba", "Navarra", "España", "Europa"}
+SCOPES = {"España", "Europa", "Andalucía", "Aragón", "Asturias", "Illes Balears", "Canarias", "Cantabria", "Castilla-La Mancha", "Castilla y León", "Cataluña", "Comunitat Valenciana", "Extremadura", "Galicia", "Madrid", "Murcia", "Navarra", "Euskadi", "La Rioja", "Ceuta", "Melilla"}
 TYPES = {"Subvención", "Préstamo", "Capital", "Mixta", "Programa"}
-STATUS = {"abierta", "permanente", "consultar", "cerrada"}
+STATUS = {"abierta", "permanente", "consultar", "proxima", "cerrada"}
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}")
 
 
@@ -57,6 +57,13 @@ def main():
                     print(f"Marcada como cerrada: {a.get('name')}")
             except ValueError:
                 errors.append(f"{where}: deadline debe ser AAAA-MM-DD o null")
+        if a.get("opens"):
+            try:
+                dt.date.fromisoformat(a["opens"])
+            except ValueError:
+                errors.append(f"{where}: opens debe ser AAAA-MM-DD")
+        if a.get("status") == "proxima" and not a.get("opens"):
+            errors.append(f"{where}: una ayuda 'proxima' necesita la fecha de apertura en 'opens'")
         if a.get("status") == "abierta" and not d:
             errors.append(f"{where}: una ayuda 'abierta' necesita deadline; si no tiene fecha usa 'permanente' o 'consultar'")
         try:

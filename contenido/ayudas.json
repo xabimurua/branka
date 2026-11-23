@@ -142,7 +142,7 @@
     {
       "name": "Txekintek 2026 (creación y desarrollo empresarial)",
       "org": "Diputación Foral de Gipuzkoa",
-      "scope": "Gipuzkoa",
+      "scope": "Euskadi",
       "type": "Subvención",
       "amount": "Ayudas para promover la creación y el desarrollo de empresas",
       "for": "Proyectos empresariales en Gipuzkoa. La convocatoria de 2026 cerró el 22 de octubre.",
@@ -160,12 +160,13 @@
         ]
       ],
       "tool": "09_business_model_canvas",
-      "checked": "2026-11-23"
+      "checked": "2026-11-23",
+      "area": "Gipuzkoa"
     },
     {
       "name": "Fomento de iniciativas emprendedoras 2026",
       "org": "Diputación Foral de Bizkaia",
-      "scope": "Bizkaia",
+      "scope": "Euskadi",
       "type": "Subvención",
       "amount": "Ayudas a la puesta en marcha, creación de empresas y transmisión empresarial",
       "for": "Personas emprendedoras en Bizkaia. La segunda convocatoria de 2026 cerró el 30 de julio.",
@@ -183,6 +184,192 @@
         ]
       ],
       "tool": "14_plan_negocio",
+      "checked": "2026-11-23",
+      "area": "Bizkaia"
+    },
+    {
+      "name": "Capitalización del paro (pago único)",
+      "org": "SEPE",
+      "scope": "España",
+      "type": "Subvención",
+      "amount": "Cobrar de una vez la prestación por desempleo pendiente para invertirla en tu proyecto",
+      "for": "Personas que cobran la prestación contributiva por desempleo y tienen al menos tres meses pendientes. Hay que pedirlo antes de darse de alta como autónomo.",
+      "deadline": null,
+      "status": "permanente",
+      "url": "https://www.sepe.es/HomeSepe/autonomos/capitaliza-tu-prestacion.html",
+      "sources": [
+        [
+          "SEPE",
+          "https://www.sepe.es/HomeSepe/autonomos/capitaliza-tu-prestacion.html"
+        ],
+        [
+          "Que.es",
+          "https://www.que.es/2026/10/17/cobrar-paro-golpe-pago-unico/"
+        ]
+      ],
+      "tool": "19_tesoreria_burn_rate_y_runway",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Tarifa plana para nuevos autónomos",
+      "org": "Seguridad Social",
+      "scope": "España",
+      "type": "Subvención",
+      "amount": "Cuota reducida de 80 € al mes (88,64 € en 2026 con el MEI) durante los primeros 12 meses",
+      "for": "Nuevos autónomos, también societarios. Se puede prorrogar 12 meses más si los rendimientos no superan el salario mínimo. Algunas comunidades la complementan con una cuota cero.",
+      "deadline": null,
+      "status": "permanente",
+      "url": "https://www.infoautonomos.com/seguridad-social/tarifa-plana-autonomos/",
+      "sources": [
+        [
+          "Infoautónomos",
+          "https://www.infoautonomos.com/seguridad-social/tarifa-plana-autonomos/"
+        ],
+        [
+          "VidaCaixa",
+          "https://www.vidacaixa.es/articulos/finanzas-y-ahorro/tarifa-plana-autonomos"
+        ]
+      ],
+      "tool": "40_estrategia_de_precios",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Ayudas a nuevos autónomos para gastos de inicio",
+      "org": "Comunidad de Madrid",
+      "scope": "Madrid",
+      "type": "Subvención",
+      "amount": "Subvención de parte de los gastos de arranque: notaría, registro, gestoría, patentes…",
+      "for": "Nuevos autónomos que inician su actividad en la Comunidad de Madrid. Convocatoria indefinida: se puede pedir en cualquier momento del año en la sede electrónica.",
+      "deadline": null,
+      "status": "permanente",
+      "url": "https://www.comunidad.madrid/node/107052",
+      "sources": [
+        [
+          "Comunidad de Madrid",
+          "https://www.comunidad.madrid/node/107052"
+        ],
+        [
+          "Comunidad de Madrid",
+          "https://pcen.prod.comunidad.madrid/press-releases/download/106981"
+        ]
+      ],
+      "tool": "14_plan_negocio",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Fomento del emprendimiento colectivo 2026",
+      "org": "Comunidad de Madrid",
+      "scope": "Madrid",
+      "type": "Subvención",
+      "amount": "Ayudas para crear y ampliar cooperativas y sociedades laborales (5,5 M€ en 2026)",
+      "for": "Proyectos de emprendimiento colectivo en Madrid: cooperativas, sociedades laborales y entrada de nuevos socios. Convocatoria indefinida.",
+      "deadline": null,
+      "status": "permanente",
+      "url": "https://sede.comunidad.madrid/ayudas-becas-subvenciones/ayuda-fomento-emprendimiento-colectivo",
+      "sources": [
+        [
+          "Comunidad de Madrid",
+          "https://www.comunidad.madrid/press-releases/download/117434"
+        ],
+        [
+          "Comunidad de Madrid",
+          "https://www.comunidad.madrid/press-releases/download/105209"
+        ]
+      ],
+      "tool": "42_mapa_de_alianzas_y_gobernanza",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Ayudas para el crecimiento de autónomos y microempresas",
+      "org": "Comunidad de Madrid",
+      "scope": "Madrid",
+      "type": "Subvención",
+      "amount": "Ayudas directas de hasta 150.000 €",
+      "for": "Autónomos y microempresas madrileñas con proyectos de crecimiento o consolidación. El próximo plazo de solicitud está previsto del 1 al 31 de enero de 2027.",
+      "deadline": "2027-01-31",
+      "opens": "2027-01-01",
+      "status": "proxima",
+      "url": "https://sede.comunidad.madrid/perfil/emprendedores?page=11",
+      "sources": [
+        [
+          "Sede Comunidad de Madrid",
+          "https://sede.comunidad.madrid/perfil/emprendedores?page=11"
+        ],
+        [
+          "Comunidad de Madrid",
+          "https://www.comunidad.madrid/node/113415"
+        ]
+      ],
+      "tool": "15_escenarios",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Incentivos al inicio de actividad de nuevos autónomos",
+      "org": "Junta de Andalucía",
+      "scope": "Andalucía",
+      "type": "Subvención",
+      "amount": "Entre 3.800 y 5.500 €",
+      "for": "Nuevos autónomos en Andalucía, con atención especial a jóvenes, mujeres y municipios pequeños. Cerró el 30 de septiembre de 2026 (se pedía en los dos meses siguientes al alta).",
+      "deadline": "2026-09-30",
+      "status": "cerrada",
+      "url": "https://www.juntadeandalucia.es/temas/trabajar/autoempleo/ayudas.html",
+      "sources": [
+        [
+          "Junta de Andalucía",
+          "https://www.juntadeandalucia.es/organismos/empleoempresaytrabajoautonomo/servicios/actualidad/noticias/detalle/602926.html"
+        ],
+        [
+          "Finantres",
+          "https://finantresnoticias.com/negocios-y-autonomos/andalucia-amplia-hasta-septiembre-ayudas-nuevos-autonomos-quien-puede-pedirlas/"
+        ]
+      ],
+      "tool": "14_plan_negocio",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Cuota Cero para autónomos",
+      "org": "Junta de Andalucía",
+      "scope": "Andalucía",
+      "type": "Subvención",
+      "amount": "Cubre la cuota de autónomo durante el periodo de tarifa plana",
+      "for": "Nuevos autónomos en Andalucía que se acogen a la tarifa plana. El plazo de esta línea terminó el 30 de septiembre de 2026.",
+      "deadline": "2026-09-30",
+      "status": "cerrada",
+      "url": "https://www.juntadeandalucia.es/temas/trabajar/autoempleo/ayudas.html",
+      "sources": [
+        [
+          "El Diario (Andalucía Informa)",
+          "https://andaluciainforma.eldiario.es/?p=34618"
+        ],
+        [
+          "El Diario (Andalucía Informa)",
+          "https://andaluciainforma.eldiario.es/?p=29002"
+        ]
+      ],
+      "tool": "19_tesoreria_burn_rate_y_runway",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "EMPYME 2026",
+      "org": "Generalitat Valenciana",
+      "scope": "Comunitat Valenciana",
+      "type": "Subvención",
+      "amount": "Ayudas a personas emprendedoras y pymes para iniciar y consolidar su proyecto",
+      "for": "Personas emprendedoras y pymes con domicilio social en la Comunitat Valenciana, preferentemente de sectores con potencial de crecimiento. La convocatoria de 2026 cerró el 31 de julio.",
+      "deadline": "2026-07-31",
+      "status": "cerrada",
+      "url": "https://sede.gva.es/descarregues/2026/07/153293-0-Guia_solicitud-EMPYME_es_26_06_30_def.pdf",
+      "sources": [
+        [
+          "GVA",
+          "https://sede.gva.es/descarregues/2026/07/153293-0-Guia_solicitud-EMPYME_es_26_06_30_def.pdf"
+        ],
+        [
+          "El Español",
+          "https://www.elespanol.com/valencia/20260915/oficial-ayuda-euros-personas-abran-nuevos-negocios-municipios-trt/1003744382457_0.amp.html"
+        ]
+      ],
+      "tool": "09_business_model_canvas",
       "checked": "2026-11-23"
     }
   ]
