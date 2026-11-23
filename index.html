@@ -383,7 +383,40 @@ nav.main a.navcta { animation: pulse 3.2s ease-in-out infinite; }
   .card, .res-card, .stage, .inc, .story, .ep, .steps li, .mentor-band, .apply, .feat, .sec-h, .panel, .tpl { animation: none !important; }
 }
 
-.load-more{display:flex;justify-content:center;padding:26px 0 42px}.load-more .btn{cursor:pointer;min-width:200px}.load-more .btn[hidden]{display:none}</style>
+.load-more{display:flex;justify-content:center;padding:26px 0 42px}.load-more .btn{cursor:pointer;min-width:200px}.load-more .btn[hidden]{display:none}
+/* Test de riesgo */
+.risk { display: grid; gap: 14px; margin: 26px 0 10px; }
+.risk-bar { position: sticky; top: 70px; z-index: 5; height: 6px; border-radius: 6px; background: var(--surface-2); overflow: hidden; }
+.risk-bar span { display: block; height: 100%; width: 0; background: var(--grad); transition: width .3s; }
+.rq { border: 1px solid var(--line); border-radius: 16px; padding: 18px; margin: 0; background: var(--surface); }
+.rq legend { float: left; width: 100%; padding: 0; margin-bottom: 12px; font-weight: 700; font-size: 18px; }
+.rq legend small { display: block; color: var(--red); font-size: 13px; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
+.ro { clear: both; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; }
+.ro label { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; line-height: 1.35; }
+.ro label:hover { border-color: #e0602b; }
+.ro input { accent-color: #e0602b; margin-top: 3px; }
+.ro label:has(input:checked) { border-color: #e0602b; background: #fff1e8; }
+.risk-go { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+#risk-msg { color: var(--red); font-weight: 600; }
+.risk-res { scroll-margin-top: 90px; margin: 20px 0 40px; padding: 26px; border-radius: 20px; background: var(--surface); border: 2px solid var(--pc); display: grid; gap: 18px; }
+.risk-top { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+.risk-top h2 { font-size: 38px; font-weight: 800; color: var(--pc); margin: 2px 0 6px; }
+.risk-top p { margin: 0; max-width: 70ch; }
+.risk-gauge { width: 150px; height: 150px; border-radius: 50%; display: grid; place-content: center; text-align: center; background: radial-gradient(closest-side, var(--surface) 76%, transparent 77%), conic-gradient(var(--pc) calc(var(--p) * 1%), var(--surface-2) 0); }
+.risk-gauge b { font-size: 40px; font-weight: 800; line-height: 1; }
+.risk-gauge small { font-size: 12px; max-width: 90px; color: var(--muted, #666); }
+.risk-dims { display: grid; gap: 8px; }
+.risk-dims div { display: grid; grid-template-columns: 120px 1fr 36px; gap: 10px; align-items: center; }
+.risk-dims i { height: 10px; border-radius: 10px; background: var(--surface-2); overflow: hidden; }
+.risk-dims em { display: block; height: 100%; background: var(--grad); border-radius: 10px; }
+.risk-dims b { text-align: right; }
+.risk-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.risk-cols h3, .risk-res > h3 { font-size: 18px; margin: 0 0 6px; }
+.risk-cols ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.risk-tools { display: flex; flex-direction: column; gap: 6px; }
+.risk-note { font-size: 14px; color: var(--muted, #666); margin: 0; }
+@media (max-width: 760px) { .risk-top, .risk-cols { grid-template-columns: 1fr; } .risk-gauge { margin: 0 auto; } .risk-dims div { grid-template-columns: 112px 1fr 30px; gap: 6px; font-size: 15px; } }
+</style>
 </head>
 <body>
 <header class="top">
@@ -784,6 +817,7 @@ function renderHome() {
     <div class="res-grid">
       <a class="res-card" href="#herramientas"><b>Herramientas</b><span>Plantillas descargables para validar, diseñar y planificar tu proyecto.</span></a>
       <a class="res-card" href="#aprende"><b>Aprende</b><span>Los mejores podcasts para emprendedores y los episodios que más nos han enseñado.</span></a>
+      <a class="res-card" href="#test-riesgo"><b>Test de riesgo</b><span>Descubre en 3 minutos cuánto riesgo estás dispuesto a asumir al emprender.</span></a>
       <a class="res-card" href="#noticias"><b>Noticias</b><span>La actualidad de tecnología y negocios, con una lección para tu proyecto.</span></a>
     </div>
   </section>
@@ -831,10 +865,116 @@ function renderHome() {
   if (target) document.getElementById(target).scrollIntoView(); else window.scrollTo(0, 0);
 }
 
+/* ---------- Test de aversión al riesgo ---------- */
+const RISK_DIMS = { dinero: "Dinero", incertidumbre: "Incertidumbre", fracaso: "Fracaso", decision: "Decisiones" };
+const RISK_Q = [
+  ["dinero", "Tienes un trabajo estable y una idea que te ilusiona. ¿Qué haces?", ["Sigo en mi trabajo y la desarrollo solo los fines de semana", "Pido una reducción de jornada para probarla", "Me pido una excedencia y me dedico unos meses", "Lo dejo y me lanzo a tiempo completo"]],
+  ["dinero", "¿Cuánto de tus ahorros pondrías en tu proyecto?", ["Nada o casi nada", "Hasta un 10 %", "Entre un 10 % y un 30 %", "Más de un 30 %"]],
+  ["dinero", "Para financiar el arranque, ¿pedirías un préstamo personal?", ["Nunca", "Solo uno pequeño y con garantías claras", "Sí, si el plan lo justifica", "Sí, sin problema si acelera el proyecto"]],
+  ["dinero", "¿Cuántos meses podrías vivir sin ingresos mientras el proyecto despega?", ["Menos de 3", "Entre 3 y 6", "Entre 6 y 12", "Más de 12"]],
+  ["incertidumbre", "Tienes que tomar una decisión importante y solo tienes la mitad de la información.", ["Espero hasta tenerla toda", "Busco más datos aunque tarde", "Decido con lo que hay y corrijo después", "Decido rápido: actuar es la mejor forma de aprender"]],
+  ["incertidumbre", "Un cliente grande te pide algo que nunca has hecho.", ["Le digo que no", "Le digo que sí solo si puedo subcontratarlo", "Le digo que sí y aprendo por el camino", "Le digo que sí y lo convierto en una nueva línea de negocio"]],
+  ["incertidumbre", "¿Cómo te sientes cuando no sabes cuánto vas a ingresar el mes que viene?", ["Me genera mucha ansiedad", "Me incomoda bastante", "Lo llevo bien si tengo un colchón", "Me da igual: es parte del juego"]],
+  ["fracaso", "Imagina que tu proyecto no funciona dentro de un año.", ["Sería un golpe muy duro del que me costaría recuperarme", "Me afectaría mucho, pero volvería a mi trabajo", "Lo vería como un aprendizaje caro", "Lo vería como un paso más hacia el siguiente proyecto"]],
+  ["fracaso", "¿Lanzarías una versión imperfecta de tu producto para ver cómo reacciona el mercado?", ["No, prefiero lanzar cuando esté perfecto", "Solo a un grupo muy pequeño de conocidos", "Sí, a clientes reales con avisos", "Sí, cuanto antes mejor"]],
+  ["fracaso", "¿Qué pesa más para ti?", ["Lo que pierdo si sale mal", "Más lo que pierdo que lo que gano", "Más lo que gano que lo que pierdo", "Lo que gano si sale bien"]],
+  ["decision", "Un inversor te ofrece dinero a cambio del 25 % de tu empresa.", ["No, prefiero crecer despacio con lo mío", "Solo si no hay otra opción", "Lo estudio si me ayuda a crecer más rápido", "Sí, si el inversor aporta además de dinero"]],
+  ["decision", "Tu proyecto va bien, pero aparece una oportunidad de cambiar de mercado.", ["Me quedo donde estoy", "La estudio durante meses antes de moverme", "Hago una prueba pequeña", "Me muevo rápido antes que la competencia"]],
+];
+const RISK_PROFILES = [
+  { max: 22, name: "Prudente", color: "#2f7d6d",
+    text: "Te sientes más cómodo cuando controlas los riesgos. Es una ventaja: te protege de errores caros. El reto es que la prudencia no te impida probar y aprender del mercado.",
+    plus: ["Cuidas la caja y evitas deudas innecesarias", "Planificas antes de actuar", "Es difícil que pongas en peligro tu estabilidad"],
+    watch: ["Esperar demasiado a tener la información completa", "Lanzar tarde por buscar la perfección", "Dejar pasar oportunidades por miedo a perder"],
+    steps: ["Empieza con experimentos pequeños y baratos, sin dejar tu trabajo", "Define cuánto estás dispuesto a perder antes de empezar", "Rodéate de alguien con más tolerancia al riesgo que te empuje"],
+    tools: ["39_experimentos_y_validacion_de_mvp", "19_tesoreria_burn_rate_y_runway", "26_subvenciones_y_financiacion_publica"] },
+  { max: 35, name: "Equilibrado", color: "#e0602b",
+    text: "Asumes riesgos cuando entiendes lo que está en juego. Combinas ambición y cabeza fría, un perfil muy habitual entre quienes consiguen consolidar un proyecto.",
+    plus: ["Arriesgas con criterio", "Sabes cuándo acelerar y cuándo frenar", "Aprendes de los errores sin dramatizar"],
+    watch: ["Quedarte a medio camino en decisiones que exigen compromiso", "Dudar demasiado entre opciones", "No fijar de antemano tus límites"],
+    steps: ["Pon fechas y cifras a tus apuestas: cuánto, hasta cuándo y qué resultado esperas", "Prepara escenarios optimista, realista y pesimista", "Revisa cada trimestre si toca arriesgar más o menos"],
+    tools: ["15_escenarios", "16_riesgos", "13_okrs"] },
+  { max: 48, name: "Audaz", color: "#da3a22",
+    text: "Te mueves bien en la incertidumbre y no te asusta apostar fuerte. Es la energía que necesita un proyecto para arrancar, siempre que no ponga en riesgo lo que no puedes perder.",
+    plus: ["Decides y ejecutas rápido", "Ves oportunidades donde otros ven problemas", "Te recuperas pronto de los tropiezos"],
+    watch: ["Quedarte sin caja por crecer demasiado rápido", "Subestimar riesgos financieros y personales", "Comprometerte con más de lo que puedes cumplir"],
+    steps: ["Calcula tu runway y no bajes nunca de un mínimo de meses", "Separa tu dinero personal del de la empresa", "Cuenta con alguien prudente que cuestione tus decisiones"],
+    tools: ["44_matriz_de_riesgos_financieros", "19_tesoreria_burn_rate_y_runway", "21_estrategia_de_ronda_de_inversion"] },
+];
+let riskAnswers = [];
+function renderRisk() {
+  setNav("riesgo");
+  riskAnswers = [];
+  app.innerHTML = `
+  <section class="news-head">
+    <span class="eyebrow">Test · 3 minutos</span>
+    <h1>¿Cuánto riesgo estás dispuesto a asumir al emprender?</h1>
+    <p>12 preguntas sobre dinero, incertidumbre, fracaso y decisiones. Al final verás tu perfil, tus puntos fuertes, lo que debes vigilar y las herramientas que más te pueden ayudar. Las respuestas no se guardan ni se envían.</p>
+  </section>
+  <form class="risk" id="risk">
+    <div class="risk-bar"><span id="risk-prog"></span></div>
+    ${RISK_Q.map((q, i) => `
+    <fieldset class="rq" data-i="${i}">
+      <legend><small>${i + 1}/${RISK_Q.length} · ${RISK_DIMS[q[0]]}</small>${esc(q[1])}</legend>
+      <div class="ro">${q[2].map((o, j) => `<label><input type="radio" name="q${i}" value="${j + 1}"><span>${esc(o)}</span></label>`).join("")}</div>
+    </fieldset>`).join("")}
+    <div class="risk-go"><button class="btn primary" type="submit">Ver mi perfil</button><span id="risk-msg" role="status"></span></div>
+  </form>
+  <div id="risk-out"></div>`;
+  const form = document.getElementById("risk"), prog = document.getElementById("risk-prog");
+  form.onchange = () => {
+    const done = RISK_Q.filter((_, i) => form["q" + i].value).length;
+    prog.style.width = (done / RISK_Q.length * 100) + "%";
+  };
+  form.onsubmit = e => {
+    e.preventDefault();
+    const vals = RISK_Q.map((_, i) => +form["q" + i].value || 0);
+    const miss = vals.findIndex(v => !v);
+    if (miss >= 0) {
+      document.getElementById("risk-msg").textContent = `Te falta la pregunta ${miss + 1}.`;
+      form.querySelector(`[data-i="${miss}"]`).scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    document.getElementById("risk-msg").textContent = "";
+    showRisk(vals);
+  };
+  window.scrollTo(0, 0);
+}
+function showRisk(vals) {
+  const total = vals.reduce((a, b) => a + b, 0);
+  const p = RISK_PROFILES.find(x => total <= x.max);
+  const pct = Math.round((total - 12) / 36 * 100);
+  const dims = Object.keys(RISK_DIMS).map(k => {
+    const v = RISK_Q.map((q, i) => q[0] === k ? vals[i] : null).filter(x => x !== null);
+    return [RISK_DIMS[k], Math.round((v.reduce((a, b) => a + b, 0) - v.length) / (v.length * 3) * 100)];
+  });
+  const list = a => `<ul>${a.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  const out = document.getElementById("risk-out");
+  out.innerHTML = `
+  <section class="risk-res" style="--pc:${p.color}">
+    <div class="risk-top">
+      <div class="risk-gauge" style="--p:${pct}"><b>${pct}</b><small>tolerancia al riesgo</small></div>
+      <div><span class="eyebrow">Tu perfil</span><h2>${esc(p.name)}</h2><p>${esc(p.text)}</p></div>
+    </div>
+    <div class="risk-dims">${dims.map(d => `<div><span>${esc(d[0])}</span><i><em style="width:${d[1]}%"></em></i><b>${d[1]}</b></div>`).join("")}</div>
+    <div class="risk-cols">
+      <div><h3>Tus puntos fuertes</h3>${list(p.plus)}</div>
+      <div><h3>Lo que debes vigilar</h3>${list(p.watch)}</div>
+      <div><h3>Próximos pasos</h3>${list(p.steps)}</div>
+    </div>
+    <h3>Herramientas recomendadas para tu perfil</h3>
+    <div class="risk-tools">${p.tools.map(s => toolLink(s)).join("")}</div>
+    <p class="risk-note">Este test es orientativo y no sustituye un análisis profesional. Tu tolerancia al riesgo puede cambiar con tu situación personal y económica.</p>
+    <div class="btns"><a class="btn primary" href="#solicitar">Háblalo con alguien que ya ha emprendido</a><button class="btn" type="button" id="risk-again">Repetir el test</button></div>
+  </section>`;
+  document.getElementById("risk-again").onclick = renderRisk;
+  out.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 function route() {
   const h = location.hash.replace("#", "");
   if (["", "inicio", "consejo", "solicitar", "mentor", "como"].includes(h)) return renderHome();
   if (h === "aprende") return renderLearn();
+  if (h === "test-riesgo") return renderRisk();
   if (h === "noticias") return renderNews();
   const t = TOOLS.find(x => hashOf(x) === h);
   if (t) return renderTool(t);
