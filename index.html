@@ -416,6 +416,54 @@ nav.main a.navcta { animation: pulse 3.2s ease-in-out infinite; }
 .risk-tools { display: flex; flex-direction: column; gap: 6px; }
 .risk-note { font-size: 14px; color: var(--muted, #666); margin: 0; }
 @media (max-width: 760px) { .risk-top, .risk-cols { grid-template-columns: 1fr; } .risk-gauge { margin: 0 auto; } .risk-dims div { grid-template-columns: 112px 1fr 30px; gap: 6px; font-size: 15px; } }
+
+/* Tests, calculadoras, compartir, newsletter */
+.free-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 26px 0; }
+.free-card { display: grid; gap: 8px; align-content: start; padding: 20px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: var(--text); transition: transform .2s, box-shadow .2s, border-color .2s; }
+.free-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(218,58,34,.15); border-color: #e0602b; }
+.free-card .chip { justify-self: start; }
+.free-card b { font-size: 20px; line-height: 1.2; }
+.free-card span:not(.chip) { color: var(--muted); }
+.free-card i { font-style: normal; font-weight: 700; color: var(--red); margin-top: 4px; }
+.ro3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 520px) { .ro3 { grid-template-columns: 1fr; } }
+.ft-badge { width: 120px; height: 120px; border-radius: 50%; display: grid; place-items: center; font-size: 56px; font-weight: 800; color: #fff; background: var(--pc); }
+.gaps { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.gaps li { padding: 12px; border: 1px solid var(--line); border-radius: 12px; }
+.gaps .tl { display: block; margin-top: 4px; }
+.vs-banner { margin: 20px 0 0; padding: 14px 18px; border-radius: 14px; background: #fff1e8; border: 1px solid #f3c3a4; }
+.vs-res { padding: 14px 18px; border-radius: 14px; background: #fff1e8; }
+.share { display: grid; gap: 10px; padding: 18px; border-radius: 16px; background: var(--surface-2); }
+.share h3 { margin: 0; font-size: 18px; }
+.share-prev img { width: 100%; max-width: 480px; border-radius: 12px; display: block; box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+.share-msg { margin: 0; font-size: 14px; color: var(--muted); }
+.calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; margin: 26px 0 14px; align-items: start; }
+.calc-in { display: grid; gap: 14px; padding: 22px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.calc-in label { display: grid; gap: 6px; font-weight: 600; }
+.calc-in small { font-weight: 400; color: var(--muted); font-size: 13px; }
+.inp { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 12px; background: #fff; overflow: hidden; }
+.inp:focus-within { border-color: #e0602b; box-shadow: 0 0 0 3px rgba(224,96,43,.18); }
+.inp input { flex: 1; min-width: 0; border: 0; padding: 12px 14px; font: inherit; font-size: 17px; background: transparent; outline: none; }
+.inp em { font-style: normal; padding: 0 14px; color: var(--muted); font-weight: 700; }
+.calc-out { position: sticky; top: 90px; display: grid; gap: 14px; }
+.big-res { padding: 24px; border-radius: 18px; color: #fff; background: var(--pc); background-image: linear-gradient(135deg, rgba(255,255,255,.12), transparent); }
+.big-res small { font-weight: 700; text-transform: uppercase; letter-spacing: .04em; opacity: .9; }
+.big-res b { display: block; font-size: clamp(32px, 5vw, 50px); font-weight: 800; line-height: 1.1; margin: 6px 0; }
+.big-res p { margin: 0; opacity: .95; }
+.calc-rows { margin: 0; display: grid; gap: 0; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); overflow: hidden; }
+.calc-rows div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--line); }
+.calc-rows div:first-child { border-top: 0; }
+.calc-rows dt { color: var(--muted); }
+.calc-rows dd { margin: 0; font-weight: 700; text-align: right; }
+@media (max-width: 820px) { .calc { grid-template-columns: 1fr; } .calc-out { position: static; } }
+.nl { margin: 34px 0; padding: 26px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: center; }
+.nl h2 { margin: 4px 0 6px; font-size: 26px; font-weight: 800; }
+.nl p { margin: 0; color: var(--muted); }
+.nl-form { display: flex; flex-wrap: wrap; gap: 8px; }
+.nl-form input[type=email] { flex: 1 1 200px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); font: inherit; }
+.nl-msg { flex-basis: 100%; font-size: 14px; font-weight: 600; color: var(--red); }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+@media (max-width: 760px) { .nl { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -427,6 +475,7 @@ nav.main a.navcta { animation: pulse 3.2s ease-in-out infinite; }
       <a href="#herramientas" data-nav="herramientas">Herramientas</a>
       <a href="#aprende" data-nav="aprende">Aprende</a>
       <a href="#noticias" data-nav="noticias">Noticias</a>
+      <a href="#gratis" data-nav="gratis">Tests</a>
       <a href="#solicitar" data-nav="solicitar" class="navcta">Quiero acompañamiento</a>
     </nav>
   </div>
@@ -674,7 +723,8 @@ function renderNews() {
 
     <div class="panel"><h2>Cómo leer esta sección</h2><p>Cada artículo enlaza su fuente, ofrece una pregunta o aprendizaje para tu proyecto y conecta con una herramienta de Branka. Consulta la fuente original antes de tomar decisiones.</p></div>
   </div>
-  <div class="news" id="news-list">${newsItemsHtml(NEWS.items.slice(0,6))}</div><div class="load-more"><button type="button" class="btn primary" id="news-more" onclick="loadMoreNews()">Ver más noticias ↓</button></div>`;
+  <div class="news" id="news-list">${newsItemsHtml(NEWS.items.slice(0,6))}</div><div class="load-more"><button type="button" class="btn primary" id="news-more" onclick="loadMoreNews()">Ver más noticias ↓</button></div>${newsletterBox()}`;
+  wireNewsletter();
   const more=document.getElementById('news-more'); if(more) more.hidden=NEWS.items.length<=6 && !NEWS.auto;
   wireAdmin();
   window.scrollTo(0, 0);
@@ -817,10 +867,11 @@ function renderHome() {
     <div class="res-grid">
       <a class="res-card" href="#herramientas"><b>Herramientas</b><span>Plantillas descargables para validar, diseñar y planificar tu proyecto.</span></a>
       <a class="res-card" href="#aprende"><b>Aprende</b><span>Los mejores podcasts para emprendedores y los episodios que más nos han enseñado.</span></a>
-      <a class="res-card" href="#test-riesgo"><b>Test de riesgo</b><span>Descubre en 3 minutos cuánto riesgo estás dispuesto a asumir al emprender.</span></a>
+      <a class="res-card" href="#gratis"><b>Tests y calculadoras</b><span>Descubre tu perfil como emprendedor y haz los números de tu proyecto en 2 minutos.</span></a>
       <a class="res-card" href="#noticias"><b>Noticias</b><span>La actualidad de tecnología y negocios, con una lección para tu proyecto.</span></a>
     </div>
   </section>
+  ${newsletterBox()}
 
   <section class="apply" id="solicitar">
     <div>
@@ -842,6 +893,7 @@ function renderHome() {
       <small class="dlmsg" id="f-out" aria-live="polite"></small>
     </form>
   </section>`;
+  wireNewsletter();
   const form = document.getElementById("apply-form");
   form.onsubmit = async e => {
     e.preventDefault();
@@ -863,6 +915,323 @@ function renderHome() {
   };
   const target = { solicitar: "solicitar", como: "como" }[location.hash.replace("#", "")];
   if (target) document.getElementById(target).scrollIntoView(); else window.scrollTo(0, 0);
+}
+
+/* ---------- Tests, calculadoras y resultados compartibles ---------- */
+const SITE = "https://branka.es";
+const eur = n => (isFinite(n) ? Math.round(n) : 0).toLocaleString("es-ES") + " €";
+const pctf = n => (Math.round(n * 10) / 10).toLocaleString("es-ES") + " %";
+function hashArgs() {
+  const q = (location.hash.split("?")[1] || "");
+  return Object.fromEntries(new URLSearchParams(q));
+}
+
+/* Imagen 1200x630 para redes */
+function drawCard(o) {
+  const c = document.createElement("canvas"); c.width = 1200; c.height = 630;
+  const x = c.getContext("2d");
+  const g = x.createLinearGradient(0, 0, 1200, 630);
+  g.addColorStop(0, "#ec8f35"); g.addColorStop(.45, "#e0602b"); g.addColorStop(1, "#da3a22");
+  x.fillStyle = g; x.fillRect(0, 0, 1200, 630);
+  x.fillStyle = "rgba(255,255,255,.10)"; x.beginPath(); x.ellipse(1050, 560, 330, 210, -0.5, 0, 7); x.fill();
+  x.fillStyle = "rgba(255,255,255,.08)"; x.beginPath(); x.arc(980, 120, 140, 0, 7); x.fill();
+  x.fillStyle = "#fff"; x.textBaseline = "top";
+  x.font = "800 40px system-ui, sans-serif"; x.fillText("BRANKA", 70, 60);
+  x.font = "600 26px system-ui, sans-serif"; x.fillStyle = "#fff3e8"; x.fillText(o.kicker, 70, 150);
+  x.fillStyle = "#fff"; x.font = "800 " + (o.big.length > 12 ? 74 : 104) + "px system-ui, sans-serif"; x.fillText(o.big, 66, 196);
+  x.font = "600 34px system-ui, sans-serif";
+  const words = o.sub.split(" "); let line = "", y = 352;
+  for (const w of words) { if (x.measureText(line + w).width > 1000) { x.fillText(line, 70, y); y += 46; line = ""; } line += w + " "; }
+  x.fillText(line, 70, y);
+  x.font = "600 26px system-ui, sans-serif"; x.fillStyle = "#fff3e8"; x.fillText(o.cta || "Hazlo tú también en branka.es", 70, 548);
+  return c;
+}
+function shareBlock(o) {
+  // o: {kicker, big, sub, text, path}
+  const id = "sh" + Math.random().toString(36).slice(2, 8);
+  setTimeout(() => wireShare(id, o), 0);
+  return `<div class="share" id="${id}">
+    <h3>Compártelo</h3>
+    <div class="share-prev"></div>
+    <div class="btns">
+      <button class="btn primary" type="button" data-a="share">Compartir</button>
+      <a class="btn" data-a="li" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" data-a="wa" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn" data-a="x" target="_blank" rel="noopener">X</a>
+      <button class="btn" type="button" data-a="dl">Descargar imagen</button>
+      ${o.vs ? `<button class="btn" type="button" data-a="vs">Reta a tu socio</button>` : ""}
+    </div>
+    <p class="share-msg" role="status"></p>
+  </div>`;
+}
+function wireShare(id, o) {
+  const box = document.getElementById(id); if (!box) return;
+  const canvas = drawCard(o);
+  const img = new Image(); img.src = canvas.toDataURL("image/png"); img.alt = o.kicker + " " + o.big;
+  box.querySelector(".share-prev").append(img);
+  const url = SITE + "/#" + o.path;
+  const text = o.text + " " + url;
+  const msg = box.querySelector(".share-msg");
+  box.querySelector('[data-a="li"]').href = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(url);
+  box.querySelector('[data-a="wa"]').href = "https://wa.me/?text=" + encodeURIComponent(text);
+  box.querySelector('[data-a="x"]').href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
+  const download = () => { const a = document.createElement("a"); a.href = img.src; a.download = "branka-" + o.path.split("?")[0] + ".png"; a.click(); };
+  box.querySelector('[data-a="dl"]').onclick = download;
+  box.querySelector('[data-a="share"]').onclick = async () => {
+    try {
+      const blob = await new Promise(r => canvas.toBlob(r, "image/png"));
+      const file = new File([blob], "branka.png", { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) await navigator.share({ files: [file], text, title: "Branka" });
+      else if (navigator.share) await navigator.share({ text, url, title: "Branka" });
+      else { await navigator.clipboard.writeText(text); msg.textContent = "Texto y enlace copiados. Pégalo donde quieras y añade la imagen descargada."; download(); }
+    } catch (e) { /* cancelado */ }
+  };
+  const vs = box.querySelector('[data-a="vs"]');
+  if (vs) vs.onclick = async () => {
+    const link = SITE + "/#" + o.vs;
+    const t = "Acabo de hacer este test de Branka. ¿Te atreves a hacerlo y comparamos? " + link;
+    try {
+      if (navigator.share) await navigator.share({ text: t, title: "Branka" });
+      else { await navigator.clipboard.writeText(t); msg.textContent = "Enlace copiado: envíaselo a tu socio. Cuando lo haga, verá vuestros resultados juntos."; }
+    } catch (e) {}
+  };
+}
+function vsBanner(args, label) {
+  return args.vs ? `<div class="vs-banner">Te han retado: <b>${esc(args.n ? args.n + " ha" : "Tu socio ha")} sacado ${esc(label(args))}</b>. Haz el test y compara vuestros resultados.</div>` : "";
+}
+
+/* ---------- Test: tipo de fundador ---------- */
+const FT = {
+  V: { name: "Visionario", color: "#da3a22", text: "Ves hacia dónde va el mercado antes que nadie y contagias la ilusión. Tu energía arrastra al equipo y a los primeros clientes.", plus: ["Detectas oportunidades y tendencias", "Cuentas la historia del proyecto con fuerza", "Atraes talento e inversores"], watch: ["Cambiar de rumbo demasiado a menudo", "Dejar a medias la ejecución", "Prometer más de lo que el equipo puede entregar"], need: "E", tools: ["12_vision_futuro", "02_tendencias_consumo", "22_pitch_deck_para_inversores"] },
+  E: { name: "Ejecutor", color: "#e0602b", text: "Conviertes las ideas en planes y los planes en resultados. Ordenas, priorizas y haces que las cosas pasen.", plus: ["Cumples plazos y objetivos", "Organizas procesos y equipos", "Controlas números y recursos"], watch: ["Perder de vista el porqué del proyecto", "Optimizar algo que el mercado no quiere", "Resistirte a los cambios necesarios"], need: "V", tools: ["13_okrs", "15_escenarios", "32_mapa_de_procesos_para_automatizar_con_ia"] },
+  S: { name: "Vendedor", color: "#c2410c", text: "Hablas con clientes sin miedo, entiendes lo que necesitan y cierras acuerdos. Sin ventas no hay empresa, y ahí brillas.", plus: ["Consigues los primeros clientes", "Negocias y creas alianzas", "Escuchas al mercado de primera mano"], watch: ["Vender algo que todavía no existe", "Descuidar el producto y la entrega", "Depender solo de tu red personal"], need: "T", tools: ["41_plan_comercial_y_embudo_de_ventas", "40_estrategia_de_precios", "04_mapa_empatia"] },
+  T: { name: "Técnico", color: "#9a3412", text: "Construyes el producto. Resuelves problemas complejos y te importa que las cosas funcionen bien.", plus: ["Creas el producto con poco dinero", "Detectas qué es viable de verdad", "Mantienes la calidad"], watch: ["Construir sin validar con clientes", "Perfeccionar en vez de lanzar", "Evitar las ventas y la parte comercial"], need: "S", tools: ["39_experimentos_y_validacion_de_mvp", "11_product_market_fit", "06_value_proposition_canvas"] },
+};
+const FT_Q = [
+  ["Un lunes ideal en tu startup empieza…", [["V", "Pensando en la próxima gran oportunidad"], ["E", "Revisando la lista de tareas y prioridades"], ["S", "Con una llamada a un cliente"], ["T", "Resolviendo un problema del producto"]]],
+  ["Lo que más disfrutas de emprender es…", [["V", "Imaginar cómo cambiará el sector"], ["E", "Ver que el plan se cumple"], ["S", "Cerrar un buen acuerdo"], ["T", "Construir algo que funciona"]]],
+  ["En una reunión con inversores, tú…", [["V", "Cuentas la visión y la historia"], ["E", "Explicas el plan y los números"], ["S", "Conectas con ellos y negocias"], ["T", "Respondes las preguntas sobre el producto"]]],
+  ["Si algo sale mal, lo primero que haces es…", [["V", "Buscar otra oportunidad"], ["E", "Analizar qué ha fallado y corregir el proceso"], ["S", "Hablar con los clientes afectados"], ["T", "Arreglarlo tú mismo"]]],
+  ["Tus amigos dicen que eres…", [["V", "Soñador"], ["E", "Organizado"], ["S", "Convincente"], ["T", "Manitas"]]],
+  ["¿Qué te cuesta más?", [["V", "Los detalles del día a día"], ["E", "Improvisar"], ["S", "Trabajar solo durante horas"], ["T", "Venderte"]]],
+  ["Tu libro de negocio favorito trataría sobre…", [["V", "El futuro y la innovación"], ["E", "Productividad y gestión"], ["S", "Persuasión y negociación"], ["T", "Cómo construir productos"]]],
+  ["Con 10.000 € extra para tu proyecto, los usarías en…", [["V", "Una apuesta nueva con mucho potencial"], ["E", "Ordenar la empresa y ganar eficiencia"], ["S", "Marketing y captación de clientes"], ["T", "Mejorar el producto"]]],
+  ["En un equipo, tú eres quien…", [["V", "Marca el rumbo"], ["E", "Asegura que todo llega a tiempo"], ["S", "Abre puertas"], ["T", "Hace que funcione"]]],
+  ["¿Qué frase va más contigo?", [["V", "La mejor forma de predecir el futuro es crearlo"], ["E", "Lo que no se mide no se puede mejorar"], ["S", "Sin clientes no hay empresa"], ["T", "Hecho es mejor que perfecto, pero bien hecho"]]],
+];
+function renderFounder() {
+  setNav("gratis");
+  const args = hashArgs();
+  app.innerHTML = `
+  <section class="news-head"><span class="eyebrow">Test · 2 minutos</span><h1>¿Qué tipo de fundador eres?</h1>
+  <p>10 preguntas para descubrir tu perfil como emprendedor (visionario, ejecutor, vendedor o técnico) y qué tipo de socio te complementa mejor.</p></section>
+  ${vsBanner(args, a => "el perfil " + (FT[a.vs] ? FT[a.vs].name : ""))}
+  <form class="risk" id="ft">
+    <div class="risk-bar"><span id="ft-prog"></span></div>
+    ${FT_Q.map((q, i) => `<fieldset class="rq" data-i="${i}"><legend><small>${i + 1}/${FT_Q.length}</small>${esc(q[0])}</legend>
+      <div class="ro">${q[1].map(o => `<label><input type="radio" name="q${i}" value="${o[0]}"><span>${esc(o[1])}</span></label>`).join("")}</div></fieldset>`).join("")}
+    <div class="risk-go"><button class="btn primary" type="submit">Ver mi perfil</button><span class="form-msg" role="status"></span></div>
+  </form><div id="ft-out"></div>`;
+  wireQuiz("ft", FT_Q.length, vals => {
+    const cnt = { V: 0, E: 0, S: 0, T: 0 }; vals.forEach(v => cnt[v]++);
+    const order = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
+    const p = FT[order[0]], second = FT[order[1]], need = FT[p.need];
+    const list = a => `<ul>${a.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+    const partner = args.vs && FT[args.vs] ? `<div class="vs-res"><b>Vosotros dos:</b> ${esc(p.name)} + ${esc(FT[args.vs].name)}. ${args.vs === order[0] ? "Tenéis el mismo perfil: os entenderéis bien, pero os faltará alguien que cubra lo contrario." : args.vs === p.need ? "¡Os complementáis muy bien! Cubrís justo lo que al otro le falta." : "Perfiles distintos: repartid bien las responsabilidades para aprovecharlo."}</div>` : "";
+    return `<section class="risk-res" style="--pc:${p.color}">
+      ${partner}
+      <div class="risk-top"><div class="ft-badge">${esc(p.name[0])}</div><div><span class="eyebrow">Tu perfil</span><h2>${esc(p.name)}</h2><p>${esc(p.text)}</p></div></div>
+      <div class="risk-dims">${Object.keys(FT).map(k => `<div><span>${FT[k].name}</span><i><em style="width:${cnt[k] / vals.length * 100}%"></em></i><b>${Math.round(cnt[k] / vals.length * 100)}</b></div>`).join("")}</div>
+      <div class="risk-cols"><div><h3>Tus puntos fuertes</h3>${list(p.plus)}</div><div><h3>Lo que debes vigilar</h3>${list(p.watch)}</div>
+      <div><h3>Tu socio ideal</h3><p>Un perfil <b>${esc(need.name)}</b>: ${esc(need.plus[0].toLowerCase())} y ${esc(need.plus[1].toLowerCase())}. Tu segundo rasgo es ${esc(second.name.toLowerCase())}.</p></div></div>
+      <h3>Herramientas para tu perfil</h3><div class="risk-tools">${p.tools.map(toolLink).join("")}</div>
+      ${shareBlock({ kicker: "Mi perfil como fundador es", big: p.name, sub: "¿Y tú? Descubre qué tipo de fundador eres y qué socio te complementa.", text: "Mi perfil como fundador es " + p.name + ". ¿Y el tuyo?", path: "test-fundador", vs: "test-fundador?vs=" + order[0] })}
+      <div class="btns"><a class="btn primary" href="#solicitar">Busca el acompañamiento que te complementa</a><a class="btn" href="#gratis">Más tests y calculadoras</a></div>
+    </section>`;
+  });
+}
+
+/* ---------- Test: ¿listo para inversión? ---------- */
+const INV_Q = [
+  ["Tracción", "¿Tienes clientes que pagan de forma recurrente?", "11_product_market_fit"],
+  ["Tracción", "¿Tus ingresos o usuarios crecen mes a mes de forma constante?", "11_product_market_fit"],
+  ["Mercado", "¿Puedes explicar con datos el tamaño del mercado al que te diriges?", "08_calculo_mercado"],
+  ["Mercado", "¿Sabes por qué te eligen frente a la competencia?", "07_matriz_competencia"],
+  ["Equipo", "¿El equipo fundador dedica el 100 % de su tiempo al proyecto?", "42_mapa_de_alianzas_y_gobernanza"],
+  ["Equipo", "¿El equipo cubre producto, negocio y ventas?", "42_mapa_de_alianzas_y_gobernanza"],
+  ["Finanzas", "¿Conoces tu coste de adquisición de clientes y lo que te deja cada cliente?", "20_unit_economics_cac_ltv_y_margen"],
+  ["Finanzas", "¿Sabes cuántos meses de caja tienes y cuánto dinero necesitas exactamente?", "19_tesoreria_burn_rate_y_runway"],
+  ["Ronda", "¿Sabes en qué gastarás el dinero y qué hitos conseguirás con él?", "21_estrategia_de_ronda_de_inversion"],
+  ["Ronda", "¿Tienes un pitch deck claro y actualizado?", "22_pitch_deck_para_inversores"],
+  ["Documentación", "¿El reparto de la empresa (cap table) y el pacto de socios están en orden?", "23_cap_table_y_dilucion"],
+  ["Documentación", "¿Tienes preparada la documentación que pedirá un inversor (data room)?", "25_due_diligence_y_data_room"],
+];
+const INV_OPTS = [["2", "Sí"], ["1", "En parte"], ["0", "Todavía no"]];
+function renderInvest() {
+  setNav("gratis");
+  app.innerHTML = `
+  <section class="news-head"><span class="eyebrow">Test · 2 minutos</span><h1>¿Está tu proyecto listo para buscar inversión?</h1>
+  <p>12 preguntas sobre tracción, mercado, equipo, finanzas y documentación. Descubre cuánto te falta y qué preparar antes de hablar con inversores.</p></section>
+  <form class="risk" id="inv">
+    <div class="risk-bar"><span id="inv-prog"></span></div>
+    ${INV_Q.map((q, i) => `<fieldset class="rq" data-i="${i}"><legend><small>${i + 1}/${INV_Q.length} · ${q[0]}</small>${esc(q[1])}</legend>
+      <div class="ro ro3">${INV_OPTS.map(o => `<label><input type="radio" name="q${i}" value="${o[0]}"><span>${o[1]}</span></label>`).join("")}</div></fieldset>`).join("")}
+    <div class="risk-go"><button class="btn primary" type="submit">Ver mi resultado</button><span class="form-msg" role="status"></span></div>
+  </form><div id="inv-out"></div>`;
+  wireQuiz("inv", INV_Q.length, vals => {
+    const nums = vals.map(Number), pct = Math.round(nums.reduce((a, b) => a + b, 0) / (nums.length * 2) * 100);
+    const v = pct >= 75 ? ["Listo para buscar inversión", "#2f7d6d", "Tienes lo esencial. Prepara la lista de inversores adecuados y organiza la ronda con calma."]
+      : pct >= 45 ? ["Casi listo", "#e0602b", "Vas por buen camino, pero un inversor detectará los huecos. Resuélvelos antes de empezar la ronda: tendrás más poder para negociar."]
+      : ["Todavía no", "#da3a22", "Ahora tu prioridad es demostrar que el negocio funciona. Busca clientes, ordena los números y valora otras vías de financiación mientras tanto."];
+    const gaps = INV_Q.map((q, i) => [q, nums[i]]).filter(x => x[1] < 2).sort((a, b) => a[1] - b[1]);
+    const areas = [...new Set(INV_Q.map(q => q[0]))].map(a => { const ix = INV_Q.map((q, i) => q[0] === a ? nums[i] : null).filter(x => x !== null); return [a, Math.round(ix.reduce((s, x) => s + x, 0) / (ix.length * 2) * 100)]; });
+    return `<section class="risk-res" style="--pc:${v[1]}">
+      <div class="risk-top"><div class="risk-gauge" style="--p:${pct}"><b>${pct}</b><small>preparación para invertir</small></div>
+      <div><span class="eyebrow">Tu resultado</span><h2>${v[0]}</h2><p>${v[2]}</p></div></div>
+      <div class="risk-dims">${areas.map(d => `<div><span>${esc(d[0])}</span><i><em style="width:${d[1]}%"></em></i><b>${d[1]}</b></div>`).join("")}</div>
+      ${gaps.length ? `<h3>Lo que te falta preparar</h3><ul class="gaps">${gaps.map(g => `<li><span class="chip ${g[1] ? "" : "phase"}">${g[1] ? "En parte" : "Pendiente"}</span> ${esc(g[0][1])} ${toolLink(g[0][2])}</li>`).join("")}</ul>` : "<p>No tienes huecos importantes. ¡Adelante!</p>"}
+      ${pct < 45 ? `<p>Mientras tanto, revisa ${toolLink("18_mapa_de_financiacion")} y ${toolLink("26_subvenciones_y_financiacion_publica")}</p>` : ""}
+      ${shareBlock({ kicker: "Mi proyecto está preparado para invertir al", big: pct + " %", sub: v[0] + ". ¿Y el tuyo? Haz el test en 2 minutos.", text: "Mi proyecto está preparado al " + pct + "% para buscar inversión. ¿Y el tuyo?", path: "test-inversion" })}
+      <div class="btns"><a class="btn primary" href="#solicitar">Prepara la ronda con alguien que ya lo ha hecho</a><a class="btn" href="#gratis">Más tests y calculadoras</a></div>
+    </section>`;
+  });
+}
+
+/* Cableado común de los tests */
+function wireQuiz(id, n, result) {
+  const form = document.getElementById(id), prog = document.getElementById(id + "-prog");
+  form.onchange = () => { prog.style.width = ([...Array(n).keys()].filter(i => form["q" + i].value).length / n * 100) + "%"; };
+  form.onsubmit = e => {
+    e.preventDefault();
+    const vals = [...Array(n).keys()].map(i => form["q" + i].value);
+    const miss = vals.findIndex(v => !v), msg = form.querySelector(".form-msg");
+    if (miss >= 0) { msg.textContent = `Te falta la pregunta ${miss + 1}.`; form.querySelector(`[data-i="${miss}"]`).scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+    msg.textContent = "";
+    const out = document.getElementById(id + "-out");
+    out.innerHTML = result(vals);
+    out.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  window.scrollTo(0, 0);
+}
+
+/* ---------- Calculadoras ---------- */
+function calcPage(o) {
+  // o: {eyebrow,title,intro,fields:[[id,label,value,step,suffix,help]],calc:fn(v)->html, tool}
+  setNav("gratis");
+  app.innerHTML = `
+  <section class="news-head"><span class="eyebrow">${o.eyebrow}</span><h1>${o.title}</h1><p>${o.intro}</p></section>
+  <div class="calc">
+    <form class="calc-in" id="calc">${o.fields.map(f => `<label><span>${f[1]}</span><div class="inp"><input type="number" inputmode="decimal" id="${f[0]}" value="${f[2]}" step="${f[3] || "any"}" min="0"><em>${f[4] || ""}</em></div>${f[5] ? `<small>${f[5]}</small>` : ""}</label>`).join("")}</form>
+    <div class="calc-out" id="calc-out" aria-live="polite"></div>
+  </div>
+  <p class="risk-note">Cálculo orientativo con los datos que introduces. No es asesoramiento financiero, fiscal ni legal. Nada se guarda ni se envía.</p>
+  <div class="btns" style="margin-bottom:40px">${o.tool ? toolLink(o.tool) : ""}<a class="btn" href="#gratis">Más tests y calculadoras</a></div>`;
+  const form = document.getElementById("calc"), out = document.getElementById("calc-out");
+  const run = () => { const v = {}; o.fields.forEach(f => v[f[0]] = parseFloat(form[f[0]].value) || 0); out.innerHTML = o.calc(v); };
+  form.oninput = run; form.onsubmit = e => e.preventDefault(); run();
+  window.scrollTo(0, 0);
+}
+const bigRes = (label, value, note, color) => `<div class="big-res" style="--pc:${color || "#e0602b"}"><small>${label}</small><b>${value}</b>${note ? `<p>${note}</p>` : ""}</div>`;
+const rows = r => `<dl class="calc-rows">${r.map(x => `<div><dt>${x[0]}</dt><dd>${x[1]}</dd></div>`).join("")}</dl>`;
+
+function renderRunway() {
+  calcPage({ eyebrow: "Calculadora", title: "¿Cuántos meses de caja te quedan?", intro: "Calcula tu runway: cuánto tiempo puede aguantar tu proyecto con el dinero que tienes, y cuándo deberías empezar a buscar financiación.", tool: "19_tesoreria_burn_rate_y_runway",
+    fields: [["cash", "Dinero en el banco hoy", 60000, 1000, "€"], ["burn", "Gastos al mes", 9000, 100, "€", "Sueldos, alquiler, herramientas, marketing…"], ["rev", "Ingresos al mes", 3000, 100, "€"], ["g", "Crecimiento mensual de ingresos", 5, 0.5, "%", "Si no lo sabes, pon 0"]],
+    calc: v => {
+      let cash = v.cash, rev = v.rev, m = 0;
+      const net0 = v.burn - v.rev;
+      while (cash > 0 && m < 120) { cash -= (v.burn - rev); rev *= 1 + v.g / 100; m++; if (rev >= v.burn) break; }
+      const profitable = rev >= v.burn && cash > 0;
+      const end = new Date(); end.setMonth(end.getMonth() + m);
+      const when = end.toLocaleDateString("es-ES", { month: "long", year: "numeric" });
+      const color = profitable || m >= 12 ? "#2f7d6d" : m >= 6 ? "#e0602b" : "#da3a22";
+      const raise = new Date(); raise.setMonth(raise.getMonth() + Math.max(0, m - 6));
+      return (net0 <= 0 ? bigRes("Runway", "Rentable", "Tus ingresos ya cubren los gastos. ¡Enhorabuena!", "#2f7d6d")
+        : profitable ? bigRes("Alcanzas la rentabilidad en", m + " meses", "Si el crecimiento se mantiene, llegas a cubrir gastos antes de quedarte sin caja.", color)
+        : bigRes("Te quedan", (m >= 120 ? "+120" : m) + " meses", "Te quedarías sin caja hacia " + when + ".", color))
+        + rows([["Consumo neto actual (burn)", eur(net0) + "/mes"], ["Busca financiación antes de", net0 > 0 && !profitable ? raise.toLocaleDateString("es-ES", { month: "long", year: "numeric" }) : "No es urgente"], ["Recomendación", m < 6 && !profitable ? "Recorta gastos o busca ingresos ya" : m < 12 && !profitable ? "Empieza a preparar la financiación" : "Situación cómoda: mantén el control"]]);
+    } });
+}
+function renderDilution() {
+  calcPage({ eyebrow: "Calculadora", title: "¿Cuánto te diluyes en una ronda?", intro: "Descubre qué porcentaje de tu empresa conservas después de una ronda de inversión, según cuánto entra y a qué valoración.", tool: "23_cap_table_y_dilucion",
+    fields: [["own", "Tu participación hoy", 50, 1, "%"], ["inv", "Inversión que entra", 250000, 10000, "€"], ["pre", "Valoración antes de la ronda (pre-money)", 1500000, 50000, "€"], ["pool", "Bolsa de opciones para el equipo (nueva)", 10, 1, "%", "Suele pedirse entre un 5 y un 15 %. Pon 0 si no hay."]],
+    calc: v => {
+      const post = v.pre + v.inv, invPct = v.inv / post * 100;
+      const remaining = (100 - invPct) * (1 - v.pool / 100);
+      const mine = v.own * remaining / 100;
+      return bigRes("Después de la ronda tendrás", pctf(mine), "Antes tenías un " + pctf(v.own) + ". Tu parte ahora vale " + eur(post * mine / 100) + " sobre el papel.")
+        + rows([["Valoración después (post-money)", eur(post)], ["Porcentaje del inversor", pctf(invPct)], ["Bolsa de opciones", pctf((100 - invPct) * v.pool / 100)], ["Dilución de tu parte", pctf(v.own ? (1 - mine / v.own) * 100 : 0)]]);
+    } });
+}
+function renderValuation() {
+  calcPage({ eyebrow: "Calculadora", title: "¿Cuánto vale mi startup?", intro: "Una estimación orientativa con dos métodos habituales: múltiplo de ingresos (si ya vendes) y método de puntuación frente a una valoración de referencia (si estás empezando). Ajusta los supuestos a tu sector.", tool: "24_valoracion_y_terminos_de_inversion",
+    fields: [["arr", "Ingresos anuales recurrentes", 120000, 10000, "€", "Pon 0 si aún no facturas"], ["mult", "Múltiplo de ingresos del sector", 4, 0.5, "x", "Supuesto editable: cambia mucho según sector y crecimiento"], ["base", "Valoración de referencia de una startup similar", 1500000, 50000, "€", "Supuesto editable: usa datos de rondas comparables"], ["team", "Equipo (0 a 10)", 7, 1, ""], ["market", "Tamaño de mercado (0 a 10)", 6, 1, ""], ["product", "Producto (0 a 10)", 6, 1, ""], ["traction", "Tracción (0 a 10)", 5, 1, ""]],
+    calc: v => {
+      const clamp = x => Math.min(10, Math.max(0, x));
+      const score = clamp(v.team) * .3 + clamp(v.market) * .25 + clamp(v.product) * .2 + clamp(v.traction) * .25;
+      const scVal = v.base * (0.5 + score / 10);
+      const revVal = v.arr * v.mult;
+      const est = v.arr > 0 ? (revVal + scVal) / 2 : scVal;
+      return bigRes("Valoración orientativa", eur(est * .8) + " – " + eur(est * 1.2), v.arr > 0 ? "Media de los dos métodos, con un margen de ±20 %." : "Basada en el método de puntuación, con un margen de ±20 %.")
+        + rows([["Por múltiplo de ingresos", v.arr > 0 ? eur(revVal) : "Sin ingresos aún"], ["Por puntuación (" + score.toFixed(1).replace(".", ",") + "/10)", eur(scVal)], ["Aviso", "La valoración final la marca la negociación con inversores"]]);
+    } });
+}
+function renderRate() {
+  calcPage({ eyebrow: "Calculadora", title: "¿Cuánto tienes que facturar para cobrarte lo que quieres?", intro: "Calcula cuánto facturar al mes y tu tarifa mínima por hora para llegar al sueldo neto que quieres como autónomo o fundador.", tool: "40_estrategia_de_precios",
+    fields: [["net", "Sueldo neto que quieres al mes", 2200, 100, "€"], ["costs", "Gastos del negocio al mes", 400, 50, "€", "Herramientas, gestoría, local, equipos…"], ["ss", "Cuota de autónomo al mes", 300, 10, "€", "Supuesto editable: depende de tus ingresos reales"], ["tax", "IRPF medio sobre tu beneficio", 20, 1, "%", "Supuesto editable: depende de tu situación"], ["hours", "Horas facturables a la semana", 25, 1, "h", "No todas las horas se pueden cobrar"], ["weeks", "Semanas de trabajo al año", 44, 1, "", "Descontando vacaciones, festivos y bajas"]],
+    calc: v => {
+      const preTax = v.net / (1 - Math.min(v.tax, 90) / 100);
+      const month = preTax + v.ss + v.costs;
+      const hoursMonth = v.hours * v.weeks / 12;
+      const rate = hoursMonth ? month / hoursMonth : 0;
+      return bigRes("Tienes que facturar al mes", eur(month), "Sin IVA. Al año, " + eur(month * 12) + ".")
+        + rows([["Tarifa mínima por hora", eur(rate) + "/h"], ["Horas facturables al mes", Math.round(hoursMonth) + " h"], ["Beneficio antes de impuestos", eur(preTax) + "/mes"], ["Consejo", "Añade un margen del 20-30 % sobre la tarifa mínima"]]);
+    } });
+}
+
+/* ---------- Página de tests y calculadoras ---------- */
+const FREE = [
+  ["test-riesgo", "Test", "¿Cuánto riesgo estás dispuesto a asumir?", "Tu perfil ante el dinero, la incertidumbre y el fracaso."],
+  ["test-fundador", "Test", "¿Qué tipo de fundador eres?", "Visionario, ejecutor, vendedor o técnico, y el socio que te complementa."],
+  ["test-inversion", "Test", "¿Estás listo para buscar inversión?", "Lo que te falta antes de hablar con inversores."],
+  ["calc-runway", "Calculadora", "¿Cuántos meses de caja te quedan?", "Tu runway y cuándo buscar financiación."],
+  ["calc-dilucion", "Calculadora", "¿Cuánto te diluyes en una ronda?", "El porcentaje que conservas tras invertir."],
+  ["calc-valoracion", "Calculadora", "¿Cuánto vale mi startup?", "Una estimación orientativa con dos métodos."],
+  ["calc-tarifa", "Calculadora", "¿Cuánto tienes que facturar?", "Facturación y tarifa por hora para tu sueldo."],
+];
+function renderFree() {
+  setNav("gratis");
+  app.innerHTML = `
+  <section class="news-head"><span class="eyebrow">Gratis · sin registro</span><h1>Tests y calculadoras para emprender</h1>
+  <p>Descubre tu perfil como emprendedor y haz los números de tu proyecto en un par de minutos. Compártelos con tu socio y comparad resultados.</p></section>
+  <div class="free-grid">${FREE.map(f => `<a class="free-card" href="#${f[0]}"><span class="chip ${f[1] === "Test" ? "phase" : ""}">${f[1]}</span><b>${esc(f[2])}</b><span>${esc(f[3])}</span><i>Empezar →</i></a>`).join("")}</div>
+  ${newsletterBox()}`;
+  wireNewsletter();
+  window.scrollTo(0, 0);
+}
+
+/* ---------- Newsletter ---------- */
+function newsletterBox() {
+  return `<section class="nl" id="newsletter">
+    <div><span class="eyebrow">Newsletter</span><h2>Lo mejor de la semana para emprender, en tu correo</h2>
+    <p>Cada semana: las noticias que importan, un episodio para aprender y una herramienta práctica. Gratis y sin spam.</p></div>
+    <form class="nl-form"><input type="email" name="email" placeholder="tu@email.com" required autocomplete="email" aria-label="Tu email">
+    <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+    <button class="btn primary" type="submit">Suscribirme</button><span class="nl-msg" role="status"></span></form>
+  </section>`;
+}
+function wireNewsletter() {
+  document.querySelectorAll(".nl-form").forEach(f => f.onsubmit = async e => {
+    e.preventDefault();
+    const msg = f.querySelector(".nl-msg"), email = f.email.value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.textContent = "Revisa el email."; return; }
+    msg.textContent = "Enviando…";
+    try {
+      const r = await fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, website: f.website.value, from: location.hash || "#inicio" }) });
+      if (!r.ok) throw 0;
+      f.reset(); msg.textContent = "¡Listo! Te has suscrito.";
+    } catch (err) { msg.textContent = "No se ha podido completar. Inténtalo de nuevo en unos minutos."; }
+  });
 }
 
 /* ---------- Test de aversión al riesgo ---------- */
@@ -903,14 +1272,16 @@ const RISK_PROFILES = [
 ];
 let riskAnswers = [];
 function renderRisk() {
-  setNav("riesgo");
+  setNav("gratis");
   riskAnswers = [];
+  const args = hashArgs();
   app.innerHTML = `
   <section class="news-head">
     <span class="eyebrow">Test · 3 minutos</span>
     <h1>¿Cuánto riesgo estás dispuesto a asumir al emprender?</h1>
     <p>12 preguntas sobre dinero, incertidumbre, fracaso y decisiones. Al final verás tu perfil, tus puntos fuertes, lo que debes vigilar y las herramientas que más te pueden ayudar. Las respuestas no se guardan ni se envían.</p>
   </section>
+  ${vsBanner(args, a => a.vs + "/100 de tolerancia al riesgo")}
   <form class="risk" id="risk">
     <div class="risk-bar"><span id="risk-prog"></span></div>
     ${RISK_Q.map((q, i) => `
@@ -952,6 +1323,7 @@ function showRisk(vals) {
   const out = document.getElementById("risk-out");
   out.innerHTML = `
   <section class="risk-res" style="--pc:${p.color}">
+    ${(() => { const vs = +hashArgs().vs; if (!(vs >= 0 && vs <= 100) || hashArgs().vs === undefined) return ""; const d = pct - vs; return `<div class="vs-res"><b>Tú ${pct} · Tu socio ${vs}.</b> ${Math.abs(d) <= 10 ? "Tenéis una tolerancia al riesgo parecida: decidiréis rápido, pero nadie frenará ni empujará." : d > 0 ? "Tú arriesgas más: tu socio te ayudará a no pasarte y tú a no quedaros quietos." : "Tu socio arriesga más: tú le darás prudencia y él os empujará a avanzar."} Hablad antes de cuánto estáis dispuestos a perder.</div>`; })()}
     <div class="risk-top">
       <div class="risk-gauge" style="--p:${pct}"><b>${pct}</b><small>tolerancia al riesgo</small></div>
       <div><span class="eyebrow">Tu perfil</span><h2>${esc(p.name)}</h2><p>${esc(p.text)}</p></div>
@@ -965,16 +1337,19 @@ function showRisk(vals) {
     <h3>Herramientas recomendadas para tu perfil</h3>
     <div class="risk-tools">${p.tools.map(s => toolLink(s)).join("")}</div>
     <p class="risk-note">Este test es orientativo y no sustituye un análisis profesional. Tu tolerancia al riesgo puede cambiar con tu situación personal y económica.</p>
-    <div class="btns"><a class="btn primary" href="#solicitar">Háblalo con alguien que ya ha emprendido</a><button class="btn" type="button" id="risk-again">Repetir el test</button></div>
+    ${shareBlock({ kicker: "Mi tolerancia al riesgo para emprender", big: pct + "/100 · " + p.name, sub: "¿Cuánto riesgo estás dispuesto a asumir tú? Descúbrelo en 3 minutos.", text: "Mi perfil emprendedor ante el riesgo: " + p.name + " (" + pct + "/100). ¿Y el tuyo?", path: "test-riesgo", vs: "test-riesgo?vs=" + pct })}
+    <div class="btns"><a class="btn primary" href="#solicitar">Háblalo con alguien que ya ha emprendido</a><button class="btn" type="button" id="risk-again">Repetir el test</button><a class="btn" href="#gratis">Más tests y calculadoras</a></div>
   </section>`;
   document.getElementById("risk-again").onclick = renderRisk;
   out.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 function route() {
-  const h = location.hash.replace("#", "");
+  const h = location.hash.replace("#", "").split("?")[0];
   if (["", "inicio", "consejo", "solicitar", "mentor", "como"].includes(h)) return renderHome();
   if (h === "aprende") return renderLearn();
   if (h === "test-riesgo") return renderRisk();
+  const FREE_ROUTES = { gratis: renderFree, "test-fundador": renderFounder, "test-inversion": renderInvest, "calc-runway": renderRunway, "calc-dilucion": renderDilution, "calc-valoracion": renderValuation, "calc-tarifa": renderRate };
+  if (FREE_ROUTES[h]) return FREE_ROUTES[h]();
   if (h === "noticias") return renderNews();
   const t = TOOLS.find(x => hashOf(x) === h);
   if (t) return renderTool(t);
