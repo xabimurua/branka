@@ -29,12 +29,25 @@ def layout(title, description, content, relpath, schema=None):
     canonical = f'<link rel="canonical" href="{esc(SITE_URL + "/" + relpath)}">' if SITE_URL else ""
     safe_json = json.dumps(schema, ensure_ascii=False).replace("<", "\\u003c") if schema else ""
     jsonld = f'<script type="application/ld+json">{safe_json}</script>' if schema else ""
+    # Imagen para X/Twitter, LinkedIn, WhatsApp… Las redes exigen URL absoluta: usa SITE_URL o el dominio público.
+    base = SITE_URL or "https://branka.es"
+    image = esc(base + "/og-image.png")
+    social = (
+        f'<meta property="og:url" content="{esc(base + "/" + relpath)}"><meta property="og:site_name" content="Branka">'
+        f'<meta property="og:locale" content="es_ES">\n'
+        f'<meta property="og:image" content="{image}"><meta property="og:image:width" content="1200">'
+        f'<meta property="og:image:height" content="630"><meta property="og:image:alt" content="Branka">\n'
+        f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@edebenews">'
+        f'<meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(description[:155])}">'
+        f'<meta name="twitter:image" content="{image}">'
+    )
     return f'''<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)} | Branka</title><meta name="description" content="{esc(description[:155])}">
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
 {canonical}<meta property="og:type" content="article"><meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description[:155])}">
+{social}
 {jsonld}
 <style>
 :root{{--red:#c73920;--ink:#2b110b;--bg:#fdf7f3;--line:#eecdbb}}
