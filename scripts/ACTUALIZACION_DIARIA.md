@@ -4,6 +4,7 @@ Cada mañana una tarea programada de Claude publica en branka.es:
 
 - **Noticias:** 2 o 3 artículos propios sobre lo más relevante de las últimas 24-48 h en startups, inversión, IA aplicada a negocio e impacto social, con su lección para emprendedores.
 - **Aprende:** 1 episodio de podcast reciente o especialmente útil para emprendedores.
+- **Ayudas:** el mapa de ayudas y subvenciones (`contenido/ayudas.json`, página `#ayudas`).
 
 La GitHub Action `noticias-diarias.yml` ya no se ejecuta sola (solo a mano), para no duplicar.
 
@@ -36,14 +37,44 @@ La GitHub Action `noticias-diarias.yml` ya no se ejecuta sola (solo a mano), par
 }
 ```
 
-3. Publicar y generar páginas:
+3. Publicar y generar páginas (y validar las ayudas):
 
 ```bash
 python3 scripts/publicar_diario.py /tmp/hoy.json
 SITE_URL=https://branka.es python3 scripts/generar_paginas_seo.py
+python3 scripts/validar_ayudas.py
 ```
 
 4. Commit y push normal a `main` (autor `xabimurua@users.noreply.github.com`; nunca force-push).
+
+## Ayudas y subvenciones (`contenido/ayudas.json`)
+
+Cada día:
+
+1. Busca convocatorias **nuevas** para emprender en Euskadi (Gobierno Vasco, SPRI, Lanbide, diputaciones de Gipuzkoa, Bizkaia y Araba), España (ENISA, CDTI, ministerios) y Europa (EIC y similares). Prioriza las fuentes oficiales (BOPV, BOG, BOB, BOTHA, BOE, webs de los organismos).
+2. Revisa las que ya están: si ha cambiado el plazo, el importe o el estado, corrígelo. Si una cerrada se vuelve a convocar, actualiza la ficha (nombre con el nuevo año, nueva fecha, `status`).
+3. Añade solo ayudas comprobadas en su convocatoria oficial. No inventes importes ni fechas: si no sabes el plazo, usa `"status": "consultar"` y `"deadline": null`.
+4. Elimina fichas cerradas hace más de 6 meses que no vayan a repetirse.
+5. Ejecuta `python3 scripts/validar_ayudas.py` (marca solas como cerradas las vencidas y valida el formato). Si falla, corrige y repite.
+
+Formato de cada ficha:
+
+```json
+{
+  "name": "Nombre de la convocatoria y año",
+  "org": "Organismo",
+  "scope": "Euskadi | Gipuzkoa | Bizkaia | Araba | Navarra | España | Europa",
+  "type": "Subvención | Préstamo | Capital | Mixta | Programa",
+  "amount": "Qué da y cuánto, en una frase",
+  "for": "A quién va dirigida y requisitos clave (30-600 caracteres)",
+  "deadline": "AAAA-MM-DD o null",
+  "status": "abierta (con deadline) | permanente | consultar | cerrada",
+  "url": "https://enlace a la convocatoria oficial",
+  "sources": [["Nombre de la fuente", "https://..."]],
+  "tool": "slug de herramienta de tools-data en index.html",
+  "checked": "AAAA-MM-DD (fecha de hoy)"
+}
+```
 
 ## Reglas
 

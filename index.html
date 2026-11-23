@@ -464,6 +464,27 @@ nav.main a.navcta { animation: pulse 3.2s ease-in-out infinite; }
 .nl-msg { flex-basis: 100%; font-size: 14px; font-weight: 600; color: var(--red); }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 @media (max-width: 760px) { .nl { grid-template-columns: 1fr; } }
+
+/* Ayudas */
+.ay-filters { display: grid; gap: 10px; margin: 24px 0 6px; }
+.ay-filters > div { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ay-filters > div > span:first-child { font-weight: 700; margin-right: 6px; min-width: 64px; }
+#ay-scopes { display: contents; }
+.chipbtn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text); }
+.chipbtn.on { background: var(--grad); color: #fff; border-color: transparent; }
+.ay-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; margin: 16px 0; }
+.ay { display: grid; gap: 8px; align-content: start; padding: 20px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); border-top: 5px solid #2f7d6d; }
+.ay-permanente, .ay-consultar { border-top-color: #e0602b; }
+.ay-cerrada { border-top-color: #bbb; opacity: .85; }
+.ay h3 { margin: 2px 0 0; font-size: 20px; }
+.ay p { margin: 0; }
+.ay .by { color: var(--red); font-weight: 600; font-size: 14px; }
+.ay-amount { font-weight: 700; }
+.ay-top { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ay-st { margin-left: auto; font-size: 13px; font-weight: 800; color: #2f7d6d; }
+.ay-permanente .ay-st, .ay-consultar .ay-st { color: #c2410c; }
+.ay-cerrada .ay-st { color: #777; }
+.ay-src { color: var(--muted); font-size: 12.5px; }
 </style>
 </head>
 <body>
@@ -475,6 +496,7 @@ nav.main a.navcta { animation: pulse 3.2s ease-in-out infinite; }
       <a href="#herramientas" data-nav="herramientas">Herramientas</a>
       <a href="#aprende" data-nav="aprende">Aprende</a>
       <a href="#noticias" data-nav="noticias">Noticias</a>
+      <a href="#ayudas" data-nav="ayudas">Ayudas</a>
       <a href="#gratis" data-nav="gratis">Tests</a>
       <a href="#solicitar" data-nav="solicitar" class="navcta">Quiero acompañamiento</a>
     </nav>
@@ -867,6 +889,7 @@ function renderHome() {
     <div class="res-grid">
       <a class="res-card" href="#herramientas"><b>Herramientas</b><span>Plantillas descargables para validar, diseñar y planificar tu proyecto.</span></a>
       <a class="res-card" href="#aprende"><b>Aprende</b><span>Los mejores podcasts para emprendedores y los episodios que más nos han enseñado.</span></a>
+      <a class="res-card" href="#ayudas"><b>Ayudas y subvenciones</b><span>Las convocatorias abiertas para emprender en Euskadi, España y Europa, actualizadas cada día.</span></a>
       <a class="res-card" href="#gratis"><b>Tests y calculadoras</b><span>Descubre tu perfil como emprendedor y haz los números de tu proyecto en 2 minutos.</span></a>
       <a class="res-card" href="#noticias"><b>Noticias</b><span>La actualidad de tecnología y negocios, con una lección para tu proyecto.</span></a>
     </div>
@@ -1234,6 +1257,68 @@ function wireNewsletter() {
   });
 }
 
+
+/* ---------- Mapa de ayudas y subvenciones ---------- */
+let AYUDAS = null;
+const AY_STATUS = { abierta: "Abierta", permanente: "Siempre abierta", consultar: "Consulta el plazo", cerrada: "Cerrada" };
+function ayState(a) {
+  if (a.deadline) {
+    const d = new Date(a.deadline + "T23:59:59"), now = new Date();
+    if (d < now) return ["cerrada", "Cerrada el " + d.toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })];
+    const days = Math.ceil((d - now) / 864e5);
+    if (a.status !== "cerrada") return ["abierta", days <= 15 ? `¡Cierra en ${days} día${days === 1 ? "" : "s"}!` : "Abierta hasta el " + d.toLocaleDateString("es-ES", { day: "numeric", month: "long" })];
+  }
+  return [a.status, AY_STATUS[a.status] || a.status];
+}
+async function renderAyudas() {
+  setNav("ayudas");
+  app.innerHTML = `
+  <section class="news-head"><span class="eyebrow">Actualizado cada día</span><h1>Mapa de ayudas y subvenciones para emprender</h1>
+  <p>Convocatorias abiertas y próximas para quien emprende en Euskadi, España y Europa: subvenciones, préstamos sin avales y programas de inversión. Cada ficha enlaza a la fuente oficial.</p></section>
+  <div class="ay-filters" role="group" aria-label="Filtros">
+    <div><span>Estado</span>${[["todas", "Todas"], ["abiertas", "Abiertas"], ["cerrada", "Cerradas"]].map((o, i) => `<button type="button" class="chipbtn${i === 1 ? " on" : ""}" data-f="st" data-v="${o[0]}">${o[1]}</button>`).join("")}</div>
+    <div><span>Ámbito</span><span id="ay-scopes"></span></div>
+  </div>
+  <div id="ay-list" class="ay-list"><p>Cargando convocatorias…</p></div>
+  <p class="risk-note">Información orientativa revisada en las fuentes enlazadas. Antes de solicitar una ayuda, comprueba siempre los requisitos y plazos en la convocatoria oficial.</p>
+  ${newsletterBox()}`;
+  wireNewsletter();
+  window.scrollTo(0, 0);
+  if (!AYUDAS) {
+    try { const r = await fetch("/contenido/ayudas.json", { cache: "no-store" }); AYUDAS = r.ok ? await r.json() : { items: [] }; }
+    catch (e) { AYUDAS = { items: [] }; }
+  }
+  if (!document.getElementById("ay-list")) return;
+  const scopes = [...new Set(AYUDAS.items.map(a => a.scope))];
+  const f = { st: "abiertas", sc: "todos" };
+  document.getElementById("ay-scopes").innerHTML = [["todos", "Todos"], ...scopes.map(s => [s, s])].map((o, i) => `<button type="button" class="chipbtn${i === 0 ? " on" : ""}" data-f="sc" data-v="${esc(o[0])}">${esc(o[1])}</button>`).join("");
+  const order = { abierta: 0, permanente: 1, consultar: 2, cerrada: 3 };
+  const draw = () => {
+    const list = AYUDAS.items.map(a => ({ a, s: ayState(a) }))
+      .filter(x => f.st === "todas" || (f.st === "abiertas" ? x.s[0] !== "cerrada" : x.s[0] === "cerrada"))
+      .filter(x => f.sc === "todos" || x.a.scope === f.sc)
+      .sort((x, y) => (order[x.s[0]] - order[y.s[0]]) || String(x.a.deadline || "9").localeCompare(String(y.a.deadline || "9")));
+    document.getElementById("ay-list").innerHTML = list.length ? list.map(({ a, s }) => `
+      <article class="ay ay-${s[0]}">
+        <div class="ay-top"><span class="chip phase">${esc(a.scope)}</span><span class="chip">${esc(a.type)}</span><span class="ay-st">${esc(s[1])}</span></div>
+        <h3>${esc(a.name)}</h3>
+        <p class="by">${esc(a.org)}</p>
+        <p class="ay-amount">${esc(a.amount)}</p>
+        <p>${esc(a.for)}</p>
+        ${toolLink(a.tool)}
+        <div class="btns"><a class="btn ${s[0] === "cerrada" ? "" : "primary"}" href="${esc(a.url)}" target="_blank" rel="noopener">Ver convocatoria oficial ↗</a></div>
+        <small class="ay-src">Fuentes: ${(a.sources || []).map(x => `<a href="${esc(x[1])}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join(" · ")} · Revisado el ${esc(new Date(a.checked + "T12:00:00").toLocaleDateString("es-ES"))}</small>
+      </article>`).join("") : `<p>No hay convocatorias con estos filtros ahora mismo.</p>`;
+  };
+  document.querySelector(".ay-filters").onclick = e => {
+    const b = e.target.closest(".chipbtn"); if (!b) return;
+    f[b.dataset.f] = b.dataset.v;
+    b.parentElement.querySelectorAll(".chipbtn").forEach(x => x.classList.toggle("on", x === b));
+    draw();
+  };
+  draw();
+}
+
 /* ---------- Test de aversión al riesgo ---------- */
 const RISK_DIMS = { dinero: "Dinero", incertidumbre: "Incertidumbre", fracaso: "Fracaso", decision: "Decisiones" };
 const RISK_Q = [
@@ -1348,6 +1433,7 @@ function route() {
   if (["", "inicio", "consejo", "solicitar", "mentor", "como"].includes(h)) return renderHome();
   if (h === "aprende") return renderLearn();
   if (h === "test-riesgo") return renderRisk();
+  if (h === "ayudas") return renderAyudas();
   const FREE_ROUTES = { gratis: renderFree, "test-fundador": renderFounder, "test-inversion": renderInvest, "calc-runway": renderRunway, "calc-dilucion": renderDilution, "calc-valoracion": renderValuation, "calc-tarifa": renderRate };
   if (FREE_ROUTES[h]) return FREE_ROUTES[h]();
   if (h === "noticias") return renderNews();

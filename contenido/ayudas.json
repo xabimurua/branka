@@ -1,0 +1,189 @@
+{
+  "updated": "2026-11-23",
+  "items": [
+    {
+      "name": "Ekintzaile 2026",
+      "org": "SPRI · Gobierno Vasco",
+      "scope": "Euskadi",
+      "type": "Subvención",
+      "amount": "Hasta 30.000 € a fondo perdido por proyecto",
+      "for": "Personas emprendedoras y nuevas empresas innovadoras o de base tecnológica que maduran y lanzan su proyecto tutorizado por un BIC.",
+      "deadline": "2026-12-11",
+      "status": "abierta",
+      "url": "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2026/03/2601174a.shtml",
+      "sources": [
+        [
+          "BOPV",
+          "https://www.euskadi.eus/web01-bopv/es/bopv2/datos/2026/03/2601174a.shtml"
+        ],
+        [
+          "ONE",
+          "https://www.one.gob.es/en/aid-and-calls/ekintzaile-2026-aid-entrepreneurs-or-entrepreneurial-companies-maturation-and-launch"
+        ]
+      ],
+      "tool": "26_subvenciones_y_financiacion_publica",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "ENISA Jóvenes Emprendedores",
+      "org": "ENISA · Ministerio de Industria",
+      "scope": "España",
+      "type": "Préstamo",
+      "amount": "Préstamo participativo de 25.000 a 75.000 €, sin avales",
+      "for": "Empresas de menos de 24 meses con socios mayoritarios menores de 40 años. Los socios deben aportar en fondos propios al menos el 50 % del préstamo.",
+      "deadline": null,
+      "status": "permanente",
+      "url": "https://www.enisa.es",
+      "sources": [
+        [
+          "Emprendedores",
+          "https://emprendedores.es/ayudas/directorio-quien-te-ayuda-a-emprender/enisa-77585"
+        ],
+        [
+          "Ecosistema Startup",
+          "https://ecosistemastartup.com/?p=64133"
+        ]
+      ],
+      "tool": "18_mapa_de_financiacion",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "EIC Accelerator",
+      "org": "Consejo Europeo de Innovación (UE)",
+      "scope": "Europa",
+      "type": "Mixta",
+      "amount": "Subvención de hasta 2,5 M€ y/o inversión en capital",
+      "for": "Startups y pymes con innovaciones de alto riesgo y alto impacto. La propuesta corta (fase 1) se puede enviar en cualquier momento; las fechas de la propuesta completa de 2027 están pendientes de publicar.",
+      "deadline": null,
+      "status": "permanente",
+      "url": "https://eic.ec.europa.eu/eic-accelerator_en",
+      "sources": [
+        [
+          "EIC",
+          "https://eic.ec.europa.eu/eic-accelerator_en"
+        ],
+        [
+          "USI",
+          "https://www.usi.ch/en/feeds/33615"
+        ]
+      ],
+      "tool": "21_estrategia_de_ronda_de_inversion",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Ayudas de Lanbide a personas emprendedoras 2026",
+      "org": "Lanbide · Gobierno Vasco",
+      "scope": "Euskadi",
+      "type": "Subvención",
+      "amount": "Ayudas al establecimiento y a la consolidación de la actividad",
+      "for": "Personas que inician una actividad empresarial o la han iniciado recientemente en Euskadi. Consulta en la ficha oficial el plazo y los requisitos.",
+      "deadline": null,
+      "status": "consultar",
+      "url": "https://www.euskadi.eus/servicios/1102125",
+      "sources": [
+        [
+          "Euskadi.eus",
+          "https://www.euskadi.eus/servicios/1102125"
+        ],
+        [
+          "Euskadi.eus",
+          "https://www.euskadi.eus/servicios/1102124"
+        ]
+      ],
+      "tool": "14_plan_negocio",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "NEOTEC 2026",
+      "org": "CDTI · Ministerio de Ciencia",
+      "scope": "España",
+      "type": "Subvención",
+      "amount": "Subvenciones para empresas de base tecnológica (presupuesto ampliado a 40 M€ en 2026)",
+      "for": "Pequeñas empresas de base tecnológica de menos de 3 años y con al menos 20.000 € de capital social. La convocatoria de 2026 cerró el 14 de mayo; suele convocarse cada primavera.",
+      "deadline": "2026-05-14",
+      "status": "cerrada",
+      "url": "https://www.cdti.es/ayudas/ayudas-neotec-2026",
+      "sources": [
+        [
+          "Ministerio de Ciencia",
+          "https://www.ciencia.gob.es/Noticias/2026/abril/MICIU-lanza-convocatoria-NEOTEC-2026.html"
+        ],
+        [
+          "CDTI",
+          "https://www.cdti.es/sites/default/files/2026-04/20260413_ndp_neotec_2026_1.pdf"
+        ]
+      ],
+      "tool": "03_tecnologia_disruptiva",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Hazten+ 2026",
+      "org": "SPRI · Gobierno Vasco",
+      "scope": "Euskadi",
+      "type": "Subvención",
+      "amount": "Impulso financiero para ejecutar el plan de empresa",
+      "for": "Startups innovadoras o de base tecnológica de Euskadi en puesta en marcha, con plan de empresa tutelado por un BIC. Sustituye a Ekintzaile+. Cerró el 14 de mayo de 2026.",
+      "deadline": "2026-05-14",
+      "status": "cerrada",
+      "url": "https://www.spri.eus/es/ayudas/haztenplus/",
+      "sources": [
+        [
+          "AFM Cluster",
+          "https://www.afm.es/gestor/modulos/items/presentacion/exportPDF.php?id=8440"
+        ],
+        [
+          "SPRI",
+          "https://www.spri.eus/es/ayudas/haztenplus/"
+        ]
+      ],
+      "tool": "13_okrs",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Txekintek 2026 (creación y desarrollo empresarial)",
+      "org": "Diputación Foral de Gipuzkoa",
+      "scope": "Gipuzkoa",
+      "type": "Subvención",
+      "amount": "Ayudas para promover la creación y el desarrollo de empresas",
+      "for": "Proyectos empresariales en Gipuzkoa. La convocatoria de 2026 cerró el 22 de octubre.",
+      "deadline": "2026-10-22",
+      "status": "cerrada",
+      "url": "https://www.afm.es/gestor/modulos/items/presentacion/exportPDF.php?id=8510",
+      "sources": [
+        [
+          "AFM Cluster",
+          "https://www.afm.es/gestor/modulos/items/presentacion/exportPDF.php?id=8510"
+        ],
+        [
+          "AFM Cluster",
+          "https://www.afm.es/gestor/modulos/items/presentacion/exportPDF.php?id=8416"
+        ]
+      ],
+      "tool": "09_business_model_canvas",
+      "checked": "2026-11-23"
+    },
+    {
+      "name": "Fomento de iniciativas emprendedoras 2026",
+      "org": "Diputación Foral de Bizkaia",
+      "scope": "Bizkaia",
+      "type": "Subvención",
+      "amount": "Ayudas a la puesta en marcha, creación de empresas y transmisión empresarial",
+      "for": "Personas emprendedoras en Bizkaia. La segunda convocatoria de 2026 cerró el 30 de julio.",
+      "deadline": "2026-07-30",
+      "status": "cerrada",
+      "url": "https://www.bizkaia.eus/es/tema-detalle/-/edukia/dt/5546",
+      "sources": [
+        [
+          "Bizkaia.eus",
+          "https://www.bizkaia.eus/es/tema-detalle/-/edukia/dt/5546"
+        ],
+        [
+          "Bizkaia.eus",
+          "https://www.bizkaia.eus/es/tema-detalle/-/edukia/dt/5546"
+        ]
+      ],
+      "tool": "14_plan_negocio",
+      "checked": "2026-11-23"
+    }
+  ]
+}
