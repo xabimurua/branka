@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T14:59:00+01:00",
+  "updated": "2026-11-23T11:28:23.055958+00:00",
   "podcasts": [
     {
       "name": "Startups for the Rest of Us",
@@ -81,6 +81,16 @@
     }
   ],
   "episodes": [
+    {
+      "title": "An 86-minute guide to finding PMF | Rob Snyder (Author, The Power of Pull)",
+      "show": "Lenny's Podcast",
+      "lang": "EN",
+      "why": "Rob Snyder, que ha ayudado a más de 50 startups a llegar al millón de facturación recurrente, explica su marco PULL para detectar si un cliente necesita de verdad lo que haces, cómo testear la idea con dos diapositivas y cómo llevar las primeras llamadas de venta.",
+      "tool": "11_product_market_fit",
+      "url": "https://www.lennysnewsletter.com/p/an-86-minute-guide-to-finding-pmf",
+      "published": "2026-10-25T00:00:00+00:00",
+      "added": "2026-11-23"
+    },
     {
       "show": "Startups for the Rest of Us",
       "title": "Success Patterns of $1M+ SaaS Founders",

@@ -1,6 +1,71 @@
 {
   "items": [
     {
+      "url": "/noticias/stark-future-fermat-devengo-y-wilco-lideran-las-rondas-espanolas-d-f74ea968.html",
+      "tag": "Financiación",
+      "title": "Stark Future, Fermat, Devengo y Wilco lideran las rondas españolas de la semana",
+      "body": "Entre el 16 y el 20 de noviembre, cuatro startups españolas sumaron unos 165 millones de euros. Stark Future se lleva casi todo y se convierte en unicornio; las otras tres son rondas pequeñas con mucho que enseñar.",
+      "lesson": "Las rondas grandes llegan después de demostrar ventas reales. Las pequeñas, como la de Wilco, se cierran resolviendo un problema muy concreto para un cliente que ya paga, no con una idea genérica de IA.",
+      "action": "Escribe en una frase qué problema concreto resuelves, para qué tipo de cliente y qué prueba tienes hoy de que lo valora.",
+      "tool": "18_mapa_de_financiacion",
+      "sources": [
+        [
+          "Forbes España",
+          "https://forbes.es/empresas/1070122/radar-de-rondas-cuatro-firmas-espanolas-captan-mas-de-165-millones/"
+        ],
+        [
+          "Startups Españolas",
+          "https://startups-espanolas.es/las-5-mayores-rondas-de-la-semana-stark-future-lidera-con-150-millones-de-euros/"
+        ],
+        [
+          "Tech.eu",
+          "https://tech.eu/2026/11/16/barcelona-based-stark-future-motors-to-unicorn-status/"
+        ]
+      ],
+      "paragraphs": [
+        "La semana pasada dejó cuatro rondas destacadas de startups españolas. Forbes España calcula que juntas suman algo más de 165 millones de euros, aunque el reparto es muy desigual: una sola empresa se lleva más del 90 % del total.",
+        "Stark Future, el fabricante barcelonés de motos eléctricas, ha cerrado más de 150 millones de euros liderados por Highland Europe, con 1GT de Morgan Stanley Investment Management y Axon Partners Group. La ronda la valora en 1.200 millones antes de la inversión, lo que la convierte en la primera empresa europea de motos eléctricas que supera los 1.000 millones. Según sus fundadores, todo es capital, sin deuda, y el dinero irá a crecer fuera y a desarrollar nuevas plataformas eléctricas.",
+        "Fermat, una plataforma de IA que empezó ayudando a diseñar prendas y ahora quiere cubrir todo el proceso de producción de ropa, ha captado 8 millones de dólares liderados por Kibo Ventures y Lunar Ventures. Los usará para abrir oficina en Nueva York y ampliar producto.",
+        "Devengo, la fintech de pagos instantáneos entre cuentas autorizada por el Banco de España, ha cerrado 5 millones de euros combinando deuda y capital, con la entrada de Mutua Madrileña a través de Mutua Ventures. El objetivo es crecer y salir al exterior.",
+        "Wilco, que crea agentes de IA para que los pacientes de grupos de clínicas acudan a sus citas, ha levantado 2,5 millones de euros liderados por Samaipata. Ya trabaja con grupos dentales, oftalmológicos y de estética, y quiere reforzar ingeniería y ventas para entrar en el resto de Europa, Estados Unidos y Latinoamérica.",
+        "La lectura para quien empieza: los cuatro casos combinan un cliente muy definido con pruebas de negocio. Stark llegó aquí tras años vendiendo motos; Wilco, con clientes de nombre conocido. Antes de pensar en cuánto levantar, conviene saber qué demuestras y a quién."
+      ],
+      "published": "2026-11-23T11:28:23.055958+00:00",
+      "generated_with_ai": true
+    },
+    {
+      "url": "/noticias/las-startups-europeas-piden-retirar-la-version-recortada-de-eu-inc-c5ef5fd0.html",
+      "tag": "Emprendimiento",
+      "title": "Las startups europeas piden retirar la versión recortada de EU Inc",
+      "body": "EU–INC y Startups for Europe han pedido a Ursula von der Leyen que retire y vuelva a presentar la propuesta de EU Inc, la sociedad europea única para startups, porque los Estados miembros la han rebajado demasiado.",
+      "lesson": "La forma jurídica y las reglas de stock options importan desde el primer día: condicionan dónde constituyes, cómo atraes talento y cuánto cuesta cerrar si algo sale mal. Conviene seguir el debate aunque aún no te afecte.",
+      "action": "Revisa con tu asesoría cómo afectaría a tu proyecto constituir en otro país europeo y qué plan de incentivos para el equipo podrías ofrecer hoy en España.",
+      "tool": "23_cap_table_y_dilucion",
+      "sources": [
+        [
+          "Trending Topics",
+          "https://www.trendingtopics.eu/eu-inc-withdrawal-startups-for-europe/"
+        ],
+        [
+          "IO+",
+          "https://ioplus.nl/en/posts/european-startups-reject-watered-down-eu-inc-proposal"
+        ],
+        [
+          "EU–INC",
+          "https://www.eu-inc.org/"
+        ]
+      ],
+      "paragraphs": [
+        "EU Inc es la propuesta de la Comisión Europea para crear una forma de sociedad común a toda la Unión. La idea es que una startup pueda constituirse una vez, con reglas iguales en los 27 países, en lugar de irse a Delaware para tener un marco sencillo y conocido por los inversores.",
+        "La Comisión la presentó en marzo, pero en octubre los Estados miembros acordaron en el Consejo su posición negociadora y, según los colectivos de startups, eliminaron o rebajaron piezas clave. Por eso la iniciativa EU–INC, con más de 26.000 apoyos, y la red de asociaciones Startups for Europe han pedido a Ursula von der Leyen que retire el texto y lo vuelva a presentar.",
+        "Las críticas se centran en cuatro puntos. Las autoridades del país donde opera la empresa podrían cuestionar dónde se ha registrado. Las stock options al estilo europeo quedan fuera para compañías de más de 750 empleados o 150 millones de facturación. Desaparece el registro central europeo, así que siguen los 27 registros nacionales. Y se elimina el procedimiento sencillo para cerrar una empresa.",
+        "No todo el ecosistema piensa igual. La asociación alemana de startups ve el acuerdo del Consejo como un paso importante y prefiere defender la ambición original en la negociación final. Los sindicatos europeos, en cambio, quieren frenar el proceso hasta que se protejan mejor los derechos de los trabajadores.",
+        "El siguiente paso son las negociaciones entre Comisión, Consejo y Parlamento, que aún no han empezado. Para quien está montando su empresa ahora, nada cambia de inmediato, pero el resultado decidirá si en unos años será fácil crecer en Europa con una sola estructura."
+      ],
+      "published": "2026-11-23T11:28:23.055958+00:00",
+      "generated_with_ai": true
+    },
+    {
       "tag": "Financiación",
       "title": "Anthropic sale a bolsa en el Nasdaq",
       "body": "La creadora de Claude fijó el precio de su salida a bolsa en 83 dólares por acción, por encima del rango previsto, con una demanda de unas seis veces la oferta. Eso la valora en torno a 1,5 billones de dólares y la sitúa entre las mayores salidas a bolsa de la historia. Empezó a cotizar el jueves 19 de noviembre.",
@@ -116,6 +181,5 @@
         ]
       ]
     }
-  ],
-  "updated": "2026-11-21T14:04:41.032Z"
+  ]
 }
