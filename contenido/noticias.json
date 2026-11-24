@@ -1,6 +1,62 @@
 {
   "items": [
     {
+      "url": "/noticias/sierra-capta-1-750-millones-y-vale-30-000-millones-cobrando-por-re-5f45c437.html",
+      "tag": "Inteligencia artificial",
+      "title": "Sierra capta 1.750 millones y vale 30.000 millones cobrando por resultados",
+      "body": "La startup de agentes de IA para atención al cliente de Bret Taylor y Clay Bavor cierra su tercera ronda en 14 meses, casi duplica su valoración en medio año y abre oficina en Múnich.",
+      "lesson": "Sierra no cobra por uso ni por tokens, sino por cada problema resuelto, préstamo concedido o siniestro pagado. Si tu producto genera un resultado medible, ligar el precio a ese resultado reduce el riesgo del cliente y acorta la venta.",
+      "action": "Escribe el resultado concreto que tu cliente paga por conseguir y diseña una tarifa de prueba ligada a ese resultado para tus próximos tres clientes.",
+      "tool": "40_estrategia_de_precios",
+      "sources": [
+        [
+          "SiliconANGLE",
+          "https://siliconangle.com/2026/11/23/ai-agent-provider-sierra-closes-1-75b-investment-amid-rapid-revenue-growth/"
+        ],
+        [
+          "Trending Topics",
+          "https://www.trendingtopics.eu/sierra-ai-agents-funding-30-billion/"
+        ]
+      ],
+      "paragraphs": [
+        "Sierra, la empresa estadounidense que crea agentes de inteligencia artificial para atender a los clientes de grandes compañías, ha anunciado una ronda de 1.750 millones de dólares (unos 1.570 millones de euros) que la valora en 30.000 millones. La lideran Greenoaks y Lightspeed, y repiten inversores anteriores como Benchmark, Sequoia, GV y Tiger Global.",
+        "Es su tercera ronda en 14 meses. En mayo había levantado 950 millones con una valoración de 15.800 millones, así que en unos seis meses casi la ha duplicado. Unas semanas antes de este anuncio, la compañía comunicó que sus ingresos anualizados superaban los 400 millones de dólares y que casi la mitad de esa cifra se había sumado en el último trimestre.",
+        "La fundaron en 2023 Bret Taylor, que fue codirector general de Salesforce, y Clay Bavor, exdirectivo de Google. Sus agentes resuelven tareas como reclamaciones o aprobaciones de préstamos y trabajan para bancos y aseguradoras como JPMorganChase, Wells Fargo, HSBC, Santander o Prudential. Según la empresa, la mitad de las compañías del Fortune 50 ya son clientes.",
+        "Lo más llamativo para quien emprende es su modelo de precios. Sierra cobra por resultados: un problema resuelto, un préstamo formalizado o un siniestro pagado, en lugar de cobrar por uso o por consumo de tokens. Además, reparte cada petición entre más de una docena de modelos de lenguaje: los casos sencillos van a modelos rápidos y baratos, y los complejos, a los más potentes.",
+        "La empresa usará el dinero para ampliar su catálogo de productos y contratar más comerciales. También ha abierto una oficina en Múnich para atender a clientes de Alemania, Austria y Suiza, un mercado donde compite con la berlinesa Parloa, además de con Decagon, Salesforce o Zendesk."
+      ],
+      "published": "2026-11-24T07:35:26.879853+00:00",
+      "generated_with_ai": true
+    },
+    {
+      "url": "/noticias/la-impact-social-cup-bate-record-con-7-768-proyectos-de-38-paises-fa4e2214.html",
+      "tag": "Impacto social",
+      "title": "La Impact Social Cup bate récord con 7.768 proyectos de 38 países",
+      "body": "La tercera edición de la competición de emprendimiento social, la primera abierta a Latinoamérica, reúne 2.157 candidaturas completas y anunciará a sus 64 semifinalistas el 9 de diciembre en Las Rozas.",
+      "lesson": "Salud, inclusión y educación concentran la mayoría de los proyectos, así que destacar ahí exige algo más que una buena causa: un impacto medible y un modelo que se sostenga económicamente. Las competiciones sirven para validar ambas cosas y conseguir contactos con empresas e inversores.",
+      "action": "Define en una frase el cambio que produce tu proyecto y elige dos indicadores con los que puedas demostrarlo antes de presentarte a la próxima convocatoria.",
+      "tool": "31_indicadores_de_impacto_social",
+      "sources": [
+        [
+          "Vivir Ediciones",
+          "https://vivirediciones.es/madrid-impact-social-cup-2026-emprendimiento-internacional"
+        ],
+        [
+          "El Español",
+          "https://www.elespanol.com/treintayseis/economia/emprendedores/20261123/gallego-tomas-garnelo-impulsa-nueva-edicion-record-impact-social-cup/1003744468736_0.html"
+        ]
+      ],
+      "paragraphs": [
+        "La Impact Social Cup, una competición internacional que premia proyectos capaces de resolver retos sociales y medioambientales, ha cerrado la inscripción de su tercera edición con cifras récord: 7.768 proyectos registrados y 2.157 candidaturas completas de 38 países. Es la primera edición abierta a Latinoamérica.",
+        "España aporta 1.090 candidaturas. La Comunidad de Madrid, socio institucional del certamen, encabeza la lista con 278, una de cada cuatro. Le siguen Cataluña (157), Andalucía (151), la Comunitat Valenciana (130) y Galicia, quinta con 59.",
+        "Los proyectos se reparten en ocho áreas. Salud y bienestar es la más concurrida, con 483 candidaturas, seguida de inclusión social y diversidad (347) y educación y empleabilidad (279). Energía sostenible es la menos representada, con 80. También hay dos categorías: Impacto Escalable, para iniciativas que pueden crecer a otros territorios (1.421), e Impacto Cercano, para proyectos locales y comunitarios (736).",
+        "Un comité técnico elegirá a 64 semifinalistas, que se anunciarán el 9 de diciembre en el Auditorio Joaquín Rodrigo de Las Rozas. La final, con 16 proyectos, se celebrará el 18 de junio de 2027 en Madrid con unas 5.000 personas. Además de competir, los participantes reciben formación, acompañamiento y acceso a empresas e inversores.",
+        "Detrás del récord están el pontevedrés Tomás Garnelo y la burgalesa Carmen Pino. Garnelo defiende que la viabilidad económica y el impacto social tienen que ir juntos, y que se pueden crear empresas para resolver problemas estructurales. La edición anterior la ganó Aldealista, una plataforma contra la despoblación rural."
+      ],
+      "published": "2026-11-24T07:35:26.879853+00:00",
+      "generated_with_ai": true
+    },
+    {
       "url": "/noticias/stark-future-fermat-devengo-y-wilco-lideran-las-rondas-espanolas-d-f74ea968.html",
       "tag": "Financiación",
       "title": "Stark Future, Fermat, Devengo y Wilco lideran las rondas españolas de la semana",

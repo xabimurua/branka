@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-23T11:28:23.055958+00:00",
+  "updated": "2026-11-24T07:35:26.879853+00:00",
   "podcasts": [
     {
       "name": "Startups for the Rest of Us",
@@ -81,6 +81,16 @@
     }
   ],
   "episodes": [
+    {
+      "title": "Lanzó una API en un fin de semana y llegó a 5M€ de ARR en 13 meses",
+      "show": "Itnig Podcast",
+      "lang": "ES",
+      "why": "Miquel Palet cuenta cómo validó Zernio con un lanzamiento en AppSumo, pasó de suscripciones a cobro por uso y creció sin inversores, con SEO y anuncios, pese a depender de las APIs de las grandes plataformas.",
+      "tool": "39_experimentos_y_validacion_de_mvp",
+      "url": "https://itnig.net/podcast/lanz-una-api-en-un-fin-de-semana-y-lleg-a-5m-de-arr-en-6d34012d2b/",
+      "published": "2026-11-12T00:00:00+00:00",
+      "added": "2026-11-24"
+    },
     {
       "title": "An 86-minute guide to finding PMF | Rob Snyder (Author, The Power of Pull)",
       "show": "Lenny's Podcast",
