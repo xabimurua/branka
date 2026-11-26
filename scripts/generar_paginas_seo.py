@@ -72,6 +72,10 @@ h2{{font-size:23px;line-height:1.3}}a{{color:#b3331e}}a:hover{{text-decoration-t
 .card{{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}}
 .card h2{{font-size:20px;margin:7px 0}}.card p{{color:#674c41}}
 .panel{{border-left:4px solid #e66c2f;background:#fff0e6;padding:16px 22px;margin:30px 0}}
+.cta{{display:flex;flex-wrap:wrap;gap:22px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin:26px 0}}
+.cta img{{width:240px;max-width:100%;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.1)}}
+.cta h2{{margin:0 0 12px}}.cta p{{margin:12px 0 0;font-size:15px}}
+.btn{{display:inline-block;background:linear-gradient(90deg,#ec8f35,#da3a22);color:#fff!important;font-weight:750;text-decoration:none;padding:12px 22px;border-radius:999px}}
 .meta,footer{{color:#6c4e43;font-size:14px}}
 footer{{border-top:1px solid var(--line);padding:20px 0;margin-top:45px}}
 nav a{{margin-right:18px}}time{{font-variant-numeric:tabular-nums}}
@@ -150,12 +154,26 @@ def main():
         guide = "".join("<p>" + esc(p) + "</p>" for p in t.get("guion", []) if p)
         blocks = "".join("<li>" + esc(b) + "</li>" for b in t.get("blocks", []))
         example = "<section class=\"panel\"><h2>Ejemplo orientativo</h2><p>" + esc(t["example"]) + "</p></section>" if t.get("example") else ""
+        # Llamada a la acción arriba: quien llega desde redes debe ver la descarga sin buscarla.
+        app_url = "/#h-" + t["slug"].replace("_", "-")
+        pdf_name = f'Branka_Plantilla_{t["slug"]}.pdf'
+        if (ROOT / "plantillas" / pdf_name).exists():
+            preview = f'Branka_Plantilla_{t["slug"]}.jpg'
+            img = f'<img src="/plantillas/{esc(preview)}" alt="Vista previa de la plantilla {esc(title)}" loading="lazy">' if (ROOT / "plantillas" / preview).exists() else ""
+            cta = (f'<section class="cta">{img}<div><h2>Descarga la plantilla gratis</h2>'
+                   f'<a class="btn" href="/plantillas/{esc(pdf_name)}" download>Descargar plantilla (PDF)</a>'
+                   f'<p><a href="{esc(app_url)}">Ver la herramienta completa en Branka</a></p></div></section>')
+        else:
+            cta = (f'<section class="cta"><div><h2>Descarga la plantilla gratis</h2>'
+                   f'<a class="btn" href="{esc(app_url)}">Abrir y descargar la plantilla</a>'
+                   f'<p>Hoja práctica con apartados guiados para imprimir o guardar en PDF.</p></div></section>')
         content = f'''<article><p class="kicker">Herramienta {esc(t.get("n", ""))} · {esc(phase)}</p>
 <h1>{esc(title)}</h1><p>{esc(short)}</p>
+{cta}
 <h2>Para qué sirve y cómo utilizarla</h2>{guide}
 <h2>Pasos y apartados que debes trabajar</h2><ol>{blocks}</ol>
 <h2>Cuándo utilizarla</h2><p>{esc(t.get("cuando", ""))}</p>
-{example}<p><a href="/#h-{esc(t["slug"].replace("_", "-"))}">Abrir la herramienta y su plantilla en Branka</a></p>
+{example}<p><a href="{esc(app_url)}">Abrir la herramienta y su plantilla en Branka</a></p>
 <p><a href="/noticias.html">Noticias relacionadas con emprendimiento</a></p></article>'''
         tool_schema = {"@context":"https://schema.org","@type":"Article","headline":title,"description":short,"inLanguage":"es","publisher":{"@type":"Organization","name":"Branka"}}
         if SITE_URL:
