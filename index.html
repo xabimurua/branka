@@ -1493,8 +1493,8 @@ function renderMeetups() {
   form.onsubmit = async e => {
     e.preventDefault();
     const v = Object.fromEntries(new FormData(form)), out = document.getElementById("m-out"), btn = form.querySelector("button[type=submit]");
-    if (!v.name.trim() || !v.project.trim() || !v.challenge.trim() || v.phone.replace(/\\D/g,"").length < 7) { out.textContent = "Revisa los campos y el número de móvil."; return; }
-    v.msg = "INSCRIPCIÓN · BRANKA ABIERTA (encuentro gratuito)\\nTema: " + v.topic + "\\nReto: " + v.challenge;
+    if (!v.name.trim() || !v.project.trim() || !v.challenge.trim() || v.phone.replace(/\D/g,"").length < 7) { out.textContent = "Revisa los campos y el número de móvil."; return; }
+    v.msg = "INSCRIPCIÓN · BRANKA ABIERTA (encuentro gratuito)\nTema: " + v.topic + "\nReto: " + v.challenge;
     btn.disabled = true; out.textContent = "Enviando…";
     try { const res = await fetch("/api/solicitud", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(v)}); if (!res.ok) throw Error("Solicitud"); form.reset(); out.textContent = "¡Gracias! Hemos recibido tu solicitud. Te contactaremos para confirmar los detalles del encuentro."; }
     catch { out.textContent = "No hemos podido enviar tu solicitud. Inténtalo de nuevo."; }
