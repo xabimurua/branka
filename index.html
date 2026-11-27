@@ -584,6 +584,10 @@ function drawGrid() {
     </a>`).join("") : `<p>No hay herramientas con «${esc(state.q)}». Prueba con otra palabra o quita el filtro de fase.</p>`;
 }
 
+function nextStep(title, body, action, source) {
+  const href = "#solicitar?recurso=" + encodeURIComponent(source);
+  return `<section class="panel" style="margin:20px 0;display:grid;gap:12px"><span class="eyebrow">Tu siguiente paso · Branka</span><h2>${esc(title)}</h2><p>${esc(body)}</p><div><a class="btn primary" href="${esc(href)}">${esc(action)}</a></div><small>Primera conversación gratuita.</small></section>`;
+}
 function renderTool(t) {
   setNav("herramientas");
   const i = TOOLS.indexOf(t), prev = TOOLS[i - 1], next = TOOLS[i + 1];
@@ -607,6 +611,7 @@ function renderTool(t) {
         </section>
       </aside>
     </div>
+    ${nextStep("De la plantilla a la decisión", "¿Has trabajado " + t.name + "? Contrasta tus conclusiones con un consejero que ya ha emprendido y define el siguiente paso de tu proyecto.", "Contrastar mi trabajo", t.name)}
     <nav class="pager" aria-label="Otras herramientas">
       ${prev ? `<a href="#${hashOf(prev)}"><small>← Anterior</small>${esc(prev.name)}</a>` : "<span></span>"}
       ${next ? `<a class="next" href="#${hashOf(next)}"><small>Siguiente →</small>${esc(next.name)}</a>` : "<span></span>"}
@@ -932,6 +937,8 @@ function renderHome() {
   const form = document.getElementById("apply-form");
   const plan = new URLSearchParams(location.hash.split("?")[1] || "").get("plan");
   const planField = document.getElementById("f-plan");
+  const recurso = new URLSearchParams(location.hash.split("?")[1] || "").get("recurso");
+  if (recurso) document.getElementById("f-msg").value = "Me gustaría contrastar mi proyecto después de utilizar: " + recurso.slice(0, 160) + ".";
   if (plan && Array.from(planField.options).some(o => o.value === plan)) planField.value = plan;
   form.onsubmit = async e => {
     e.preventDefault();
@@ -1085,7 +1092,7 @@ function renderFounder() {
       <div><h3>Tu socio ideal</h3><p>Un perfil <b>${esc(need.name)}</b>: ${esc(need.plus[0].toLowerCase())} y ${esc(need.plus[1].toLowerCase())}. Tu segundo rasgo es ${esc(second.name.toLowerCase())}.</p></div></div>
       <h3>Herramientas para tu perfil</h3><div class="risk-tools">${p.tools.map(toolLink).join("")}</div>
       ${shareBlock({ kicker: "Mi perfil como fundador es", big: p.name, sub: "¿Y tú? Descubre qué tipo de fundador eres y qué socio te complementa.", text: "Mi perfil como fundador es " + p.name + ". ¿Y el tuyo?", path: "test-fundador", vs: "test-fundador?vs=" + order[0] })}
-      <div class="btns"><a class="btn primary" href="#solicitar">Busca el acompañamiento que te complementa</a><a class="btn" href="#gratis">Más tests y calculadoras</a></div>
+      ${nextStep("Convierte tu perfil " + p.name + " en una ventaja", "Contrasta tus fortalezas y los retos que te cuesta afrontar con un consejero y define cómo complementar tu equipo.", "Hablar sobre mi perfil", "Test de fundador")}<div class="btns"><a class="btn" href="#gratis">Más tests y calculadoras</a></div>
     </section>`;
   });
 }
@@ -1131,7 +1138,7 @@ function renderInvest() {
       ${gaps.length ? `<h3>Lo que te falta preparar</h3><ul class="gaps">${gaps.map(g => `<li><span class="chip ${g[1] ? "" : "phase"}">${g[1] ? "En parte" : "Pendiente"}</span> ${esc(g[0][1])} ${toolLink(g[0][2])}</li>`).join("")}</ul>` : "<p>No tienes huecos importantes. ¡Adelante!</p>"}
       ${pct < 45 ? `<p>Mientras tanto, revisa ${toolLink("18_mapa_de_financiacion")} y ${toolLink("26_subvenciones_y_financiacion_publica")}</p>` : ""}
       ${shareBlock({ kicker: "Mi proyecto está preparado para invertir al", big: pct + " %", sub: v[0] + ". ¿Y el tuyo? Haz el test en 2 minutos.", text: "Mi proyecto está preparado al " + pct + "% para buscar inversión. ¿Y el tuyo?", path: "test-inversion" })}
-      <div class="btns"><a class="btn primary" href="#solicitar">Prepara la ronda con alguien que ya lo ha hecho</a><a class="btn" href="#gratis">Más tests y calculadoras</a></div>
+      ${nextStep(pct < 45 ? "Tu preparación es del " + pct + "%. Empieza por un diagnóstico" : pct < 75 ? "Tu preparación es del " + pct + "%. Cierra los huecos antes de la ronda" : "Tu preparación es del " + pct + "%. Contrasta tu estrategia de ronda", pct < 45 ? "Identifica con un consejero qué debes validar primero y qué alternativas de financiación tienen sentido." : pct < 75 ? "Prioriza los puntos pendientes con alguien que ya ha preparado una ronda." : "Revisa tus supuestos, hitos y estrategia antes de contactar con inversores.", pct < 75 ? "Solicitar una conversación de diagnóstico" : "Contrastar mi estrategia de ronda", "Test de preparación para inversión")}<div class="btns"><a class="btn" href="#gratis">Más tests y calculadoras</a></div>
     </section>`;
   });
 }
@@ -1166,7 +1173,7 @@ function calcPage(o) {
   <p class="risk-note">Cálculo orientativo con los datos que introduces. No es asesoramiento financiero, fiscal ni legal. Nada se guarda ni se envía.</p>
   <div class="btns" style="margin-bottom:40px">${o.tool ? toolLink(o.tool) : ""}<a class="btn" href="#gratis">Más tests y calculadoras</a></div>`;
   const form = document.getElementById("calc"), out = document.getElementById("calc-out");
-  const run = () => { const v = {}; o.fields.forEach(f => v[f[0]] = parseFloat(form[f[0]].value) || 0); out.innerHTML = o.calc(v); };
+  const run = () => { const v = {}; o.fields.forEach(f => v[f[0]] = parseFloat(form[f[0]].value) || 0); out.innerHTML = o.calc(v) + (o.next ? o.next(v) : ""); };
   form.oninput = run; form.onsubmit = e => e.preventDefault(); run();
   window.scrollTo(0, 0);
 }
@@ -1175,6 +1182,7 @@ const rows = r => `<dl class="calc-rows">${r.map(x => `<div><dt>${x[0]}</dt><dd>
 
 function renderRunway() {
   calcPage({ eyebrow: "Calculadora", title: "¿Cuántos meses de caja te quedan?", intro: "Calcula tu runway: cuánto tiempo puede aguantar tu proyecto con el dinero que tienes, y cuándo deberías empezar a buscar financiación.", tool: "19_tesoreria_burn_rate_y_runway",
+    next: v => { const net = v.burn - v.rev; let cash = v.cash, rev = v.rev, m = 0; while (cash > 0 && m < 120 && rev < v.burn) { cash -= v.burn - rev; rev *= 1 + v.g / 100; m++; } const profitable = net <= 0 || (rev >= v.burn && cash > 0); return nextStep(profitable ? "Contrasta tu camino hacia la rentabilidad" : m < 6 ? "¿Te quedan " + m + " meses de caja?" : "Planifica tu próxima decisión de financiación", profitable ? "Revisa con un consejero si tus previsiones de ingresos y gastos son sostenibles." : m < 6 ? "Revisa tus escenarios de tesorería y las opciones para ganar margen de maniobra con un consejero." : "Contrasta tus hipótesis de crecimiento y prepara la financiación antes de necesitarla.", "Contrastar mi tesorería", "Calculadora de runway"); },
     fields: [["cash", "Dinero en el banco hoy", 60000, 1000, "€"], ["burn", "Gastos al mes", 9000, 100, "€", "Sueldos, alquiler, herramientas, marketing…"], ["rev", "Ingresos al mes", 3000, 100, "€"], ["g", "Crecimiento mensual de ingresos", 5, 0.5, "%", "Si no lo sabes, pon 0"]],
     calc: v => {
       let cash = v.cash, rev = v.rev, m = 0;
@@ -1193,6 +1201,7 @@ function renderRunway() {
 }
 function renderDilution() {
   calcPage({ eyebrow: "Calculadora", title: "¿Cuánto te diluyes en una ronda?", intro: "Descubre qué porcentaje de tu empresa conservas después de una ronda de inversión, según cuánto entra y a qué valoración.", tool: "23_cap_table_y_dilucion",
+    next: () => nextStep("Antes de ceder participación, contrasta tus escenarios", "Revisa la dilución, el reparto y las alternativas de financiación con un consejero.", "Contrastar mi ronda", "Calculadora de dilución"),
     fields: [["own", "Tu participación hoy", 50, 1, "%"], ["inv", "Inversión que entra", 250000, 10000, "€"], ["pre", "Valoración antes de la ronda (pre-money)", 1500000, 50000, "€"], ["pool", "Bolsa de opciones para el equipo (nueva)", 10, 1, "%", "Suele pedirse entre un 5 y un 15 %. Pon 0 si no hay."]],
     calc: v => {
       const post = v.pre + v.inv, invPct = v.inv / post * 100;
@@ -1204,6 +1213,7 @@ function renderDilution() {
 }
 function renderValuation() {
   calcPage({ eyebrow: "Calculadora", title: "¿Cuánto vale mi startup?", intro: "Una estimación orientativa con dos métodos habituales: múltiplo de ingresos (si ya vendes) y método de puntuación frente a una valoración de referencia (si estás empezando). Ajusta los supuestos a tu sector.", tool: "24_valoracion_y_terminos_de_inversion",
+    next: () => nextStep("Una valoración es el inicio de una negociación", "Contrasta los supuestos de tu valoración y prepara una argumentación sólida con un consejero.", "Contrastar mi valoración", "Calculadora de valoración"),
     fields: [["arr", "Ingresos anuales recurrentes", 120000, 10000, "€", "Pon 0 si aún no facturas"], ["mult", "Múltiplo de ingresos del sector", 4, 0.5, "x", "Supuesto editable: cambia mucho según sector y crecimiento"], ["base", "Valoración de referencia de una startup similar", 1500000, 50000, "€", "Supuesto editable: usa datos de rondas comparables"], ["team", "Equipo (0 a 10)", 7, 1, ""], ["market", "Tamaño de mercado (0 a 10)", 6, 1, ""], ["product", "Producto (0 a 10)", 6, 1, ""], ["traction", "Tracción (0 a 10)", 5, 1, ""]],
     calc: v => {
       const clamp = x => Math.min(10, Math.max(0, x));
@@ -1217,6 +1227,7 @@ function renderValuation() {
 }
 function renderRate() {
   calcPage({ eyebrow: "Calculadora", title: "¿Cuánto tienes que facturar para cobrarte lo que quieres?", intro: "Calcula cuánto facturar al mes y tu tarifa mínima por hora para llegar al sueldo neto que quieres como autónomo o fundador.", tool: "40_estrategia_de_precios",
+    next: () => nextStep("¿Tu tarifa es sostenible y competitiva?", "Revisa tus costes, margen y estrategia de precios con un consejero antes de fijar tu tarifa.", "Contrastar mis precios", "Calculadora de tarifa"),
     fields: [["net", "Sueldo neto que quieres al mes", 2200, 100, "€"], ["costs", "Gastos del negocio al mes", 400, 50, "€", "Herramientas, gestoría, local, equipos…"], ["ss", "Cuota de autónomo al mes", 300, 10, "€", "Supuesto editable: depende de tus ingresos reales"], ["tax", "IRPF medio sobre tu beneficio", 20, 1, "%", "Supuesto editable: depende de tu situación"], ["hours", "Horas facturables a la semana", 25, 1, "h", "No todas las horas se pueden cobrar"], ["weeks", "Semanas de trabajo al año", 44, 1, "", "Descontando vacaciones, festivos y bajas"]],
     calc: v => {
       const preTax = v.net / (1 - Math.min(v.tax, 90) / 100);
@@ -1449,7 +1460,7 @@ function showRisk(vals) {
     <div class="risk-tools">${p.tools.map(s => toolLink(s)).join("")}</div>
     <p class="risk-note">Este test es orientativo y no sustituye un análisis profesional. Tu tolerancia al riesgo puede cambiar con tu situación personal y económica.</p>
     ${shareBlock({ kicker: "Mi tolerancia al riesgo para emprender", big: pct + "/100 · " + p.name, sub: "¿Cuánto riesgo estás dispuesto a asumir tú? Descúbrelo en 3 minutos.", text: "Mi perfil emprendedor ante el riesgo: " + p.name + " (" + pct + "/100). ¿Y el tuyo?", path: "test-riesgo", vs: "test-riesgo?vs=" + pct })}
-    <div class="btns"><a class="btn primary" href="#solicitar">Háblalo con alguien que ya ha emprendido</a><button class="btn" type="button" id="risk-again">Repetir el test</button><a class="btn" href="#gratis">Más tests y calculadoras</a></div>
+    ${nextStep("Pon tu perfil de riesgo en contexto", "Contrasta tus límites, las decisiones que tienes por delante y cómo equilibrar prudencia y ambición con un consejero.", "Contrastar mis decisiones", "Test de tolerancia al riesgo")}<div class="btns"><button class="btn" type="button" id="risk-again">Repetir el test</button><a class="btn" href="#gratis">Más tests y calculadoras</a></div>
   </section>`;
   document.getElementById("risk-again").onclick = renderRisk;
   out.scrollIntoView({ behavior: "smooth", block: "start" });
