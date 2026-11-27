@@ -1468,40 +1468,32 @@ function showRisk(vals) {
   out.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 function renderMeetups() {
+  const meetups=[
+    {date:"2026-12-09",label:"Miércoles 9 de diciembre de 2026",title:"Contrasta tu modelo de negocio",start:"20261209T160000Z",end:"20261209T170000Z",meet:"https://meet.google.com/zki-etoq-fdg"},
+    {date:"2026-12-15",label:"Martes 15 de diciembre de 2026",title:"Retos y crecimiento de tu negocio",start:"20261215T160000Z",end:"20261215T170000Z",meet:"https://meet.google.com/rzo-aque-xct"}
+  ];
+  const calendarLink=m=>"https://calendar.google.com/calendar/render?"+new URLSearchParams({action:"TEMPLATE",text:"Branka Abierta · "+m.title,dates:m.start+"/"+m.end,location:m.meet,details:"Encuentro online gratuito. Acceso: "+m.meet,ctz:"Europe/Madrid"});
+
   setNav("encuentros");
   app.innerHTML = `
     <section class="news-head"><span class="eyebrow">Branka Abierta · Encuentros online gratuitos</span><h1>Emprender no significa decidir solo.</h1><p>Trae un reto real de tu negocio, contrasta tus decisiones con otros emprendedores y sal con ideas concretas para avanzar. Un espacio de conversación facilitado por Branka, no un webinar.</p></section>
-    <div class="bk-launch"><div><span class="eyebrow">Próximo encuentro · Fecha por confirmar</span><h2>Contrasta tu negocio con otros emprendedores</h2><p>Online · 60 minutos · Grupos de 6 a 8 personas · Gratis</p><p>Estamos formando el próximo grupo. Déjanos tu solicitud y te contactaremos para confirmar fecha, disponibilidad y acceso.</p></div><a class="btn primary" href="#encuentros?inscripcion=1">Quiero participar</a></div>
+    <h2 class="sec-h">Próximos encuentros</h2>
+    ${meetups.map(m => `<article class="bk-launch"><div><span class="eyebrow">${m.label} · 17:00–18:00 (hora peninsular)</span><h2>${m.title}</h2><p>Google Meet · 60 minutos · Gratis · Grupo reducido</p><button class="btn primary" type="button" data-join="${m.date}">Unirme al encuentro</button><div id="join-${m.date}" hidden style="margin-top:12px"><form class="aform" data-meetup="${m.date}"><label for="email-${m.date}">Tu email para recibir el acceso</label><input id="email-${m.date}" name="email" type="email" required autocomplete="email" maxlength="200"><small>Solo utilizaremos tu email para gestionar este encuentro.</small><button class="btn primary" type="submit">Confirmar inscripción</button><small role="status" aria-live="polite"></small></form><div data-calendar hidden><a class="btn" target="_blank" rel="noopener" href="${esc(calendarLink(m))}">Guardar en Google Calendar</a> <button class="btn" type="button" data-ics="${m.date}">Guardar en otro calendario (.ics)</button></div></div></div></article>`).join("")}
     <h2 class="sec-h">¿Qué podemos contrastar?</h2>
     <div class="bk-topics"><article><h3>Validación de ideas</h3><p>Clientes, mercado y propuesta de valor.</p></article><article><h3>Ventas y crecimiento</h3><p>Captación, canales y prioridades comerciales.</p></article><article><h3>Finanzas y precios</h3><p>Rentabilidad, tesorería y financiación.</p></article><article><h3>Inversión</h3><p>Preparación de rondas y alternativas.</p></article><article><h3>Dilemas del fundador</h3><p>Socios, equipo y decisiones difíciles.</p></article><article><h3>Inteligencia artificial</h3><p>Oportunidades y aplicaciones reales en tu negocio.</p></article></div>
     <h2 class="sec-h">Cómo funciona</h2><ol class="steps"><li><b>5 min · Bienvenida</b><span>Conocemos al grupo y acordamos las reglas.</span></li><li><b>10 min · Retos</b><span>Cada persona presenta su pregunta o dilema.</span></li><li><b>35 min · Contraste</b><span>Profundizamos en dos o tres casos con preguntas y feedback constructivo.</span></li><li><b>10 min · Próximos pasos</b><span>Cada participante identifica una acción para avanzar.</span></li></ol>
     <section class="panel"><h2>Un espacio de confianza</h2><p>Escucha activa, respeto, sin discursos comerciales ni grabaciones. Pedimos a todos que respeten la confidencialidad del grupo; comparte solo información que te resulte cómodo compartir. Puedes participar desde la fase de idea o con un negocio en marcha.</p></section>
-    <section class="apply" id="meetup-signup"><div><span class="eyebrow">Inscripción gratuita</span><h2>Apúntate al próximo grupo</h2><p>Cuéntanos qué estás construyendo y qué te gustaría contrastar. La solicitud no confirma una plaza: te contactaremos para organizar el encuentro.</p><p>No necesitas contratar ningún servicio.</p></div>
-    <form id="meetup-form" class="aform">
-    <label for="m-name">Nombre</label><input id="m-name" name="name" required autocomplete="name" maxlength="120">
-    <label for="m-email">Email</label><input id="m-email" name="email" type="email" required autocomplete="email" maxlength="200">
-    <label for="m-phone">Móvil</label><input id="m-phone" name="phone" type="tel" required autocomplete="tel" minlength="7" maxlength="35">
-    <label for="m-project">Proyecto o empresa</label><input id="m-project" name="project" required maxlength="200">
-    <label for="m-stage">Etapa del proyecto</label><select id="m-stage" name="stage"><option>Idea, todavía sin clientes</option><option>Primeros clientes</option><option>Negocio en marcha</option></select>
-    <label for="m-topic">Tema que te interesa</label><select id="m-topic" name="topic"><option>Validación de ideas</option><option>Ventas y crecimiento</option><option>Finanzas y precios</option><option>Inversión</option><option>Dilemas del fundador</option><option>Inteligencia artificial</option><option>Otro</option></select>
-    <label for="m-challenge">¿Qué reto quieres contrastar?</label><textarea id="m-challenge" name="challenge" rows="4" required maxlength="2000"></textarea>
-    <div class="sr" aria-hidden="true"><label for="m-web">No rellenar</label><input id="m-web" name="website" tabindex="-1" autocomplete="off"></div>
-    <small>Usaremos tus datos para gestionar tu solicitud y contactarte sobre este encuentro.</small>
-    <button class="btn primary" type="submit">Solicitar plaza gratuita</button><small id="m-out" class="dlmsg" role="status" aria-live="polite"></small></form></section>
     <div class="bk-launch"><div><h3>¿Prefieres contrastar tu negocio en privado?</h3><p>Conoce el servicio de consejero personal de Branka en una primera conversación gratuita.</p></div><a class="btn" href="#solicitar?recurso=Branka%20Abierta">Hablar con un consejero</a></div>`;
-  const form = document.getElementById("meetup-form");
-  form.onsubmit = async e => {
-    e.preventDefault();
-    const v = Object.fromEntries(new FormData(form)), out = document.getElementById("m-out"), btn = form.querySelector("button[type=submit]");
-    if (!v.name.trim() || !v.project.trim() || !v.challenge.trim() || v.phone.replace(/\D/g,"").length < 7) { out.textContent = "Revisa los campos y el número de móvil."; return; }
-    v.msg = "INSCRIPCIÓN · BRANKA ABIERTA (encuentro gratuito)\nTema: " + v.topic + "\nReto: " + v.challenge;
-    btn.disabled = true; out.textContent = "Enviando…";
-    try { const res = await fetch("/api/solicitud", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(v)}); if (!res.ok) throw Error("Solicitud"); form.reset(); out.textContent = "¡Gracias! Hemos recibido tu solicitud. Te contactaremos para confirmar los detalles del encuentro."; }
-    catch { out.textContent = "No hemos podido enviar tu solicitud. Inténtalo de nuevo."; }
-    finally { btn.disabled = false; }
-  };
-  if (new URLSearchParams(location.hash.split("?")[1] || "").has("inscripcion")) document.getElementById("meetup-signup").scrollIntoView(); else window.scrollTo(0,0);
+  app.querySelectorAll("[data-join]").forEach(btn => { const m=meetups.find(x=>x.date===btn.dataset.join); if(Date.now()>=Date.parse(m.date+"T17:00:00+01:00")){btn.disabled=true;btn.textContent="Encuentro finalizado";} btn.onclick=()=>{const area=document.getElementById("join-"+m.date);area.hidden=false;area.querySelector("input").focus();}; });
+  app.querySelectorAll("[data-meetup]").forEach(form=>form.onsubmit=async e=>{
+    e.preventDefault(); const m=meetups.find(x=>x.date===form.dataset.meetup), out=form.querySelector("[role=status]"), btn=form.querySelector("button"); btn.disabled=true;out.textContent="Confirmando…";
+    try { const res=await fetch("/api/solicitud",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({kind:"meetup",event:m.date,email:form.email.value.trim()})}); if(!res.ok)throw Error("registration");const result=await res.json(); if(!result.ok)throw Error("registration");out.textContent=result.confirmationSent?"Inscripción recibida. Revisa tu correo y guarda la sesión en tu calendario.":"Inscripción recibida. Guarda la sesión aquí; no hemos podido enviarte el correo.";form.parentElement.querySelector("[data-calendar]").hidden=false;form.querySelector("input").disabled=true; }
+    catch {out.textContent="No hemos podido confirmar tu inscripción. Inténtalo de nuevo.";btn.disabled=false;}
+  });
+  app.querySelectorAll("[data-ics]").forEach(btn=>btn.onclick=()=>{const m=meetups.find(x=>x.date===btn.dataset.ics);const stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Branka//Encuentros//ES","BEGIN:VEVENT","UID:branka-abierta-"+m.date+"@branka.es","DTSTAMP:"+stamp,"DTSTART:"+m.start,"DTEND:"+m.end,"SUMMARY:Branka Abierta · "+m.title,"LOCATION:"+m.meet,"END:VEVENT","END:VCALENDAR",""].join("\r\n");const url=URL.createObjectURL(new Blob([ics],{type:"text/calendar;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download="branka-abierta-"+m.date+".ics";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+  window.scrollTo(0,0);
 }
+
 function route() {
   const h = location.hash.replace("#", "").split("?")[0];
   if (["", "inicio", "consejo", "solicitar", "mentor", "como", "servicios"].includes(h)) return renderHome();
